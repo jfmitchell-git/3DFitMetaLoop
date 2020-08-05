@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaConfiguration", "MetaConfiguration\MetaConfiguration.csproj", "{EBE08235-FE9E-4913-9CC7-8D7386E1A4CE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameLogic", "GameLogic\GameLogic.csproj", "{A1ABB793-4790-41F0-BD05-C6B29311E0FB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataImportTool", "DataImportTool\DataImportTool.csproj", "{D1A3B284-A5D2-4E89-86E6-CD8FD7ADA220}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayFabCdnManager", "PlayFabCdnManager\PlayFabCdnManager.csproj", "{5CA91383-FEA4-495F-BAD7-96571C07F703}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MetaCommon", "MetaCommon\MetaCommon.csproj", "{54F3B7AB-A0EF-40DA-9BB7-CACD48F86FF2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RESTApi", "RESTApi\RESTApi.csproj", "{06F08981-1A58-4473-AA32-5D51DE4B3BA9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EBE08235-FE9E-4913-9CC7-8D7386E1A4CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBE08235-FE9E-4913-9CC7-8D7386E1A4CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBE08235-FE9E-4913-9CC7-8D7386E1A4CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBE08235-FE9E-4913-9CC7-8D7386E1A4CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1ABB793-4790-41F0-BD05-C6B29311E0FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1ABB793-4790-41F0-BD05-C6B29311E0FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1ABB793-4790-41F0-BD05-C6B29311E0FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1ABB793-4790-41F0-BD05-C6B29311E0FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1A3B284-A5D2-4E89-86E6-CD8FD7ADA220}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1A3B284-A5D2-4E89-86E6-CD8FD7ADA220}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1A3B284-A5D2-4E89-86E6-CD8FD7ADA220}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1A3B284-A5D2-4E89-86E6-CD8FD7ADA220}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5CA91383-FEA4-495F-BAD7-96571C07F703}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CA91383-FEA4-495F-BAD7-96571C07F703}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CA91383-FEA4-495F-BAD7-96571C07F703}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CA91383-FEA4-495F-BAD7-96571C07F703}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54F3B7AB-A0EF-40DA-9BB7-CACD48F86FF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54F3B7AB-A0EF-40DA-9BB7-CACD48F86FF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54F3B7AB-A0EF-40DA-9BB7-CACD48F86FF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54F3B7AB-A0EF-40DA-9BB7-CACD48F86FF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06F08981-1A58-4473-AA32-5D51DE4B3BA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06F08981-1A58-4473-AA32-5D51DE4B3BA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06F08981-1A58-4473-AA32-5D51DE4B3BA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06F08981-1A58-4473-AA32-5D51DE4B3BA9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4E1D4BA9-DCA8-47BF-9159-F118FF6ADA73}
+	EndGlobalSection
+EndGlobal

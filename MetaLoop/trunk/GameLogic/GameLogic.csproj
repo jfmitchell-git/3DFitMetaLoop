@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>MetaLoop.GameLogic</RootNamespace>
+    <AssemblyName>MetaLoop.GameLogic</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Shared\MetaStateSettings.cs.meta" />
+    <None Remove="Shared\_MetaStateSettings.cs.meta" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+
+</Project>
