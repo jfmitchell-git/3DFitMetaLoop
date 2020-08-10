@@ -40,5 +40,10 @@ namespace MetaLoopDemo.Meta
 
         public const string DatabaseName = "MetaLoopDemo.db";
         public const string DatabaseFileName = @"Assets\StreamingAssets\" + DatabaseName;
+
+        public void InitForReflection()
+        {
+            
+        }
     }
 }

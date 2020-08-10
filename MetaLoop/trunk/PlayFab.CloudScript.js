@@ -5,7 +5,7 @@ var defaultEnvironement = "dev";
 var productionUrl = "https://metaloopdemo.azurewebsites.net/api/";
 var stagingUrl = "https://metaloopdemo.azurewebsites.net/api/";
 //Development URL must be accessible from outside (PlayFab)
-var devUrl = "https://metaloopdemo.azurewebsites.net/api/";
+var devUrl = "http://mitchell-pc.dynamic-dns.net:45455/api/";
 
 function InvokeBackOffice(args, context) {
 
@@ -42,7 +42,7 @@ function InvokeBackOffice(args, context) {
 
     var body = {
         CloudScriptMethod: args,
-        UserId: playerIdParam
+        UserId: playerIdParam,
     };
 
     var headers;
@@ -50,10 +50,11 @@ function InvokeBackOffice(args, context) {
     var httpMethod = "post";
     var contentType = "application/json";
 
+
     // Try Catch Retry Logic important with PlayFab, should be better written with short delay
     try {
         var result = http.request(url, httpMethod, content, contentType, headers);
-        return { result };
+        return result;
     } catch (e) {
         var msg = JSON.stringify(e);
 

@@ -163,31 +163,31 @@
     <Compile Include="Assets\Scripts\MetaLoopDemo\Meta\MetaSettings.cs" />
     <None Include="Assets\JsonDotNet\link.xml" />
     <Reference Include="Unity.Timeline.Editor">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VSCode.Editor">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Library/ScriptAssemblies/Unity.VSCode.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Timeline">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Library/ScriptAssemblies/Unity.Timeline.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Rider.Editor">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.10f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -367,25 +367,31 @@
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.10f1/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
     </Reference>
     <Reference Include="DemiLib">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/Demigiant/DemiLib/Core/DemiLib.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/Demigiant/DemiLib/Core/DemiLib.dll</HintPath>
     </Reference>
     <Reference Include="DOTween">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/Demigiant/DOTween/DOTween.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/Demigiant/DOTween/DOTween.dll</HintPath>
     </Reference>
     <Reference Include="DOTween43">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/Demigiant/DOTween/DOTween43.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/Demigiant/DOTween/DOTween43.dll</HintPath>
     </Reference>
     <Reference Include="DOTween46">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/Demigiant/DOTween/DOTween46.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/Demigiant/DOTween/DOTween46.dll</HintPath>
     </Reference>
     <Reference Include="DOTween50">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/Demigiant/DOTween/DOTween50.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/Demigiant/DOTween/DOTween50.dll</HintPath>
     </Reference>
     <Reference Include="DOTweenPro">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/Demigiant/DOTweenPro/DOTweenPro.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/Demigiant/DOTweenPro/DOTweenPro.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/JsonDotNet/Assemblies/Standalone/Newtonsoft.Json.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/JsonDotNet/Assemblies/Standalone/Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.10f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.10f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.10f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>

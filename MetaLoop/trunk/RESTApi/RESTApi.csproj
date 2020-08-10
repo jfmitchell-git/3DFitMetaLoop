@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\MetaLoopUnityDemo\Assets\StreamingAssets\MetaLoopDemo.db" Link="MetaLoopDemo.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\MetaLoopUnityDemo\Assets\StreamingAssets\MetaLoopDemo.db.meta" Link="MetaLoopDemo.db.meta" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
     <PackageReference Include="PlayFabAllSDK" Version="1.75.200629" />
   </ItemGroup>

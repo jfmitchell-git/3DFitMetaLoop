@@ -20,16 +20,26 @@ namespace MetaLoop.Common.PlatformCommon.Settings
             if (allProviders.Count == 0)
             {
                 throw new Exception("MetaStateSettings could not locate ISettingsProvider.");
-            } else if (allProviders.Count > 1)
+            }
+            else if (allProviders.Count > 1)
             {
                 throw new Exception("MetaStateSettings found multiples ISettingsProvider.");
-            } else
+            }
+            else
             {
                 SettingsClassName = allProviders.First();
             }
 
             var allFields = new Dictionary<string, object>();
-            var customMetaStateSettings = Type.GetType(SettingsClassName);
+
+            Type customMetaStateSettings;
+
+#if BACKOFFICE
+            customMetaStateSettings = Type.GetType(SettingsClassName + ", MetaLoop.GameLogic");
+#else
+            customMetaStateSettings = Type.GetType(SettingsClassName);
+#endif
+
             FieldInfo[] fieldInfos = customMetaStateSettings.GetFields(BindingFlags.Static | BindingFlags.Public);
             fieldInfos.ToList().ForEach(y => allFields.Add(y.Name, y.GetValue(null)));
             var baseClassFields = typeof(MetaStateSettings).GetFields(BindingFlags.Static | BindingFlags.Public).ToList();

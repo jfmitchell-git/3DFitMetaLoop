@@ -67,16 +67,16 @@
     <Compile Include="Assets\PlayFabSDK\Shared\Editor\PlayFabHelp.cs" />
     <None Include="Assets\PlayFabSDK\Shared\Editor\PlayFabSdkEditor.asmdef" />
     <Reference Include="UnityEditor.UI">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Library/ScriptAssemblies/UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.TestRunner">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.TestRunner">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Library/ScriptAssemblies/UnityEngine.TestRunner.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Library/ScriptAssemblies/UnityEngine.TestRunner.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.10f1/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -267,41 +267,50 @@
     <Reference Include="UnityEditor.Android.Extensions">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.10f1/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions">
+      <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.10f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/16.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
     <Reference Include="DemiLib">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/Demigiant/DemiLib/Core/DemiLib.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/Demigiant/DemiLib/Core/DemiLib.dll</HintPath>
     </Reference>
     <Reference Include="DemiEditor">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/Demigiant/DemiLib/Core/Editor/DemiEditor.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/Demigiant/DemiLib/Core/Editor/DemiEditor.dll</HintPath>
     </Reference>
     <Reference Include="DOTween">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/Demigiant/DOTween/DOTween.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/Demigiant/DOTween/DOTween.dll</HintPath>
     </Reference>
     <Reference Include="DOTween43">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/Demigiant/DOTween/DOTween43.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/Demigiant/DOTween/DOTween43.dll</HintPath>
     </Reference>
     <Reference Include="DOTween46">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/Demigiant/DOTween/DOTween46.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/Demigiant/DOTween/DOTween46.dll</HintPath>
     </Reference>
     <Reference Include="DOTween50">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/Demigiant/DOTween/DOTween50.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/Demigiant/DOTween/DOTween50.dll</HintPath>
     </Reference>
     <Reference Include="DOTweenEditor">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/Demigiant/DOTween/Editor/DOTweenEditor.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/Demigiant/DOTween/Editor/DOTweenEditor.dll</HintPath>
     </Reference>
     <Reference Include="DOTweenPro">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/Demigiant/DOTweenPro/DOTweenPro.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/Demigiant/DOTweenPro/DOTweenPro.dll</HintPath>
     </Reference>
     <Reference Include="DOTweenProEditor">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/Demigiant/DOTweenPro/Editor/DOTweenProEditor.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/Demigiant/DOTweenPro/Editor/DOTweenProEditor.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Assets/JsonDotNet/Assemblies/Standalone/Newtonsoft.Json.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/JsonDotNet/Assemblies/Standalone/Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>D:/DryGinStudios/MetaBackend/MetaLoopUnityDemo/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>
+      <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.10f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.10f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.10f1/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

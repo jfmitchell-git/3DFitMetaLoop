@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.Server;
+using MetaLoopDemo.Meta;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -17,11 +19,34 @@ namespace MetaLoop.RESTApi
     public class Startup
     {
         public static DateTime UpTimeStart;
+        public static string InstanceId;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            //Required to force assembly loading order. 
+            new MetaSettings().InitForReflection();
+
+            InstanceId = Guid.NewGuid().ToString();
+
+            //Initialize MetaLoop methods reflection engine. 
             ApiController.Init();
-            UpTimeStart = DateTime.Now;
+
+            //Init DataLayer.
+            var rootDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            DataLayer.Instance.Init(rootDir + @"\" + MetaSettings.DatabaseName);
+
+
+            //Init CloudTable if any.
+
+
+
+            //Set PlayFab settings.
+            PlayFab.PlayFabSettings.staticSettings.TitleId = MetaLoop.Configuration.PlayFabSettings.TitleId;
+            PlayFab.PlayFabSettings.staticSettings.DeveloperSecretKey = MetaLoop.Configuration.PlayFabSettings.DeveloperSecretKey;
+
+            //Statistics
+            UpTimeStart = DateTime.UtcNow;
 
 
         }
