@@ -491,6 +491,8 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
         }
         public void InvokeBackOffice(CloudScriptMethod cloudScriptMethod, Action<CloudScriptResponse, CloudScriptMethod> resultCallBack)
         {
+            cloudScriptMethod.Entity = CurrentEntity.Id;
+
             if (isWorking)
             {
                 realtimeQueue.Add(() => InvokeBackOffice(cloudScriptMethod, resultCallBack));

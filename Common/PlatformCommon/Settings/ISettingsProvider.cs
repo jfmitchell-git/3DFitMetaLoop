@@ -6,5 +6,6 @@ namespace MetaLoop.Common.PlatformCommon.Settings
 {
     public interface ISettingsProvider
     {
+        void InitForReflection();
     }
 }

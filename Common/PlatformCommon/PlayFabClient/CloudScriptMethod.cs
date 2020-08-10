@@ -10,6 +10,7 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
     public class CloudScriptMethod
     {
         public string Method { get; set; }
+        public string Entity { get; set; }
         public Dictionary<string, string> Params { get; set; }
         public int Attempt { get; set; }
 

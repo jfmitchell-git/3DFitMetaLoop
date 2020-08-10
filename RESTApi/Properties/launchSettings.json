@@ -2,9 +2,13 @@
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/RESTApi",
+      "sslPort": 0
+    },
     "iisExpress": {
-      "applicationUrl": "https://localhost:44389/",
-      "sslPort": 44389
+      "applicationUrl": "http://localhost:44314/",
+      "sslPort": 0
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
@@ -12,11 +16,11 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "https://localhost:44389/",
+      "launchUrl": "http://localhost:44314/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "ancmHostingModel": "InProcess"
+      "ancmHostingModel": "OutOfProcess"
     },
     "RESTApi": {
       "commandName": "Project",

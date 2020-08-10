@@ -6,6 +6,7 @@ namespace MetaLoop.Configuration
 {
     public class PlayFabSettings
     {
+
 #if STAGING || DEBUG
         public static string DeveloperSecretKey = MetaStateSettings._PlayFabDeveloperSecretKey_Staging;
         public static string TitleId = MetaStateSettings._PlayFabTitleId_Staging;

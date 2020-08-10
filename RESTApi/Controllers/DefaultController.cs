@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.Data;
@@ -21,100 +22,82 @@ namespace MetaLoop.RESTApi.Controllers
     public class DefaultController : ControllerBase
     {
         [HttpGet]
-        public string Get(string method, string param1, string param2)
+        [HttpPost]
+        public async Task<string> Get(string method, string param1, string param2)
         {
-            return "";
+            await PlayFabApiHandler.ValidateEntityToken();
+
             //Response.ContentType = "application/json; charset=utf-8";
 
-            //bool stack = false;
-            //string functionId = method;
+            string result = string.Empty;
 
-            //if (functionId.IndexOf("/stack") >= 0)
-            //{
-            //    stack = true;
-            //    functionId = functionId.Replace("/stack", string.Empty);
-            //}
+            bool isStackCall = param1 != null && param1.ToLower() == "stack";
 
-            //string[] urlParams = null;
+            switch (method)
+            {
+                case "":
+                case "Status":
 
-            //if (functionId.IndexOf(@"/") > 0)
-            //{
-            //    var allParams = functionId.Split('/').ToList();
-            //    allParams.RemoveAt(0);
+                    CloudScriptResponse statusResponse = new CloudScriptResponse() { ResponseCode = ResponseCode.Success, Method = method };
+                    statusResponse.Params.Add("DataVersion", DataLayer.Instance.GetTable<DataVersion>().First().Version.ToString());
+                    statusResponse.Params.Add("Environment", PlayFabSettings.PlayFabEnvironment);
+                    statusResponse.Params.Add("UptimeMinutes", Convert.ToUInt32((DateTime.UtcNow - Startup.UpTimeStart).TotalMinutes).ToString());
+                    statusResponse.Params.Add("InstanceId", Startup.InstanceId);
+                    statusResponse.Params.Add("InstanceId2", Startup.InstanceId);
+                    return JsonConvert.SerializeObject(statusResponse);
 
-            //    urlParams = allParams.ToArray();
-            //    functionId = functionId.Split('/')[0];
-            //}
+                case "ResetPlayerData":
 
+                    CloudScriptResponse resetDataResponse;
 
-            //switch (functionId)
-            //{
-            //    case "":
-            //    case "Status":
+                    //TODO: Implement ResetPlayerData
 
-            //        bool showStatus = true;
-            //        CloudScriptResponse statusResponse = new CloudScriptResponse() { ResponseCode = ResponseCode.Success, Method = functionId };
-            //        statusResponse.Params.Add("DataVersion", DataLayer.Instance.GetTable<DataVersion>().First().Version.ToString());
-            //        statusResponse.Params.Add("Environment", PlayFabSettings.PlayFabEnvironment);
-            //        statusResponse.Params.Add("UptimeMinutes", Convert.ToUInt32((DateTime.UtcNow - Global.UpTimeStart).TotalMinutes).ToString());
-            //        statusResponse.Params.Add("InstanceId", Global.InstanceId);
-            //        return JsonConvert.SerializeObject(statusResponse);
+                    resetDataResponse = new CloudScriptResponse() { ResponseCode = ResponseCode.Error, ErrorMessage = string.Format("Reset data for user {0} failed.", param1), Method = method };
+
+                    result = JsonConvert.SerializeObject(resetDataResponse);
+
+                    break;
 
 
-            //    case "ResetPlayerData":
+                default:
 
-            //        CloudScriptResponse resetDataResponse;
+                    CloudScriptResponse response = null;
 
-            //        if (ResetPlayerData(urlParams[0]))
-            //        {
-            //            resetDataResponse = new CloudScriptResponse() { ResponseCode = ResponseCode.Success, ErrorMessage = "", Method = functionId };
-            //        }
-            //        else
-            //        {
-            //            resetDataResponse = new CloudScriptResponse() { ResponseCode = ResponseCode.Error, ErrorMessage = string.Format("Reset data for user {0} failed.", urlParams[0]), Method = functionId };
-            //        }
+                    if (ApiController.ApiMethods.ContainsKey(method))
+                    {
 
-            //        Response.Write(JsonConvert.SerializeObject(resetDataResponse));
+                        string jsonRequest;
+                        using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
+                        {
+                            jsonRequest = await reader.ReadToEndAsync();
+                        }
 
-            //        break;
+                  
 
+                        if (isStackCall)
+                        {
+                            CloudScriptRequestStack requests = JsonConvert.DeserializeObject<CloudScriptRequestStack>(jsonRequest);
+                            response = ApiController.ApiMethods[method].ExecuteStack(requests);
+                        }
+                        else
+                        {
+                            CloudScriptRequest request = JsonConvert.DeserializeObject<CloudScriptRequest>(jsonRequest);
+                            response = ApiController.ApiMethods[method].Execute(request, new string[] { param1, param2 });
+                        }
 
-            //    default:
+                    }
+                    else
+                    {
+                        response = new CloudScriptResponse() { ResponseCode = ResponseCode.ProtocolError, ErrorMessage = "Invalid method.", Method = method };
+                    }
 
-            //        CloudScriptResponse response = null;
+                    result = JsonConvert.SerializeObject(response);
 
-            //        if (ApiController.ApiMethods.ContainsKey(functionId))
-            //        {
-            //            StreamReader stream = new StreamReader(Request.InputStream);
-            //            string jsonRequest = stream.ReadToEnd();
+                    break;
 
-            //            if (stack)
-            //            {
-            //                CloudScriptRequestStack requests = JsonConvert.DeserializeObject<CloudScriptRequestStack>(jsonRequest);
-            //                response = ApiController.ApiMethods[functionId].ExecuteStack(requests);
-            //            }
-            //            else
-            //            {
+            }
 
-            //                CloudScriptRequest request = JsonConvert.DeserializeObject<CloudScriptRequest>(jsonRequest);
-            //                response = ApiController.ApiMethods[functionId].Execute(request, urlParams);
-            //            }
-
-            //        }
-            //        else
-            //        {
-            //            response = new CloudScriptResponse() { ResponseCode = ResponseCode.ProtocolError, ErrorMessage = "Invalid method.", Method = functionId };
-            //        }
-
-            //        Response.Write(JsonConvert.SerializeObject(response));
-
-            //        break;
-
-            //}
-
-
-            //Response.End();
-
+            return result;
         }
 
     }

@@ -4,6 +4,8 @@ using MetaLoop.Common.PlatformCommon.State;
 using MetaLoopDemo;
 using MetaLoopDemo.Meta;
 using MetaLoopDemo.Meta.Data;
+using PlayFab;
+using PlayFab.ClientModels;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +14,71 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+
+    void Awake()
+    {
+        PlayFabManager.Instance.BackOfficeEnvironement = BackOfficeEnvironement.Dev;
+
+        switch (PlayFabManager.Instance.BackOfficeEnvironement)
+        {
+            case BackOfficeEnvironement.Dev:
+            case BackOfficeEnvironement.Staging:
+                PlayFabSettings.TitleId = MetaSettings.PlayFabTitleId_Staging;
+
+                break;
+
+            case BackOfficeEnvironement.Prod:
+
+                PlayFabSettings.TitleId = MetaSettings.PlayFabTitleId;
+                break;
+        }
+
+        PlayFabSettings.RequestType = WebRequestType.UnityWebRequest;
+
+        PlayFabManager.Instance.OnDataMissMatchDetected += OnDataMissMatchDetected;
+
+        PlayFabManager.Instance.Login(OnPlayFabLoginSuccess, OnPlayFabLoginFailed, SystemInfo.deviceUniqueIdentifier);
+
+
+    }
+
+    public void BackOfficeLogin()
+    {
+        CloudScriptMethod method = new CloudScriptMethod();
+        method.Method = "PlayerLogin";
+        //Use case only valid for BOTS//Impersonates
+        if (!PlayFabManager.IsImpersonating)
+        {
+            method.Params.Add("DisplayName", PlayFabManager.Instance.PlayerName);
+        }
+
+        method.Params.Add("UniqueId", SystemInfo.deviceUniqueIdentifier);
+        PlayFabManager.Instance.InvokeBackOffice(method, OnBackOfficePlayerLoginComplete);
+    }
+
+    private void OnBackOfficePlayerLoginComplete(CloudScriptResponse response, CloudScriptMethod method)
+    {
+        
+    }
+
+    private void OnPlayFabLoginFailed(PlayFabError obj)
+    {
+    
+    }
+
+    private void OnPlayFabLoginSuccess(LoginResult obj)
+    {
+        BackOfficeLogin();
+    }
+
+
+
+    private void OnDataMissMatchDetected(OnDataMissMatchDetectedEventType type)
+    {
+        
+    }
+
+
     // Start is called before the first frame update
     void Start()
     {
