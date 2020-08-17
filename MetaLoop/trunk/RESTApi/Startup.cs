@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MetaLoop.Common.DataEngine;
 using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.Server;
+using MetaLoop.Common.PlayFabWrapper;
+using MetaLoop.GameLogic;
 using MetaLoopDemo.Meta;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -24,8 +27,10 @@ namespace MetaLoop.RESTApi
         {
             Configuration = configuration;
 
+            PlayFabApiHandler.UseEntityFiles = true;
+
             //Required to force assembly loading order. 
-            new MetaSettings().InitForReflection();
+            _MetaStateSettings.Init();
 
             InstanceId = Guid.NewGuid().ToString();
 

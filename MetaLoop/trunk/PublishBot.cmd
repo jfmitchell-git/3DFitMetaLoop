@@ -15,6 +15,9 @@ set /P VERSIONID=MAJOR VERSION:%=%
 set /P CDNONLY=CDN Sync Only? (y/*): %=%
 
 
+IF "%TIMEOUT_CACHE%"=="" (
+    set TIMEOUT_CACHE=0
+)
 
 If "%INPUT%"=="staging" goto STAGING
 If "%INPUT%"=="prod" goto PROD
@@ -26,7 +29,8 @@ GOTO ASK
 ECHO --------------------------------------------------
 ECHO Building.... STAGING
 ECHO --------------------------------------------------
-%MSBUILD_PATH% /p:Configuration=Release /p:DefineConstants="BACKOFFICE;STAGING;DISABLE_PLAYFABCLIENT_API" %CD%\MetaBackend.sln /t:Clean,Build /p:DeployOnBuild=false /p:PublishProfile=%STAGING_PUBXML% /verbosity:quiet /p:WarningLevel=0
+
+%MSBUILD_PATH% /p:Configuration=Release /p:DefineConstants="BACKOFFICE;STAGING;DISABLE_PLAYFABCLIENT_API" %CD%\MetaLoop.sln /t:Clean,Build /p:DeployOnBuild=false /p:PublishProfile=%STAGING_PUBXML% /verbosity:quiet /p:WarningLevel=0
 
 IF NOT %ERRORLEVEL%==0 GOTO ERROR
 If "%CDNONLY%"=="y" goto CDNONLY_PUSH
@@ -34,7 +38,7 @@ If "%CDNONLY%"=="y" goto CDNONLY_PUSH
 ECHO --------------------------------------------------
 ECHO Preparing Release, Shutting down servers....
 ECHO --------------------------------------------------
-"%CD%\PlayFabCdnManager\bin\Release\PlayFabCdnManager.exe" -status offline %TIMEOUT%
+"%CD%\PlayFabCdnManager\bin\MetaLoop.PlayFabCdnManager.exe" -status offline %TIMEOUT%
 
 
 
@@ -42,7 +46,7 @@ ECHO --------------------------------------------------
 ECHO Deploying to staging....
 ECHO --------------------------------------------------
 
-%MSBUILD_PATH% /p:Configuration=Release /p:DefineConstants="BACKOFFICE;STAGING;DISABLE_PLAYFABCLIENT_API" %CD%\MetaBackend.sln /t:Clean,Build /p:DeployOnBuild=true /p:PublishProfile=%STAGING_PUBXML% /verbosity:quiet /p:WarningLevel=0
+%MSBUILD_PATH% /p:Configuration=Release /p:DefineConstants="BACKOFFICE;STAGING;DISABLE_PLAYFABCLIENT_API" %CD%\MetaLoop.sln /t:Clean,Build /p:DeployOnBuild=true /p:PublishProfile=%STAGING_PUBXML% /verbosity:quiet /p:WarningLevel=0
 
 
 GOTO STEP2
@@ -52,13 +56,13 @@ ECHO --------------------------------------------------
 ECHO Writing App Version... PRODUCTION
 ECHO --------------------------------------------------
 
-"%CD%\PlayFabCdnManager\bin\Release\PlayFabCdnManager.exe" -appversion %VERSIONID% "%CD%\RESTApi\AppVersion.txt
+"%CD%\PlayFabCdnManager\bin\MetaLoop.PlayFabCdnManager.exe" -appversion %VERSIONID% "%CD%\RESTApi\AppVersion.txt
 
 
 ECHO --------------------------------------------------
 ECHO Building... PRODUCTION
 ECHO --------------------------------------------------
-%MSBUILD_PATH% /p:Configuration=Release /p:DefineConstants="BACKOFFICE;DISABLE_PLAYFABCLIENT_API" %CD%\MetaBackend.sln /t:Clean,Build /p:DeployOnBuild=false /p:PublishProfile=%PROD_PUBXML% /verbosity:quiet /p:WarningLevel=0
+%MSBUILD_PATH% /p:Configuration=Release /p:DefineConstants="BACKOFFICE;DISABLE_PLAYFABCLIENT_API" %CD%\MetaLoop.sln /t:Clean,Build /p:DeployOnBuild=false /p:PublishProfile=%PROD_PUBXML% /verbosity:quiet /p:WarningLevel=0
 
 IF NOT %ERRORLEVEL%==0 GOTO ERROR
 If "%CDNONLY%"=="y" goto CDNONLY_PUSH
@@ -67,13 +71,13 @@ If "%CDNONLY%"=="y" goto CDNONLY_PUSH
 ECHO --------------------------------------------------
 ECHO Preparing Release, Shutting down servers....
 ECHO --------------------------------------------------
-"%CD%\PlayFabCdnManager\bin\Release\PlayFabCdnManager.exe" -status offline %TIMEOUT%
+"%CD%\PlayFabCdnManager\bin\MetaLoop.PlayFabCdnManager.exe" -status offline %TIMEOUT%
 
 
 ECHO --------------------------------------------------
 ECHO Deployging to production
 ECHO --------------------------------------------------
-%MSBUILD_PATH% /p:Configuration=Release /p:DefineConstants="BACKOFFICE;DISABLE_PLAYFABCLIENT_API" %CD%\MetaBackend.sln /t:Clean,Build /p:DeployOnBuild=true /p:PublishProfile=%PROD_PUBXML% /verbosity:quiet /p:WarningLevel=0
+%MSBUILD_PATH% /p:Configuration=Release /p:DefineConstants="BACKOFFICE;DISABLE_PLAYFABCLIENT_API" %CD%\MetaLoop.sln /t:Clean,Build /p:DeployOnBuild=true /p:PublishProfile=%PROD_PUBXML% /verbosity:quiet /p:WarningLevel=0
 
 GOTO STEP2
 
@@ -92,7 +96,7 @@ GOTO END
 ECHO --------------------------------------------------
 ECHO "Build and publish to AZURE COMPLETED... Running PlayFabCdnManager..."
 ECHO --------------------------------------------------
-"%CD%\PlayFabCdnManager\bin\Release\PlayFabCdnManager.exe" "-BaseUnityFolder:%PROJECT_PATH%"
+"%CD%\PlayFabCdnManager\bin\MetaLoop.PlayFabCdnManager.exe" "-BaseUnityFolder:%PROJECT_PATH%"
 
 
 ECHO(
@@ -108,18 +112,18 @@ If "%INPUT%"=="staging" goto STAGING_finish
 If "%INPUT%"=="prod" goto PROD_finish
 
 :STAGING_finish
-"%CD%\PlayFabCdnManager\bin\Release\PlayFabCdnManager.exe" -status online %TIMEOUT_CACHE% %VERSIONID%
+"%CD%\PlayFabCdnManager\bin\MetaLoop.PlayFabCdnManager.exe" -status online %TIMEOUT_CACHE% %VERSIONID%
 GOTO COMPLETE
 
 :PROD_finish
-"%CD%\PlayFabCdnManager\bin\Release\PlayFabCdnManager.exe" -status online %TIMEOUT_CACHE% %VERSIONID%
+"%CD%\PlayFabCdnManager\bin\MetaLoop.PlayFabCdnManager.exe" -status online %TIMEOUT_CACHE% %VERSIONID%
 GOTO COMPLETE
 
 :CDNONLY_PUSH
 ECHO --------------------------------------------------
 ECHO "Running PlayFabCdnManager... (CDN ONLY MODE)"
 ECHO --------------------------------------------------
-"%CD%\PlayFabCdnManager\bin\Release\PlayFabCdnManager.exe" -cdnonly "-BaseUnityFolder:%PROJECT_PATH%"
+"%CD%\PlayFabCdnManager\bin\MetaLoop.PlayFabCdnManager.exe" -cdnonly "-BaseUnityFolder:%PROJECT_PATH%"
 GOTO COMPLETE
 
 :COMPLETE

@@ -9,10 +9,10 @@ namespace MetaLoopDemo.Meta
         public const string StagingEndpoint = @"https://metaloopdemo.azurewebsites.net/api/";
         public const string DevEndpoint = @"https://metaloopdemo.azurewebsites.net/api/";
 
-        public const string PlayerXpId = "";
-        public const string SoftCurrencyId = "";
-        public const string HardCurrencyId = "";
-        public const string EnergyId = "";
+        public const string PlayerXpId = "PlayerXp";
+        public const string SoftCurrencyId = "Gold";
+        public const string HardCurrencyId = "Gems";
+        public const string EnergyId = "Energy";
 
         public const string DateTimeFormat = "yyyy-MM-dd HH:mm";
         public static string BaseUnityFolder = "";  //Setting applied from publish bot.
@@ -39,11 +39,9 @@ namespace MetaLoopDemo.Meta
         public const int MaxPlayerLevel = 100;
 
         public const string DatabaseName = "MetaLoopDemo.db";
-        public const string DatabaseFileName = @"Assets\StreamingAssets\" + DatabaseName;
+        public const string DatabaseFileName = @"\Assets\StreamingAssets\" + DatabaseName;
 
-        public void InitForReflection()
-        {
-            
-        }
+        public const string MetaDataStateFileName = "MetaDataState.json";
+
     }
 }

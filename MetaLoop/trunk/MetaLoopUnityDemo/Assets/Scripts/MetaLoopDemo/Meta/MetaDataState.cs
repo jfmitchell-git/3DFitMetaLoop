@@ -1,5 +1,6 @@
 ﻿using MetaLoop.Common.PlatformCommon.State;
 using MetaLoopDemo.Meta.Data;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,10 @@ namespace MetaLoopDemo.Meta
         {
             TroopsData = new List<TroopDataState>();
         }
+
+        public static MetaDataState FromJson(string data) {
+            return JsonConvert.DeserializeObject<MetaDataState>(data);
+        }
+
     }
 }
