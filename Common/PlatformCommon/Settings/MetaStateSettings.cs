@@ -87,6 +87,7 @@ namespace MetaLoop.Common.PlatformCommon.Settings
         public static int _MaxPlayerLevel = 0;
 
         public static string _DatabaseName = "";
+        public static string _DatabaseFileName = @"Assets\StreamingAssets\" + _DatabaseName;
 
 
     }

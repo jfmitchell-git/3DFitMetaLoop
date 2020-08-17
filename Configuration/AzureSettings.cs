@@ -28,7 +28,7 @@ namespace MetaLoop.Configuration
         {
             get
             {
-                return Endpoint + "/Api/Status";
+                return Endpoint + "/Status";
             }
         }
     }

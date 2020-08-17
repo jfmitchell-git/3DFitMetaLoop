@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MetaLoop.Common.DataEngine;
 using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.Data;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlatformCommon.Server;
+using MetaLoop.Common.PlayFabWrapper;
 using MetaLoop.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -65,6 +67,7 @@ namespace MetaLoop.RESTApi.Controllers
 
                     if (ApiController.ApiMethods.ContainsKey(method))
                     {
+                        var apiMethod = ApiController.ApiMethods[method]; 
 
                         string jsonRequest;
                         using (StreamReader reader = new StreamReader(Request.Body, Encoding.UTF8))
@@ -72,17 +75,17 @@ namespace MetaLoop.RESTApi.Controllers
                             jsonRequest = await reader.ReadToEndAsync();
                         }
 
-                  
-
                         if (isStackCall)
                         {
                             CloudScriptRequestStack requests = JsonConvert.DeserializeObject<CloudScriptRequestStack>(jsonRequest);
-                            response = ApiController.ApiMethods[method].ExecuteStack(requests);
+                            apiMethod.LoadContext(requests);
+                            response = await apiMethod.ExecuteStackAsync(requests);
                         }
                         else
                         {
                             CloudScriptRequest request = JsonConvert.DeserializeObject<CloudScriptRequest>(jsonRequest);
-                            response = ApiController.ApiMethods[method].Execute(request, new string[] { param1, param2 });
+                            apiMethod.LoadContext(request);
+                            response = await apiMethod.ExecuteAsync(request, new string[] { param1, param2 });
                         }
 
                     }

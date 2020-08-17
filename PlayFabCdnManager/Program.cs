@@ -14,6 +14,9 @@ using MetaLoop.Common.PlatformCommon.Protocol;
 using MetaLoop.Configuration;
 using PlayFabSettings = MetaLoop.Configuration.PlayFabSettings;
 using MetaLoop.Common.PlatformCommon.Settings;
+using MetaLoop.GameLogic;
+using PlayFab.AdminModels;
+using System.Net.Http;
 
 namespace MetaLoop.PlayFabCdnManager
 {
@@ -22,7 +25,11 @@ namespace MetaLoop.PlayFabCdnManager
         public static string BackOfficeStatusUrl;
         static void Main(string[] args)
         {
+
+            _MetaStateSettings.Init();
+
             bool isCdnOnlyMode = false;
+
 
             List<string> allArgs = args == null ? new List<string>() : args.ToList();
             PlayFab.PlayFabSettings.staticSettings.DeveloperSecretKey = PlayFabSettings.DeveloperSecretKey;
@@ -85,15 +92,19 @@ namespace MetaLoop.PlayFabCdnManager
             Console.WriteLine("Loading local files on " + MetaStateSettings._BaseUnityFolder + MetaStateSettings._DownloadableFolderPath);
             List<AssetFileInfo> allFiles = LocalFileHandler.GetLocalDownloadableFiles();
 
-           var allCdnContent = PlayFabAdminAPI.GetContentListAsync(new PlayFab.AdminModels.GetContentListRequest()).GetAwaiter().GetResult();
+            var allCdnContent = PlayFabAdminAPI.GetContentListAsync(new PlayFab.AdminModels.GetContentListRequest()).GetAwaiter().GetResult();
 
-          
+
 
             int currentDataVersion;
             AssetFileInfo previousDbFileInfo = null;
             if (!isCdnOnlyMode)
             {
-                string databasePath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\" + MetaStateSettings._DatabaseName;
+                //string databasePath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) + @"\" + MetaStateSettings._DatabaseName;
+
+                string databasePath = MetaStateSettings._BaseUnityFolder + MetaStateSettings._DatabaseFileName;
+
+
 
                 DataLayer.Instance.Init(databasePath);
                 currentDataVersion = DataLayer.Instance.GetTable<DataVersion>().First().Version;
@@ -201,7 +212,60 @@ namespace MetaLoop.PlayFabCdnManager
 
         public static bool UploadFileToCDN(string relativeFileName, byte[] content)
         {
+            GetContentUploadUrlRequest request = new GetContentUploadUrlRequest();
+            request.ContentType = "binary/octet-stream";
+            request.Key = relativeFileName;
+        
+
+            var result = PlayFabAdminAPI.GetContentUploadUrlAsync(request).GetAwaiter().GetResult();
+
+            if (result.Error == null)
+            {
+
+                bool uploadResult = UploadFile(result.Result.URL, content);
+                //HttpClient client = new HttpClient();
+                //ByteArrayContent data = new ByteArrayContent(content);
+                //var response = client.PutAsync(result.Result.URL, data).GetAwaiter().GetResult();
+
+                if (uploadResult)
+                {
+                    return true;
+                } else
+                {
+                    Console.WriteLine("HTTP PUT ERROR" + " " + result.Result.URL);
+                }
+            }
+            else
+            {
+                Console.WriteLine(result.Error.ErrorMessage);
+            }
             return false;
+        }
+
+        public static bool UploadFile(string urlPath, byte[] byteArray)
+        {
+            string result = string.Empty;
+
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(urlPath);
+            httpWebRequest.ContentType = "binary/octet-stream";
+            httpWebRequest.Method = "PUT";
+
+            Stream dataStream = httpWebRequest.GetRequestStream();
+            dataStream.Write(byteArray, 0, byteArray.Length);
+            dataStream.Close();
+
+            HttpWebResponse response = (HttpWebResponse)httpWebRequest.GetResponse();
+
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+
+            }
+
         }
 
         public static void ChangeServerStatus(bool available, string secondsToWait, string versionId = null)
@@ -216,9 +280,8 @@ namespace MetaLoop.PlayFabCdnManager
             }
             else
             {
-                Console.WriteLine("ERROR, COULD NOT READ ServerInfo!");
-                Environment.Exit(0);
-                return;
+                serverInfo = new ServerInfo();
+                Console.WriteLine("COULD NOT READ ServerInfo, CREATING NEW ONE...");
             }
 
             serverInfo.ServerStatus = (available || waitingTime == 0) ? ServerStatus.Online : ServerStatus.Offline;
@@ -264,6 +327,9 @@ namespace MetaLoop.PlayFabCdnManager
 
         public static void WakeUpAzureRequests(int numOfRequest)
         {
+
+            System.Diagnostics.Process.Start(BackOfficeStatusUrl);
+
             for (int i = 0; i < numOfRequest; i++)
             {
                 try

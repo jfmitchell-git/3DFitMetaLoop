@@ -161,6 +161,7 @@
     <Compile Include="Assets\Scripts\MetaLoopDemo\Meta\Data\TroopTagData.cs" />
     <Compile Include="Assets\Scripts\MetaLoopDemo\Meta\MetaDataState.cs" />
     <Compile Include="Assets\Scripts\MetaLoopDemo\Meta\MetaSettings.cs" />
+    <Compile Include="Assets\Scripts\MetaLoopDemo\Meta\_MetaStateSettings.cs" />
     <None Include="Assets\JsonDotNet\link.xml" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
