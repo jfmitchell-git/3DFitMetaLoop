@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        PlayFabManager.Instance.BackOfficeEnvironement = BackOfficeEnvironement.Dev;
+        PlayFabManager.Instance.BackOfficeEnvironement = BackOfficeEnvironement.Staging;
 
         switch (PlayFabManager.Instance.BackOfficeEnvironement)
         {

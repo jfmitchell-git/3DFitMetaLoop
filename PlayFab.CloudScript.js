@@ -1,5 +1,7 @@
 //This is default template file for PlayFab CloudScript.
 //Environement URLs must be updated and file saved in PlayFab's CloudScript Revision system. 
+// Sample request stack { "Method": "PlayerLogin", "Params": { "Name": "Value" }, "Attempt": 0, "Environement": "Prod" }
+
 
 var defaultEnvironement = "dev";
 var productionUrl = "https://metaloopdemo.azurewebsites.net/api/";
@@ -40,16 +42,24 @@ function InvokeBackOffice(args, context) {
         playerIdParam = currentPlayerId;
     }
 
+    var titlePlayerAccountEntity;
+
+    if ('Entity' in firtsRequest) {
+        titlePlayerAccountEntity = firtsRequest.Entity;
+    } else {
+        titlePlayerAccountEntity = entity.GetTitlePlayersFromMasterPlayerAccountIds({ MasterPlayerAccountIds: currentPlayerId }).TitlePlayerAccounts[currentPlayerId].Id;
+    }
+
     var body = {
         CloudScriptMethod: args,
         UserId: playerIdParam,
+        EntityId: titlePlayerAccountEntity
     };
 
     var headers;
     var content = JSON.stringify(body);
     var httpMethod = "post";
     var contentType = "application/json";
-
 
     // Try Catch Retry Logic important with PlayFab, should be better written with short delay
     try {
@@ -63,6 +73,8 @@ function InvokeBackOffice(args, context) {
             Body: { errorMessage: msg },
             EventName: "cloudscript_http_error"
         });
+
+        if (firtsRequest.Environement.toLowerCase() == "dev") return { result: msg };
     }
 
     sleep(50);

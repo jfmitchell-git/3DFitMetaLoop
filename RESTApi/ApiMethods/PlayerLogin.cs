@@ -13,13 +13,14 @@ namespace MetaLoop.RESTApi.ApiMethods
     {
         public override async Task<CloudScriptResponse> ExecuteAsync(CloudScriptRequest request, string[] urlArguments)
         {
+            DateTime benginRequest = DateTime.UtcNow;
             if (IsClientValidRequest)
             {
                 var cloudData = new PlayFabFileDetails(MetaSettings.MetaDataStateFileName);
                 MetaDataState metaDataState = null;
 
-
-                if (await PlayFabApiHandler.GetEntityFiles(CurrentEntity, new List<PlayFabFileDetails>() { cloudData }))
+       
+                if (await PlayFabApiHandler.GetPlayerTitleData(CurrentUserId, new List<PlayFabFileDetails>() { cloudData }))
                 {
                     //if file does not exist yet, create default for content, otherwise perfom Login Activies.
                     if (cloudData.ExistOnServer)
@@ -41,9 +42,10 @@ namespace MetaLoop.RESTApi.ApiMethods
                     metaDataState.ServerDateTime = DateTime.UtcNow;
                     cloudData.DataAsString = metaDataState.ToJson();
 
-                    if (await PlayFabApiHandler.UploadEntityFiles(CurrentEntity, new List<PlayFabFileDetails>() { cloudData }))
+                    if (await PlayFabApiHandler.UploadPlayerTitleData(CurrentUserId, new List<PlayFabFileDetails>() { cloudData }))
                     {
-                        return new CloudScriptResponse() { ResponseCode = ResponseCode.Success };
+                        var response = new CloudScriptResponse() { ResponseCode = ResponseCode.Success };
+                        return response;
                     }
 
                 }
