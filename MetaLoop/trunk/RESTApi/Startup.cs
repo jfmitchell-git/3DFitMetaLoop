@@ -23,6 +23,7 @@ namespace MetaLoop.RESTApi
     {
         public static DateTime UpTimeStart;
         public static string InstanceId;
+        public static string AppVersion;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -41,6 +42,16 @@ namespace MetaLoop.RESTApi
             var rootDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             DataLayer.Instance.Init(rootDir + @"\" + MetaSettings.DatabaseName);
 
+            var appVersionFileName = rootDir + @"\AppVersion.txt";
+
+            if (System.IO.File.Exists(appVersionFileName))
+            {
+                AppVersion = System.IO.File.ReadAllText(appVersionFileName);
+            }
+            else
+            {
+                throw new Exception("Mission AppVersion.txt file.");
+            }
 
             //Init CloudTable if any.
 

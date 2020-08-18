@@ -45,7 +45,6 @@ namespace MetaLoop.RESTApi.Controllers
                     statusResponse.Params.Add("Environment", PlayFabSettings.PlayFabEnvironment);
                     statusResponse.Params.Add("UptimeMinutes", Convert.ToUInt32((DateTime.UtcNow - Startup.UpTimeStart).TotalMinutes).ToString());
                     statusResponse.Params.Add("InstanceId", Startup.InstanceId);
-                    statusResponse.Params.Add("InstanceId2", Startup.InstanceId);
                     return JsonConvert.SerializeObject(statusResponse);
 
                 case "ResetPlayerData":
@@ -57,6 +56,12 @@ namespace MetaLoop.RESTApi.Controllers
                     resetDataResponse = new CloudScriptResponse() { ResponseCode = ResponseCode.Error, ErrorMessage = string.Format("Reset data for user {0} failed.", param1), Method = method };
 
                     result = JsonConvert.SerializeObject(resetDataResponse);
+
+                    break;
+
+                case "AppVersion":
+
+                    result = Startup.AppVersion;
 
                     break;
 
