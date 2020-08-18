@@ -24,5 +24,11 @@
     <ProjectReference Include="..\GameLogic\GameLogic.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="AppVersion.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 
 </Project>
