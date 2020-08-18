@@ -72,7 +72,7 @@ namespace MetaLoop.Common.PlayFabWrapper
 
             var result = await PlayFabServerAPI.UpdateUserInternalDataAsync(requestData);
 
-            if (result.Error != null)
+            if (result.Error == null)
             {
                 return true;
             }
@@ -88,7 +88,7 @@ namespace MetaLoop.Common.PlayFabWrapper
             requestData.Keys = files.Select(y => y.FileName).ToList();
             var result = await PlayFabServerAPI.GetUserReadOnlyDataAsync(requestData);
 
-            if (result.Error != null)
+            if (result.Error == null)
             {
                 foreach (var file in files)
                 {

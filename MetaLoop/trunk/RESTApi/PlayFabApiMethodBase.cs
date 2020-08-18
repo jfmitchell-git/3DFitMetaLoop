@@ -26,10 +26,7 @@ namespace MetaLoop.RESTApi
             if (r != null)
             {
                 CurrentUserId = r.UserId;
-                if (r.CloudScriptMethod != null)
-                {
-                    CurrentEntity = r.CloudScriptMethod.Entity;
-                }
+                CurrentEntity = r.EntityId;
             }
         }
 
@@ -38,10 +35,7 @@ namespace MetaLoop.RESTApi
             if (r != null)
             {
                 CurrentUserId = r.UserId;
-                if (r.CloudScriptMethod.FirstOrDefault() != null)
-                {
-                    CurrentEntity = r.CloudScriptMethod.FirstOrDefault().Entity;
-                }
+                CurrentEntity = r.EntityId;
             }
         }
 
