@@ -63,14 +63,14 @@ namespace MetaLoop.Common.PlayFabWrapper
       
         public static async Task<bool> UploadPlayerTitleData(string titlePlayerId, List<PlayFabFileDetails> files)
         {
-            var requestData = new UpdateUserInternalDataRequest() { PlayFabId = titlePlayerId };
+            var requestData = new UpdateUserDataRequest() { PlayFabId = titlePlayerId, Permission = UserDataPermission.Private };
             requestData.Data = new Dictionary<string, string>();
             foreach (var file in files)
             {
                 requestData.Data.Add(file.FileName, file.DataAsString);
             }
 
-            var result = await PlayFabServerAPI.UpdateUserInternalDataAsync(requestData);
+            var result = await PlayFabServerAPI.UpdateUserReadOnlyDataAsync(requestData);
 
             if (result.Error == null)
             {
