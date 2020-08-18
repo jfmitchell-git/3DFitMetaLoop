@@ -124,6 +124,7 @@
     <Compile Include="Assets\MetaLoop.PlatformCommon\GameServices\IGameService.cs" />
     <Compile Include="Assets\MetaLoop.PlatformCommon\GameServices\LeaderboardScoreEntryArg.cs" />
     <Compile Include="Assets\MetaLoop.PlatformCommon\GameServices\SteamGameService.cs" />
+    <Compile Include="Assets\MetaLoop.PlatformCommon\HttpClient\UnityWebRequestHandler.cs" />
     <Compile Include="Assets\MetaLoop.PlatformCommon\PlayFabClient\CloudScriptMethod.cs" />
     <Compile Include="Assets\MetaLoop.PlatformCommon\PlayFabClient\CloudScriptRequest.cs" />
     <Compile Include="Assets\MetaLoop.PlatformCommon\PlayFabClient\CloudScriptResponse.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Assets\MetaLoop.PlatformCommon\PlayFabClient\PlayFabManager.cs" />
     <Compile Include="Assets\MetaLoop.PlatformCommon\Protocol\GameUnavailableMessageType.cs" />
     <Compile Include="Assets\MetaLoop.PlatformCommon\RemoteAssets\AssetFileInfo.cs" />
+    <Compile Include="Assets\MetaLoop.PlatformCommon\RemoteAssets\RemoteAssetsManager.cs" />
     <Compile Include="Assets\MetaLoop.PlatformCommon\Server\ApiController.cs" />
     <Compile Include="Assets\MetaLoop.PlatformCommon\Server\IPlayFabApiMethod.cs" />
     <Compile Include="Assets\MetaLoop.PlatformCommon\Server\ServerInfo.cs" />
@@ -153,6 +155,7 @@
     <Compile Include="Assets\MetaLoop.PlatformCommon\UserProfile\UserProfileManager.cs" />
     <Compile Include="Assets\MetaLoop.PlatformCommon\Utils\Path.cs" />
     <Compile Include="Assets\Scripts\MetaLoopDemo\GameManager.cs" />
+    <Compile Include="Assets\Scripts\MetaLoopDemo\LocalGameData.cs" />
     <Compile Include="Assets\Scripts\MetaLoopDemo\Meta\Data\AbilityData.cs" />
     <Compile Include="Assets\Scripts\MetaLoopDemo\Meta\Data\Consumable.cs" />
     <Compile Include="Assets\Scripts\MetaLoopDemo\Meta\Data\Schema.cs" />
@@ -387,12 +390,6 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>D:/DryGinStudios/MetaLoop/MetaLoopUnityDemo/Assets/JsonDotNet/Assemblies/Standalone/Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
-      <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.10f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.iOS.Extensions.Common">
-      <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.10f1/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.10f1/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>

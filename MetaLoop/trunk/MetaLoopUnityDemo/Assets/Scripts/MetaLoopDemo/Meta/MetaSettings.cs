@@ -5,9 +5,20 @@ namespace MetaLoopDemo.Meta
 {
     public class MetaSettings : ISettingsProvider
     {
+
+        public static float MAJOR_VERSION = 0.1f;
+        public static string GetMajorVersion()
+        {
+            string result = MAJOR_VERSION.ToString("0.00");
+            result = result.Replace(" ", "");
+            result = result.Replace(",", ".");
+            return result;
+        }
+
         public const string ProductionEndpoint = @"https://metaloopdemo.azurewebsites.net/api/";
         public const string StagingEndpoint = @"https://metaloopdemo.azurewebsites.net/api/";
         public const string DevEndpoint = @"https://metaloopdemo.azurewebsites.net/api/";
+        public const string ServerAppVersionUrl = ProductionEndpoint + "AppVersion";
 
         public const string PlayerXpId = "PlayerXp";
         public const string SoftCurrencyId = "Gold";
