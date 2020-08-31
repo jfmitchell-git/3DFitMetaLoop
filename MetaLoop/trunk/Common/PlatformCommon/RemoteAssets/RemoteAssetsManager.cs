@@ -62,7 +62,7 @@ namespace MetaLoop.Common.PlatformCommon.RemoteAssets
             }
         }
 
-        public const string RemoteAssetsPersistantName = @"/RemoteAssets";
+   
 
 
 
@@ -174,7 +174,7 @@ namespace MetaLoop.Common.PlatformCommon.RemoteAssets
         {
             List<RemoteAssetInfo> allFilesToBeSynced = new List<RemoteAssetInfo>();
 
-            string remoteAssetsPath = Application.persistentDataPath + RemoteAssetsPersistantName;
+            string remoteAssetsPath = Application.persistentDataPath + MetaStateSettings._RemoteAssetsPersistantName;
 
             if (!Directory.Exists(remoteAssetsPath)) Directory.CreateDirectory(remoteAssetsPath);
 

@@ -1,4 +1,5 @@
-﻿using MetaLoop.Common.PlatformCommon;
+﻿using DG.Tweening;
+using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlatformCommon.Protocol;
 using MetaLoop.Common.PlatformCommon.RemoteAssets;
@@ -203,7 +204,8 @@ public class GameManager : MonoBehaviour
 
             GameDataAndBackOfficeReady();
 
-        } else
+        }
+        else
         {
             ShowUnavailableMessage(GameUnavailableMessageType.BACKOFFICE_ERROR);
         }
@@ -216,24 +218,61 @@ public class GameManager : MonoBehaviour
 
 #if UNITY_EDITOR
         //DataLayer.Instance.Init();
-        DataLayer.Instance.Init(Application.persistentDataPath + "/" + MetaSettings.DatabaseName);
+        DataLayer.Instance.Init(Application.persistentDataPath + MetaSettings.RemoteAssetsPersistantName + @"/" + MetaSettings.AssetManagerStartupFolder + MetaSettings.DatabaseName);
 #else
-        DataLayer.Instance.Init(Application.persistentDataPath + "/" + MetaSettings.DatabaseName);
+        DataLayer.Instance.Init(Application.persistentDataPath + MetaSettings.RemoteAssetsPersistantName + @"/" + MetaSettings.AssetManagerStartupFolder + MetaSettings.DatabaseName);
 #endif
 
         DataLayer.Instance.GetTable<TroopData>().ForEach(y => Debug.Log(y.Name));
 
-        var troopInfo = DataLayer.Instance.GetTable<TroopData>().Where(y => y.Name == "Chicken").SingleOrDefault();
 
-        var nextTierInfo = DataLayer.Instance.GetTable<TierData>().Where(y => (int)y.Tier == (int)troopInfo.StartTier + 1).SingleOrDefault();
+        DOVirtual.DelayedCall(5f, () => UpgradeTier("Pig"));
 
-        if (MetaDataState.Current.Consumables.CheckBalances(nextTierInfo.Cost.ConsumableCostItems) && true == false)
+    }
+
+    public void UpgradeTier(string troopId)
+    {
+        Debug.Log("Upgrading Tier for " + troopId);
+        var troopInfo = DataLayer.Instance.GetTable<TroopData>().Where(y => y.Name == troopId).SingleOrDefault();
+
+        var playerTroopInfo = MetaDataState.GetCurrent().TroopsData.Where(y => y.TroopId == troopId).SingleOrDefault();
+
+        TierData nextTierInfo;
+        if (playerTroopInfo != null)
+        {
+            nextTierInfo = DataLayer.Instance.GetTable<TierData>().Where(y => (int)y.Tier == (int)troopInfo.StartTier + 1).SingleOrDefault();
+        }
+        else
+        {
+            nextTierInfo = DataLayer.Instance.GetTable<TierData>().First();
+        }
+       
+        if (MetaDataState.Current.Consumables.CheckBalances(nextTierInfo.Cost.ConsumableCostItems))
         {
             CloudScriptMethod upgradeTier = new CloudScriptMethod("UpgradeTier");
-            upgradeTier.Params.Add("troopId", troopInfo.Name);
-            PlayFabManager.Instance.InvokeBackOffice(upgradeTier, OnUpgradeTierResult);
+            upgradeTier.Params.Add("troopId", troopId);
+            PlayFabManager.Instance.InvokeBackOffice(upgradeTier, (CloudScriptResponse r, CloudScriptMethod m) => OnUpgradeTierResult(r, troopId));
         }
 
+    }
+
+    private void OnUpgradeTierResult(CloudScriptResponse r, string troopId)
+    {
+        if (r.ResponseCode == ResponseCode.Success)
+        {
+            Debug.Log("SUCCESS Upgrading Tier for " + troopId);
+
+            var playerTroopInfo = MetaLoopDemo.Meta.MetaDataState.GetCurrent().TroopsData.Where(y => y.TroopId == troopId).SingleOrDefault();
+
+            if (playerTroopInfo == null)
+            {
+                playerTroopInfo = new TroopDataState() { TroopId = troopId };
+                MetaDataState.GetCurrent().TroopsData.Add(playerTroopInfo);
+            }
+
+            playerTroopInfo.CurrentTier = (TierType)((int)playerTroopInfo.CurrentTier + 1);
+
+        }
     }
 
     private void OnDataMissMatchDetected(OnDataMissMatchDetectedEventType type)
@@ -249,14 +288,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-    private void OnUpgradeTierResult(CloudScriptResponse r, CloudScriptMethod m)
-    {
-        if (r.ResponseCode == ResponseCode.Success)
-        {
-            //MetaDataState.Current.Consumables.SpendConsumables
-            //show Upgrade Animation!!
-        }
-    }
 
 
     public void ShowUnavailableMessage(GameUnavailableMessageType reason)
