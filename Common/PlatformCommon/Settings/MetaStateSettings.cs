@@ -53,6 +53,8 @@ namespace MetaLoop.Common.PlatformCommon.Settings
             }
         }
 
+        public static string _RemoteAssetsPersistantName = "";
+
         public static string _ProductionEndpoint = "";
         public static string _StagingEndpoint = "";
         public static string _DevEndpoint = "";

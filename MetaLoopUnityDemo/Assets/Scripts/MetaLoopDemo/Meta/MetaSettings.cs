@@ -31,6 +31,7 @@ namespace MetaLoopDemo.Meta
         public const string DownloadableFolderPath = @"\Downloadable";
         public const string DownloadableStartupPath = @"\Startup";
         public const string DownloadableOnDemandPath = @"\OnDemand";
+        public const string RemoteAssetsPersistantName = @"/RemoteAssets";
 
         public const string PlayFabDeveloperSecretKey_Staging = "Z3OJCX8JS7ABHMH4O3QTZDU698JTP97KJO4KBBB3GUJRFH9AGX";
         public const string PlayFabTitleId_Staging = "FE17A";
