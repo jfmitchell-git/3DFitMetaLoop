@@ -1,1 +1,5 @@
 /GameLogic/Shared
+bin
+obj
+.vs
+/MetaLoopUnityDemo/Assets/MetaLoop.PlatformCommon
