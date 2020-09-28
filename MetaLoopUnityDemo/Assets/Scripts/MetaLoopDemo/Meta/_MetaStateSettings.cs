@@ -7,9 +7,11 @@ namespace MetaLoop.GameLogic
 {
     public partial class _MetaStateSettings
     {
+
         public static void Init()
         {
-            new MetaSettings();
+            var tempObject = new MetaSettings();
+            tempObject = null;
         }
 
     }
