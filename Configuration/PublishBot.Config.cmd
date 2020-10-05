@@ -8,6 +8,6 @@ set MSBUILD_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\
 set STAGING_PUBXML="%CD%\RESTApi\Properties\PublishProfiles\MetaLoopDemo - Web Deploy.pubxml"
 set PROD_PUBXML="%CD%\RESTApi\Properties\PublishProfiles\MetaLoopDemo - Web Deploy.pubxml"
 
-set PROJECT_PATH=MetaLoopUnityDemo
-set UNITY3D_PATH=MetaLoopUnityDemo
-set EXCEL_PATH=MetaLoopUnityDemoData.xlsx
+set PROJECT_PATH=..\BioIncRedemptionMobile
+set UNITY3D_PATH=..\BioIncRedemptionMobile\UnityMobile
+set EXCEL_PATH=BioIncRedemptionMetaLoop.xlsx

@@ -1,7 +1,6 @@
 ﻿using MetaLoop.Common.DataEngine;
 using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.Data;
-using MetaLoopDemo.Meta.Data;
 using System;
 using System.Collections.Generic;
 using System.Data;
