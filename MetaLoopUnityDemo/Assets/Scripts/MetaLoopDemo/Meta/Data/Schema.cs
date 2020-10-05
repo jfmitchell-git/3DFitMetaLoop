@@ -16,25 +16,9 @@ namespace MetaLoopDemo.Meta.Data
         {
             get
             {
-                List<Type> allTypes = new List<Type>();
-                allTypes.AddRange(MetaSchema.SystemsTypes);
+                List<Type> allTypes = SchemaBuilder.CodeFirstTypes;
 
-
-                var allMetaObjects = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
-                              .Where(x => typeof(IMetaDataObject).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract).ToList();
-
-                var priorityList = allMetaObjects.Where(y => y.GetCustomAttribute<MetaSchemaOrder>() != null).OrderBy(y => y.GetCustomAttribute<MetaSchemaOrder>().Order).ToList();
-                var nonPriorityList = allMetaObjects.Where(y => y.GetCustomAttribute<MetaSchemaOrder>() == null).ToList();
-
-                allTypes.AddRange(priorityList);
-
-                allTypes.Add(typeof(ConsumableCost));
-                allTypes.Add(typeof(ConsumableCostItem));
-                allTypes.Add(typeof(RewardData));
-                allTypes.Add(typeof(RewardDataItem));
-
-
-                allTypes.AddRange(nonPriorityList);
+                //Add any custom integration here..
 
                 return allTypes;
             }
