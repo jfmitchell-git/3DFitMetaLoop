@@ -6,6 +6,10 @@
     <AssemblyName>MetaLoop.GameLogic</AssemblyName>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE;TRACE,BACKOFFICE</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Shared\MetaStateSettings.cs.meta" />
     <None Remove="Shared\_MetaStateSettings.cs.meta" />

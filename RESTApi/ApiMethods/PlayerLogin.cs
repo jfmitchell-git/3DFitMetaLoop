@@ -1,8 +1,8 @@
-﻿using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
+﻿using dryginstudios.bioinc.meta.Data;
+using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlayFabWrapper;
 using MetaLoopDemo.Meta;
-using MetaLoopDemo.Meta.Data;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
