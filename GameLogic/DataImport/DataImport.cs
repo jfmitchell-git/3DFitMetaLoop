@@ -33,7 +33,9 @@ namespace MetaLoop.GameLogic.DataImport
             else
             {
 
-                DataVersion dataVersioRow = DataLayer.Instance.Connection.Table<DataVersion>().FirstOrDefault();
+                DataVersion dataVersioRow = null;
+                try { dataVersioRow = DataLayer.Instance.Connection.Table<DataVersion>().FirstOrDefault(); } catch { }
+
                 int currentVersion = dataVersioRow == null ? 0 : dataVersioRow.Version;
 
 

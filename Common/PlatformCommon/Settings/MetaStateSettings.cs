@@ -8,6 +8,17 @@ namespace MetaLoop.Common.PlatformCommon.Settings
 {
     public partial class MetaStateSettings
     {
+
+
+        public static float _MAJOR_VERSION = 0.1f;
+        public static string GetMajorVersion()
+        {
+            string result = _MAJOR_VERSION.ToString("0.00");
+            result = result.Replace(" ", "");
+            result = result.Replace(",", ".");
+            return result;
+        }
+
         public static string SettingsClassName;
         static MetaStateSettings()
         {
@@ -90,6 +101,9 @@ namespace MetaLoop.Common.PlatformCommon.Settings
 
         public static string _DatabaseName = "";
         public static string _DatabaseFileName = @"Assets\StreamingAssets\" + _DatabaseName;
+        public static string _MetaDataStateFileName = "";
+
+        public static List<string> _UserDataToDownload = new List<string>() { _MetaDataStateFileName };
 
 
     }

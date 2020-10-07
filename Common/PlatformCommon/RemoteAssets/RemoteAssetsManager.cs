@@ -1,5 +1,6 @@
 ﻿#if !BACKOFFICE
 using DG.Tweening;
+using MetaLoop.Common.PlatformCommon.GameManager;
 using MetaLoop.Common.PlatformCommon.HttpClient;
 using MetaLoop.Common.PlatformCommon.Settings;
 using PlayFab;
