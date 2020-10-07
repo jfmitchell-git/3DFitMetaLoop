@@ -190,7 +190,7 @@ namespace MetaLoop.Common.DataEngine
 
                             if (isCostObject || isCostAndRewardObject)
                             {
-                                ((CostObject)newInstance).ConsumableCost_Id = ImportGenericCostItems(dataset.Tables[tableName], row, updateDatabase).Id;
+                                ((ICostObject)newInstance).ConsumableCost_Id = ImportGenericCostItems(dataset.Tables[tableName], row, updateDatabase).Id;
                             }
 
                             if (updateDatabase)
