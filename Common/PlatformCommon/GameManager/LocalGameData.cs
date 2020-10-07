@@ -1,4 +1,4 @@
-﻿
+﻿#if !BACKOFFICE
 using MetaLoop.Common.PlatformCommon.State;
 using MetaLoop.Common.PlatformCommon.UserProfile;
 using System;
@@ -104,3 +104,4 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         }
     }
 }
+#endif

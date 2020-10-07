@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿#if !BACKOFFICE
+using DG.Tweening;
 using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlatformCommon.Protocol;
@@ -267,3 +268,4 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
     }
 
 }
+#endif
