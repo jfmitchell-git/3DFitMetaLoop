@@ -33,9 +33,10 @@ namespace MetaLoop.GameLogic.DataImport
             else
             {
 
-                DataVersion dataVersioRow = DataLayer.Instance.Connection.Table<DataVersion>().FirstOrDefault();
-                int currentVersion = dataVersioRow == null ? 0 : dataVersioRow.Version;
+                DataVersion dataVersioRow = null;
+                try { dataVersioRow = DataLayer.Instance.Connection.Table<DataVersion>().FirstOrDefault(); } catch { }
 
+                int currentVersion = dataVersioRow == null ? 0 : dataVersioRow.Version;
 
                 Console.WriteLine("Schema validated with no errors.");
 
@@ -56,7 +57,6 @@ namespace MetaLoop.GameLogic.DataImport
                     int resultCreate = DataLayer.Instance.Connection.Execute(createTableScript);
                 }
 
-
                 CodeFirtsImport.ObjectsMemoryCache = new Dictionary<string, List<object>>();
 
                 ImportCustomData(data, true);
@@ -65,7 +65,6 @@ namespace MetaLoop.GameLogic.DataImport
 
                 dataVersioRow = new DataVersion() { Version = currentVersion + 1 };
                 DataLayer.Instance.Connection.Insert(dataVersioRow);
-
 
                 ImportDataStatus.WriteStatus("Updating Database Version to " + dataVersioRow.Version.ToString() + "...");
                 DataLayer.Instance.Connection.Update(dataVersioRow);

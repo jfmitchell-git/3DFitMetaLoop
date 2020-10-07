@@ -9,10 +9,12 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;TRACE,BACKOFFICE</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE;TRACE,BACKOFFICE</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

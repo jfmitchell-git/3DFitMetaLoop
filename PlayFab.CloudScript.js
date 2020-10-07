@@ -1,11 +1,11 @@
 //This is default template file for PlayFab CloudScript.
 //Environement URLs must be updated and file saved in PlayFab's CloudScript Revision system. 
-// Sample request stack { "Method": "PlayerLogin", "Params": { "Name": "Value" }, "Attempt": 0, "Environement": "Prod" }
+//Sample request stack { "Method": "PlayerLogin", "Params": { "Name": "Value" }, "Attempt": 0, "Environement": "Prod" }
 
 
 var defaultEnvironement = "dev";
-var productionUrl = "https://metaloopdemo.azurewebsites.net/api/";
-var stagingUrl = "https://metaloopdemo.azurewebsites.net/api/";
+var productionUrl = "https://bioinredemptionmobile.azurewebsites.net/api/";
+var stagingUrl = "https://bioinredemptionmobile.azurewebsites.net/api/";
 //Development URL must be accessible from outside (PlayFab)
 var devUrl = "http://mitchell-pc.dynamic-dns.net:45455/api/";
 
