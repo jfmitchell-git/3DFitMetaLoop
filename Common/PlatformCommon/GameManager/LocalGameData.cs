@@ -10,7 +10,7 @@ using UnityEngine;
 namespace MetaLoop.Common.PlatformCommon.GameManager
 {
     [Serializable]
-    public class GameData
+    public partial class GameData
     {
         public delegate void OnGameDataReadyEvent();
         [field: NonSerialized]

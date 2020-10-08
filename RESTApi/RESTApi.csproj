@@ -15,10 +15,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\MetaLoopUnityDemo\Assets\StreamingAssets\MetaLoopDemo.db" Link="MetaLoopDemo.db">
+    <None Include="..\..\BioIncRedemptionMobile\UnityMobile\Assets\StreamingAssets\BioInc.db" Link="BioInc.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\MetaLoopUnityDemo\Assets\StreamingAssets\MetaLoopDemo.db.meta" Link="MetaLoopDemo.db.meta" />
+    <None Include="..\..\BioIncRedemptionMobile\UnityMobile\Assets\StreamingAssets\BioInc.db.meta" Link="BioInc.db.meta" />
   </ItemGroup>
 
   <ItemGroup>

@@ -96,7 +96,7 @@ GOTO END
 ECHO --------------------------------------------------
 ECHO "Build and publish to AZURE COMPLETED... Running PlayFabCdnManager..."
 ECHO --------------------------------------------------
-"%CD%\PlayFabCdnManager\bin\MetaLoop.PlayFabCdnManager.exe" "-BaseUnityFolder:%PROJECT_PATH%"
+"%CD%\PlayFabCdnManager\bin\MetaLoop.PlayFabCdnManager.exe" "-BaseUnityFolder:%UNITY3D_PATH%"
 
 
 ECHO(
