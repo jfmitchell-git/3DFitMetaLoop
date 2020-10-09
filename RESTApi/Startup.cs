@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using MetaLoop.Common.DataEngine;
 using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.Server;
+using MetaLoop.Common.PlatformCommon.Settings;
 using MetaLoop.Common.PlayFabWrapper;
 using MetaLoop.GameLogic;
-using MetaLoopDemo.Meta;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -40,7 +40,7 @@ namespace MetaLoop.RESTApi
 
             //Init DataLayer.
             var rootDir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            DataLayer.Instance.Init(rootDir + @"\" + MetaSettings.DatabaseName);
+            DataLayer.Instance.Init(rootDir + @"\" + MetaStateSettings._DatabaseName);
 
             var appVersionFileName = rootDir + @"\AppVersion.txt";
 

@@ -1,8 +1,8 @@
-﻿using dryginstudios.bioinc.meta.Data;
+﻿using dryginstudios.bioinc.meta;
+using dryginstudios.bioinc.meta.Data;
 using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlayFabWrapper;
-using MetaLoopDemo.Meta;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,11 +17,11 @@ namespace MetaLoop.RESTApi.ApiMethods
             if (IsClientValidRequest)
             {
                 var cloudData = new PlayFabFileDetails(MetaSettings.MetaDataStateFileName);
-                MetaDataState metaDataState = null;
 
-       
                 if (await PlayFabApiHandler.GetPlayerTitleData(CurrentUserId, new List<PlayFabFileDetails>() { cloudData }))
                 {
+                    MetaDataState metaDataState = null;
+
                     //if file does not exist yet, create default for content, otherwise perfom Login Activies.
                     if (cloudData.ExistOnServer)
                     {

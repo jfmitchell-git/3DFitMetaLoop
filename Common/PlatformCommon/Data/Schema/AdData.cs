@@ -48,6 +48,7 @@ namespace dryginstudios.bioinc.data.meta
 
         public static AdData GetAdDataForPlacementType(AdPlacementType type)
         {
+
             return DataLayer.Instance.GetTable<AdData>().Where(y => y.PlacementType == type).SingleOrDefault();
         }
 
