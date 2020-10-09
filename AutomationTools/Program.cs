@@ -1,8 +1,8 @@
 ﻿using MetaLoop.Common.DataEngine;
 using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.Settings;
+using MetaLoop.GameLogic;
 using MetaLoop.GameLogic.DataImport;
-using MetaLoopDemo.Meta;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -20,6 +20,8 @@ namespace MetaLoop.AutomationsTools
         public static List<string> allFunctions = new List<string>() { "exit", "importdb" };
         static void Main(string[] args)
         {
+            _MetaStateSettings.Init();
+
             Console.WriteLine("MetaLoop Automation Tools.");
 
             if (args != null && args.ToList().ElementAtOrDefault(0) != null && args.ToList().ElementAtOrDefault(0) != string.Empty)
@@ -78,11 +80,11 @@ namespace MetaLoop.AutomationsTools
             var pathArg = args.Where(y => y.StartsWith("-BaseUnityFolder:")).SingleOrDefault();
             if (pathArg != null)
             {
-                MetaSettings.BaseUnityFolder = pathArg.Replace("-BaseUnityFolder:", string.Empty);
+                MetaStateSettings._BaseUnityFolder = pathArg.Replace("-BaseUnityFolder:", string.Empty);
             }
 
-            string excelFileName = Path.GetFullPath(MetaSettings.BaseUnityFolder + @"\" + args.First(), Directory.GetCurrentDirectory());
-            string databaseFileName = Path.GetFullPath(MetaSettings.BaseUnityFolder + @"\" + MetaSettings.DatabaseFileName, Directory.GetCurrentDirectory());
+            string excelFileName = Path.GetFullPath(MetaStateSettings._BaseUnityFolder + @"\" + args.First(), Directory.GetCurrentDirectory());
+            string databaseFileName = Path.GetFullPath(MetaStateSettings._BaseUnityFolder + @"\" + MetaStateSettings._DatabaseFileName, Directory.GetCurrentDirectory());
 
 
             if (!File.Exists(databaseFileName))
