@@ -5,6 +5,7 @@ using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlayFabWrapper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MetaLoop.RESTApi.ApiMethods
@@ -34,7 +35,31 @@ namespace MetaLoop.RESTApi.ApiMethods
                         metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.SoftCurrencyId), 1000);
                         metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.EnergyId), 70);
                         metaDataState.CreationDate = DateTime.UtcNow;
-                        metaDataState.MetaTimeZone = MetaTimeZone.UTC;
+
+                        var playerProfile = await PlayFabApiHandler.GetPlayerProfileInfo(CurrentUserId);
+
+                        if (playerProfile != null && playerProfile.Locations != null && playerProfile.Locations.LastOrDefault() != null)
+                        {
+                            switch (playerProfile.Locations.LastOrDefault().ContinentCode)
+                            {
+                                case PlayFab.ServerModels.ContinentCode.AF:
+                                case PlayFab.ServerModels.ContinentCode.AN:
+                                case PlayFab.ServerModels.ContinentCode.EU:
+                                    metaDataState.MetaTimeZone = MetaTimeZone.EU;
+                                    break;
+
+                                case PlayFab.ServerModels.ContinentCode.NA:
+                                case PlayFab.ServerModels.ContinentCode.SA:
+                                    metaDataState.MetaTimeZone = MetaTimeZone.NA;
+                                    break;
+
+                                case PlayFab.ServerModels.ContinentCode.AS:
+                                case PlayFab.ServerModels.ContinentCode.OC:
+                                    metaDataState.MetaTimeZone = MetaTimeZone.ASIA;
+                                    break;
+                            }
+                            metaDataState.CountryCode = playerProfile.Locations.LastOrDefault().CountryCode.ToString();
+                        }
                         metaDataState.ApplyDailyReset();
                     }
 

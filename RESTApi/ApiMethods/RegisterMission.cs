@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Linq;
 using dryginstudios.bioinc.stage;
+using Newtonsoft.Json;
 
 namespace MetaLoop.RESTApi.ApiMethods
 {
@@ -26,11 +27,18 @@ namespace MetaLoop.RESTApi.ApiMethods
                     MetaDataState metaDataState = MetaDataState.FromJson(cloudData.DataAsString);
 
                     string missionId = request.CloudScriptMethod.Params["missionId"];
+                    List<string> boosterUsed = JsonConvert.DeserializeObject<List<string>>(request.CloudScriptMethod.Params["boosterUsed"]);
                     int difficultyId = Convert.ToInt32(request.CloudScriptMethod.Params["difficultyId"]);
 
                     var missionData = DataLayer.Instance.GetTable<MissionData>().Where(y => y.MissionId.ToString() == missionId && y.DifficultyId == difficultyId).Single();
 
-                    bool result = MissionManager.RegisterCurrentMission(metaDataState, missionData);
+                    List<BoosterData> boosterDataList = new List<BoosterData>();
+                    if (boosterUsed != null)
+                    {
+                        boosterUsed.ForEach(y => boosterDataList.Add(DataLayer.Instance.GetTable<BoosterData>().Where(x => x.GetUniqueId() == y).Single()));
+                    }
+                   
+                    bool result = MissionManager.RegisterCurrentMission(metaDataState, missionData, boosterDataList);
 
                     if (result)
                     {

@@ -59,8 +59,27 @@ namespace MetaLoop.Common.PlayFabWrapper
             return result.Result;
         }
 
+        public static async Task<PlayerProfileModel> GetPlayerProfileInfo(string titlePlayerId)
+        {
+            var requestData = new GetPlayerProfileRequest() { PlayFabId = titlePlayerId,  };
+            requestData.ProfileConstraints = new PlayerProfileViewConstraints();
+            requestData.ProfileConstraints.ShowLocations = true;
+            requestData.ProfileConstraints.ShowDisplayName = true;
 
-      
+            var result = await PlayFabServerAPI.GetPlayerProfileAsync(requestData);
+
+            if (result.Error == null)
+            {
+                return result.Result.PlayerProfile;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+
+
         public static async Task<bool> UploadPlayerTitleData(string titlePlayerId, List<PlayFabFileDetails> files)
         {
             var requestData = new UpdateUserDataRequest() { PlayFabId = titlePlayerId, Permission = UserDataPermission.Private };
@@ -216,7 +235,7 @@ namespace MetaLoop.Common.PlayFabWrapper
                 hasOperationError = true;
             }
 
-         
+
             var finalizeRequest = new PlayFab.DataModels.FinalizeFileUploadsRequest
             {
                 Entity = new PlayFab.DataModels.EntityKey { Id = entityId, Type = entityType.ToString() },

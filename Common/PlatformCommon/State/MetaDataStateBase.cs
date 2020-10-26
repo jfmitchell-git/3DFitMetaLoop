@@ -51,6 +51,7 @@ namespace MetaLoop.Common.PlatformCommon.State
         public Dictionary<DateTime, bool> LoginCalendar { get; set; }
         public Dictionary<string, int> Statistics { get; set; }
         public Dictionary<string, int> DailyMissionStats { get; set; }
+        public string CountryCode { get; set; }
 
 
         public void OnPlayerLogin()
@@ -148,9 +149,10 @@ namespace MetaLoop.Common.PlatformCommon.State
             DailyMissionStats = new Dictionary<string, int>();
         }
 
-        public void ApplyDailyReset()
+        public virtual void ApplyDailyReset()
         {
         }
+
         public string ToJson()
         {
             return JsonConvert.SerializeObject(this);

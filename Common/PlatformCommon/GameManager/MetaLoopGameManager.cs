@@ -227,9 +227,9 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         {
             Debug.Log("MetaLoopGameManager Instancing DataLayer...");
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && !PROD
             //DataLayer.Instance.Init();
-            DataLayer.Instance.Init(Application.persistentDataPath + MetaStateSettings._RemoteAssetsPersistantName + @"/" + MetaStateSettings._AssetManagerStartupFolder + MetaStateSettings._DatabaseName);
+            DataLayer.Instance.Init(Application.streamingAssetsPath + @"/" + MetaStateSettings._DatabaseName);
 #else
             DataLayer.Instance.Init(Application.persistentDataPath + MetaSettings.RemoteAssetsPersistantName + @"/" + MetaSettings.AssetManagerStartupFolder + MetaSettings.DatabaseName);
 #endif
