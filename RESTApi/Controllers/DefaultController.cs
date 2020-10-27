@@ -65,6 +65,12 @@ namespace MetaLoop.RESTApi.Controllers
 
                     break;
 
+                case "Debug":
+
+                    result = JsonConvert.SerializeObject(Startup.ApiErrors);
+
+                    break;
+
 
                 default:
 

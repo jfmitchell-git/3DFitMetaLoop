@@ -63,8 +63,19 @@ namespace MetaLoop.RESTApi.ApiMethods
                         metaDataState.ApplyDailyReset();
                     }
 
+                    if (metaDataState.NextDailyReset == DateTime.MinValue) metaDataState.NextDailyReset = MetaSettings.GetNextDailyReset(metaDataState.MetaTimeZone, DateTime.UtcNow);
+
                     metaDataState.SyncLoginCalendar();
                     metaDataState.ServerDateTime = DateTime.UtcNow;
+
+                 
+                    if (DateTime.UtcNow > metaDataState.NextDailyReset)
+                    {
+                        metaDataState.ApplyDailyReset();
+                        metaDataState.NextDailyReset = MetaSettings.GetNextDailyReset(metaDataState.MetaTimeZone, DateTime.UtcNow);
+                    }
+
+
                     cloudData.DataAsString = metaDataState.ToJson();
 
                     if (await PlayFabApiHandler.UploadPlayerTitleData(CurrentUserId, new List<PlayFabFileDetails>() { cloudData }))

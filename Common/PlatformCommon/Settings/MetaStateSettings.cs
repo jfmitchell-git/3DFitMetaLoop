@@ -103,6 +103,8 @@ namespace MetaLoop.Common.PlatformCommon.Settings
         public static string _DatabaseFileName = @"Assets\StreamingAssets\" + _DatabaseName;
         public static string _MetaDataStateFileName = "";
 
+        public static string _DataKey_Inbox = "";
+
         public static List<string> _UserDataToDownload = new List<string>() { _MetaDataStateFileName };
 
 

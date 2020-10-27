@@ -1,21 +1,26 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using MetaLoop.Common.DataEngine;
 using MetaLoop.Common.PlatformCommon;
+using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlatformCommon.Server;
 using MetaLoop.Common.PlatformCommon.Settings;
 using MetaLoop.Common.PlayFabWrapper;
 using MetaLoop.GameLogic;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace MetaLoop.RESTApi
 {
@@ -24,6 +29,7 @@ namespace MetaLoop.RESTApi
         public static DateTime UpTimeStart;
         public static string InstanceId;
         public static string AppVersion;
+        public static List<ApiErrorDetail> ApiErrors = new List<ApiErrorDetail>();
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -78,16 +84,31 @@ namespace MetaLoop.RESTApi
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseExceptionHandler(errorApp =>
+            {
+                errorApp.Run(async context =>
+                {
+                    context.Response.StatusCode = 500;
+                    context.Response.ContentType = "application/json; charset=utf-8";
+                    var exception = context.Features.Get<IExceptionHandlerPathFeature>().Error;
+                 
+                    var newError = new ApiErrorDetail(exception);
+                    if (ApiErrors.Count > 50) Startup.ApiErrors.Remove(Startup.ApiErrors.LastOrDefault());
+                    ApiErrors.Insert(0, newError);
+
+                    CloudScriptResponse statusResponse = new CloudScriptResponse() { ResponseCode = ResponseCode.Error, Method = context.Request.Path, ErrorMessage = exception.Message };
+                    statusResponse.Params.Add("InstanceId", Startup.InstanceId);
+                    string output = JsonConvert.SerializeObject(statusResponse);
+                    await context.Response.WriteAsync(output);
+               
+                });
+            });
 
             app.UseEndpoints(endpoints =>
             {

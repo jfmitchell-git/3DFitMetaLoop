@@ -1,6 +1,7 @@
 ﻿#if !BACKOFFICE
 using DG.Tweening;
 using MetaLoop.Common.PlatformCommon;
+using MetaLoop.Common.PlatformCommon.Data.Schema;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlatformCommon.Protocol;
 using MetaLoop.Common.PlatformCommon.RemoteAssets;
@@ -24,6 +25,8 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         public static bool UseStagingForPreProdBuild { get; set; }
         public static bool IsFirtsStart = true;
         public static Type MetaDataStateType = typeof(MetaDataStateBase);
+        private int lastServerInfoCacheVersion;
+        public bool IsGameAvailable { get; set; }
 
         protected virtual void Awake()
         {
@@ -127,7 +130,11 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         protected virtual void DownloadTitleData_Completed(GetTitleDataResult result)
         {
             Debug.Log("MetaLoopGameManager Downloading TitleData Completed...");
-            if (result == null)
+            if (result != null)
+            {
+                ReadTitleData(result, false);
+            }
+            else
             {
                 ShowUnavailableMessage(GameUnavailableMessageType.HOST_UNREACHABLE);
                 return;
@@ -237,11 +244,87 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             OnMetaLoopReady();
         }
 
-        public virtual void OnMetaLoopReady() { 
-        
+
+        public void ReadTitleData(GetTitleDataResult obj, bool fromRoutineTaskManager = true)
+        {
+            ServerInfo serverInfo;
+            if (obj != null && obj.Data.ContainsKey(MetaStateSettings._TitleDataKey_ServerInfo))
+            {
+                serverInfo = JsonConvert.DeserializeObject<ServerInfo>(obj.Data[MetaStateSettings._TitleDataKey_ServerInfo]);
+
+                if ((serverInfo.CacheVersion < lastServerInfoCacheVersion) && IsGameAvailable) return;
+
+                lastServerInfoCacheVersion = serverInfo.CacheVersion;
+
+                if (serverInfo.ServerStatus != ServerStatus.Online)
+                {
+                    GameUnavailableMessageType gameUnavailableMessageType = GameUnavailableMessageType.MAINTENANCE;
+
+                    if (!string.IsNullOrEmpty(serverInfo.MaintenanceMessage))
+                    {
+                        try
+                        {
+                            gameUnavailableMessageType = (GameUnavailableMessageType)Enum.Parse(typeof(GameUnavailableMessageType), serverInfo.MaintenanceMessage);
+                        }
+                        catch { }
+                    }
+
+                    ShowUnavailableMessage(gameUnavailableMessageType);
+
+                    return;
+                }
+                else if (serverInfo.ServerStatus == ServerStatus.Online)
+                {
+                    //"0.1" is wildcard for dev/staging env
+                    if (serverInfo.AppVersion == MetaStateSettings.GetMajorVersion() || serverInfo.AppVersion == "0.10")
+                    {
+                        IsGameAvailable = true;
+
+                        if (fromRoutineTaskManager && DataLayer.Instance.Connection != null)
+                        {
+                            if (obj != null && obj.Data.ContainsKey(MetaStateSettings._TitleDataKey_EventManager))
+                            {
+                                EventManagerState eventManagerState = JsonConvert.DeserializeObject<EventManagerState>(obj.Data[MetaStateSettings._TitleDataKey_EventManager]);
+                                GameData.Current.EventManagerState = eventManagerState;
+                                GameData.Current.EventManagerState.SyncState(EventData.GetAllEvents());
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ShowUnavailableMessage(GameUnavailableMessageType.VERSION_MISMATCH);
+                    }
+
+                }
+            }
+            else
+            {
+
+                if (CheckInternetConnection())
+                {
+                    ShowUnavailableMessage(GameUnavailableMessageType.HOST_UNREACHABLE);
+                }
+                else
+                {
+                    ShowUnavailableMessage(GameUnavailableMessageType.INTERNET_ERROR);
+
+                }
+
+                return;
+            }
         }
 
-        protected virtual void OnDataMissMatchDetected(OnDataMissMatchDetectedEventType type)
+        public bool CheckInternetConnection()
+        {
+            return true;
+        }
+
+        public virtual void OnMetaLoopReady()
+        {
+
+        }
+
+        public virtual void OnDataMissMatchDetected(OnDataMissMatchDetectedEventType type)
         {
 
         }
@@ -253,7 +336,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
 
         }
-        protected virtual void ShowUnavailableMessage(GameUnavailableMessageType reason)
+        public virtual void ShowUnavailableMessage(GameUnavailableMessageType reason)
         {
             //Show client update/unvailable message...
         }
