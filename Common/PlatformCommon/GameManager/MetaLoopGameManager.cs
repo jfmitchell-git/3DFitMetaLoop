@@ -34,7 +34,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             if (IsFirtsStart)
             {
 #if PROD
-            UnityWebRequestHandler.Instance.GetBodyFromHttp(MetaStateSettings.ServerAppVersionUrl, null, (UnityWebRequest r) => AwakeFirtsInit_ServerInfoReady(r));
+                UnityWebRequestHandler.Instance.GetBodyFromHttp(MetaStateSettings.ServerAppVersionUrl, null, (UnityWebRequest r) => AwakeFirtsInit_ServerInfoReady(r));
 #else
                 AwakeFirtsInit_ServerInfoReady(null);
 #endif

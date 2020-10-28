@@ -72,7 +72,6 @@ namespace MetaLoop.RESTApi.ApiMethods
                     if (DateTime.UtcNow > metaDataState.NextDailyReset)
                     {
                         metaDataState.ApplyDailyReset();
-                        metaDataState.NextDailyReset = MetaSettings.GetNextDailyReset(metaDataState.MetaTimeZone, DateTime.UtcNow);
                     }
 
 

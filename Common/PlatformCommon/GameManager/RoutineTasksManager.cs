@@ -152,7 +152,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             {
                 if (arg1.Params.ContainsKey("EnergyBalance"))
                 {
-                    int newBalance = Convert.ToInt32(arg1.Params.ContainsKey("EnergyBalance"));
+                    int newBalance = Convert.ToInt32(arg1.Params["EnergyBalance"]);
                     MetaDataStateBase.Current.Consumables.SetConsumableAmount(Consumable.GetByName(MetaStateSettings._EnergyId), newBalance);
                 }
 
