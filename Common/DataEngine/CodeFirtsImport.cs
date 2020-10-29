@@ -160,7 +160,8 @@ namespace MetaLoop.Common.DataEngine
                                             if (relationValue == null)
                                             {
                                                 MetaDataImportExeption.Log(String.Format("Could not find value of {0} in all objects of Type {1}.", valueToCompare.ToString(), dependency.Type.ToString()), type.Name);
-                                            } else
+                                            }
+                                            else
                                             {
                                                 if (dependency.CreateRelation)
                                                 {
@@ -227,7 +228,7 @@ namespace MetaLoop.Common.DataEngine
                 string item = row[string.Format(itemColumnName, i.ToString())].ToString();
                 int Amount = DataConvert.GetCellValueInt(row[string.Format(amountColumnName, i.ToString())].ToString());
 
-                if (!string.IsNullOrEmpty(item))
+                if (!string.IsNullOrEmpty(item) && Amount > 0)
                 {
                     Consumable consumable = ObjectsMemoryCache[typeof(Consumable).Name].Cast<Consumable>().ToList().Where(y => y.Name == item).SingleOrDefault();
 
@@ -266,7 +267,7 @@ namespace MetaLoop.Common.DataEngine
                 string item = row[string.Format(itemColumnName, i.ToString())].ToString();
                 int Amount = DataConvert.GetCellValueInt(row[string.Format(amountColumnName, i.ToString())].ToString());
 
-                if (!string.IsNullOrEmpty(item))
+                if (!string.IsNullOrEmpty(item) && Amount > 0)
                 {
                     Consumable consumable = ObjectsMemoryCache[typeof(Consumable).Name].Cast<Consumable>().ToList().Where(y => y.Name == item).SingleOrDefault();
 

@@ -70,32 +70,5 @@ namespace MetaLoop.Common.PlatformCommon.State
             return AllObjectiveStateItem.Where(y => y.Id == type).Single();
         }
 
-        //public void RegisterMissionBasedObjectives(MissionData mission, bool userWon, bool autoWin, int count = 1, MetaDataState state = null)
-        //{
-
-        //    if (!autoWin && mission.CampaignId == 1 && mission.ChapterId == 1 && mission.Number <= 3) RegisterObjective(DailyObjectiveType.LifeCampaignTutorial);
-
-        //    if (state != null && !state.IsTutorialCompleted)
-        //    {
-        //        return;
-        //    }
-
-        //    if (mission.CampaignId == 1 || mission.CampaignId == 4) RegisterObjective(DailyObjectiveType.DeathCampaign, count);
-        //    if (mission.CampaignId == 2) RegisterObjective(DailyObjectiveType.LifeCampaign, count);
-        //    if (mission.MissionType == MissionType.Campaign && userWon) RegisterObjective(DailyObjectiveType.CampaignMissions, count);
-        //    if (mission.MissionType == MissionType.Challenge && userWon) RegisterObjective(DailyObjectiveType.CompleteChallenges, count);
-        //    if (autoWin) RegisterObjective(DailyObjectiveType.AutoWin, count);
-
-
-        //    //if (!autoWin && mission.CampaignId == 0 && mission.ChapterId > 0 && mission.Number > 1) RegisterObjective(DailyObjectiveType.LifeCampaignTutorial);
-        //    //if (!autoWin && mission.CampaignId == 0 && mission.ChapterId > 0 && mission.Number > 2) RegisterObjective(DailyObjectiveType.LifeCampaignTutorial2);
-
-        //    //if (mission.CampaignId == 1 || mission.CampaignId == 4) RegisterObjective(DailyObjectiveType.DeathCampaign, count);
-        //    //if (mission.CampaignId == 2) RegisterObjective(DailyObjectiveType.LifeCampaign, count);
-        //    //if (mission.MissionType == MissionType.Campaign && userWon) RegisterObjective(DailyObjectiveType.CampaignMissions, count);
-        //    //if (mission.MissionType == MissionType.Challenge && userWon) RegisterObjective(DailyObjectiveType.CompleteChallenges, count);
-        //    //if (autoWin) RegisterObjective(DailyObjectiveType.AutoWin, count);
-
-        //}
     }
 }
