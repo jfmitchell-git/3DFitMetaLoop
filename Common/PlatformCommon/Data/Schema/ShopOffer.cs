@@ -282,7 +282,9 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
 #if UNITY_EDITOR
                 return MetaDataStateBase.Current.ShopState.AllTransactions.Where(y => y.InternalId == this.InternalId).Count();
 #else
-                return gamedata.GameData.Current.MetaDataState.ShopState.AllTransactions.Where(y => y.InternalId == this.InternalId && y.Result == GenericRequestRewardResultType.Success).Count();
+                
+                return MetaDataStateBase.Current.ShopState.AllTransactions.Where(y => y.InternalId == this.InternalId).Count();
+                //return gamedata.GameData.Current.MetaDataState.ShopState.AllTransactions.Where(y => y.InternalId == this.InternalId && y.Result == GenericRequestRewardResultType.Success).Count();
 #endif
             }
         }

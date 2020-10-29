@@ -26,12 +26,13 @@ namespace MetaLoop.Common.PlatformCommon.GameServices
 
 #if UNITY_EDITOR || UNITY_STANDALONE
 
+                
 #if STEAM
     gameService = new SteamGameService();
 #endif
 
 #elif UNITY_ANDROID
-                 gameService = new GooglePlayGameService();    
+                // gameService = new GooglePlayGameService();    
 #elif UNITY_IOS
                  gameService = new GameCenterGameService();
 #endif

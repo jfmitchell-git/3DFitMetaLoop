@@ -348,7 +348,7 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
 
         private void HandleAndroidLoginMethod(Action<LoginResult> loginSuccess, Action<PlayFabError> loginFailure)
         {
-#if UNITY_ANDROID
+#if UNITY_ANDROID1
 
             if (GameServiceManager.GameService.IsSignedIn)
             {

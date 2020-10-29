@@ -238,7 +238,8 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             //DataLayer.Instance.Init();
             DataLayer.Instance.Init(Application.streamingAssetsPath + @"/" + MetaStateSettings._DatabaseName);
 #else
-            DataLayer.Instance.Init(Application.persistentDataPath + MetaSettings.RemoteAssetsPersistantName + @"/" + MetaSettings.AssetManagerStartupFolder + MetaSettings.DatabaseName);
+            DataLayer.Instance.Init(Application.persistentDataPath + "/" + MetaStateSettings._DatabaseFileName);                 
+            //DataLayer.Instance.Init(Application.persistentDataPath + MetaSettings.RemoteAssetsPersistantName + @"/" + MetaSettings.AssetManagerStartupFolder + MetaSettings.DatabaseName);
 #endif
 
             OnMetaLoopReady();

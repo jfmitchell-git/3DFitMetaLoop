@@ -6,6 +6,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema.Types
 {
     public enum DisplayTagType
     {
-        Undefined
+        Undefined,
+        Discount
     }
 }
