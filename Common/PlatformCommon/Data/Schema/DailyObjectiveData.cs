@@ -59,9 +59,6 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         {
             return state.ObjectiveState.AllObjectiveStateItem.Where(y => y.Id == ObjectiveId).SingleOrDefault();
         }
-
-
-        
         public DailyObjectiveStatus GetObjectiveStatus(MetaDataStateBase state)
         {
             var stateItem = GetObjectiveState(state);
@@ -80,12 +77,6 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
             }
 
             return DailyObjectiveStatus.Unavailabe;
-        }
-
-
-        public static DailyObjectiveData GetObjective(DailyObjectiveType type)
-        {
-            return DataLayer.Instance.GetTable<DailyObjectiveData>().Where(y => y.ObjectiveId == type).SingleOrDefault();
         }
 
 
