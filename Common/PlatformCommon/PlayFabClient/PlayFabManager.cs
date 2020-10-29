@@ -283,7 +283,8 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
 
 #elif UNITY_ANDROID
 
-            HandleAndroidLoginMethod(loginSuccess, loginFailure);
+            HandleDefaultLoginMethod(loginSuccess, loginFailure, customId);
+            //HandleAndroidLoginMethod(loginSuccess, loginFailure);
 
 #elif UNITY_IOS
            

@@ -11,7 +11,15 @@ using System.Text;
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
 
-    public class DailyObjectiveData
+    public enum DailyObjectiveStatus
+    {
+        Undefined,
+        Availabe,
+        Unavailabe,
+        CanBeClaimed,
+        Claimed
+    }
+    public class DailyObjectiveData : RewardObject
     {
         private int id;
         [PrimaryKey, AutoIncrement]
@@ -28,60 +36,66 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
             }
         }
 
-        public string ObjectiveId { get; set; }
-        public int CountRequired { get; set; }
-        public DailyObjectiveType ObjectiveType { get; set; }
-        public DailyObjectiveAvailabilityType DailyObjectiveAvailabilityType { get; set; }
-        public int RewardData_Id { get; set; }
-
-        public int LevelRequired { get; set; }
-        public string MissionRequired { get; set; }
-
-
-        private RewardData rewardData;
-        [IgnoreCodeFirst, Ignore]
-        public RewardData Rewards
+        private int countRequired;
+        public int CountRequired
         {
             get
             {
-                if (rewardData == null && RewardData_Id > 0)
-                    rewardData = DataLayer.Instance.GetTable<RewardData>().Where(y => y.Id == this.RewardData_Id).SingleOrDefault();
+                if (countRequired == -1)
+                {
 
-                return rewardData;
+                }
+                return countRequired;
             }
+            set
+            {
+                countRequired = value;
+            }
+        }
+        public DailyObjectiveType ObjectiveId { get; set; }
+        public int LevelRequired { get; set; }
 
+        public ObjectiveStateItem GetObjectiveState(MetaDataStateBase state)
+        {
+            return state.ObjectiveState.AllObjectiveStateItem.Where(y => y.Id == ObjectiveId).SingleOrDefault();
         }
 
 
-        //public bool IsObjectiveAvailable(MetaDataStateBase metaDataState, CampaignDataState campaignDataState)
-        //{
+        
+        public DailyObjectiveStatus GetObjectiveStatus(MetaDataStateBase state)
+        {
+            var stateItem = GetObjectiveState(state);
 
-        //    if (LevelRequired > 0)
-        //    {
-        //        if (metaDataState.PlayerLevel.LevelId < LevelRequired)
-        //        {
-        //            return false;
-        //        }
-        //    }
+            if (stateItem != null)
+            {
+                if (stateItem.Claimed) return DailyObjectiveStatus.Claimed;
+                if (LevelRequired > 0 && state.PlayerLevel.LevelId < LevelRequired) return DailyObjectiveStatus.Unavailabe;
 
-        //    if (!string.IsNullOrEmpty(MissionRequired))
-        //    {
-        //        var missionData = campaignDataState.StageHistory.Where(y => y.StageId == this.MissionRequired).FirstOrDefault();
+                if (stateItem.Count >= CountRequired)
+                {
+                    return DailyObjectiveStatus.CanBeClaimed;
+                }
 
-        //        if (missionData == null || (int)missionData.Score < 1)
-        //        {
-        //            return false;
-        //        }
-        //    }
+                return DailyObjectiveStatus.Availabe;
+            }
 
-        //    return true;
+            return DailyObjectiveStatus.Unavailabe;
+        }
 
-        //}
 
         public static DailyObjectiveData GetObjective(DailyObjectiveType type)
         {
-            return DataLayer.Instance.GetTable<DailyObjectiveData>().Where(y => y.ObjectiveType == type).SingleOrDefault();
+            return DataLayer.Instance.GetTable<DailyObjectiveData>().Where(y => y.ObjectiveId == type).SingleOrDefault();
         }
+
+
+#if !BACKOFFICE
+        public virtual DailyObjectiveStatus GetObjectiveStatus()
+        {
+            return GetObjectiveStatus(MetaDataStateBase.Current);
+        }
+
+#endif
 
     }
 }
