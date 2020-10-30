@@ -7,7 +7,10 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema.Types
 {
     public enum TagType
     {
-        Undefined
+        Undefined,
+        BestValue,
+        LimitedTime
+
 
     }
 }

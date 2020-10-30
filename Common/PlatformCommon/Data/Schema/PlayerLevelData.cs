@@ -10,7 +10,7 @@ using System.Text;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-    public class PlayerLevelData
+    public class PlayerLevelData : RewardObject
     {
         private int id;
         [PrimaryKey, AutoIncrement]
@@ -46,27 +46,6 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
             }
             return level;
         }
-
-        public int RewardData_Id { get; set; }
-
-
-        private RewardData rewardData;
-        [IgnoreCodeFirst, Ignore]
-        public RewardData Rewards
-        {
-            get
-            {
-                if (rewardData == null && RewardData_Id > 0)
-                    rewardData = DataLayer.Instance.GetTable<RewardData>().Where(y => y.Id == this.RewardData_Id).SingleOrDefault();
-
-                return rewardData;
-            }
-
-        }
-
-
-
-
 
     }
 }

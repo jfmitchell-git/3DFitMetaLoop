@@ -17,7 +17,7 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
     {
         public string UserId { get; set; }
         public string EntityId { get; set; }
-        public List<CloudScriptMethod> CloudScriptMethods { get; set; }
+        public List<CloudScriptMethod> CloudScriptMethod { get; set; }
 
 
     }

@@ -10,14 +10,16 @@ using System.Text;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-    public class PurchasableItem
+    public class PurchasableItem : RewardObject
     {
 
         public string InternalId { get; set; }
         public string iOSBillingID { get; set; }
         public string PlayBillingID { get; set; }
-        public int Consumable_Id { get; set; }
-        public int ConsumableAmount { get; set; }
+
+        public string CostConsumableName { get; set; }
+        public int CostConsumableAmount { get; set; }
+
         public float DefaultUsdPrice { get; set; }
 
         [IgnoreCodeFirst, Ignore]
@@ -85,13 +87,15 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         {
             get
             {
-                if (Consumable_Id > 0)
+                if (!string.IsNullOrEmpty(CostConsumableName))
                 {
-                    return Consumable.GetById(Consumable_Id);
+                    return Consumable.GetByName(CostConsumableName);
                 }
                 return null;
             }
         }
+
+        [IgnoreCodeFirst, Ignore]
         public bool IsRealMoneyTransaction
         {
             get
@@ -116,19 +120,6 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
             if (string.IsNullOrEmpty(result)) result = InternalId;
             return result;
         }
-
-        public int RewardData_Id { get; set; }
-        private RewardData rewardData;
-
-        [IgnoreCodeFirst, Ignore]
-        public RewardData RewardData
-        {
-            get
-            {
-                if (rewardData == null)
-                    rewardData = DataLayer.Instance.GetTable<RewardData>().Where(y => y.Id == this.RewardData_Id).SingleOrDefault();
-                return rewardData;
-            }
-        }
+        
     }
 }

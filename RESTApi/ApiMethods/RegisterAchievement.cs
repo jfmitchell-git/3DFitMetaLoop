@@ -26,7 +26,7 @@ namespace MetaLoop.RESTApi.ApiMethods
 
                     bool success = true;
 
-                    foreach (var stack in request.CloudScriptMethods)
+                    foreach (var stack in request.CloudScriptMethod)
                     {
                         AchievementType type = (AchievementType)Enum.Parse(typeof(AchievementType), stack.Params["type"]);
                         bool result = metaDataState.AchievementDataState.RegisterAchievementCount(type);

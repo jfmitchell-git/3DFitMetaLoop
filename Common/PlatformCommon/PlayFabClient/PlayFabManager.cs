@@ -214,8 +214,7 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
             {
                 try
                 {
-                    JsonObject playFabResult = (JsonObject)result.FunctionResult;
-                    jsonResponse = JsonConvert.DeserializeObject<CloudScriptResponse>(playFabResult[0].ToString());
+                    jsonResponse = JsonConvert.DeserializeObject<CloudScriptResponse>(result.FunctionResult.ToString());
                     if (jsonResponse.ResponseCode == ResponseCode.Success) success = true;
                 }
                 catch (Exception e)

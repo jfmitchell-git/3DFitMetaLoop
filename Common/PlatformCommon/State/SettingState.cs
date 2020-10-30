@@ -101,6 +101,17 @@ namespace MetaLoop.Common.PlatformCommon.State
 
         }
 
+        public string GetKeyValue(string settingId)
+        {
+            if (!KeyValuePairs.ContainsKey(settingId))
+            {
+                return string.Empty;
+            }
+            else
+            {
+                return KeyValuePairs[settingId];
+            }
+        }
 
 
         public bool GetTutorialProgress(string stepId)

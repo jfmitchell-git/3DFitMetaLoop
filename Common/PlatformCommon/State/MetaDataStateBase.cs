@@ -43,6 +43,7 @@ namespace MetaLoop.Common.PlatformCommon.State
         public int TotalAdWatchedCount { get; set; }
         public MetaTimeZone MetaTimeZone { get; set; }
         public ConsumableState Consumables { get; set; }
+        public OfferDataState OfferDataState { get; set; }
         public AchievementDataState AchievementDataState { get; set; }
         public SettingState SettingState { get; set; }
         public AdState AdState { get; set; }
@@ -147,6 +148,7 @@ namespace MetaLoop.Common.PlatformCommon.State
             AchievementDataState = new AchievementDataState();
             Statistics = new Dictionary<string, int>();
             DailyMissionStats = new Dictionary<string, int>();
+            OfferDataState = new OfferDataState();
         }
 
         public virtual void ApplyDailyReset()

@@ -11,34 +11,15 @@ using MetaLoop.Common.PlatformCommon.Settings;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-
-    public enum ShopOfferPlacementType
-    {
-        Undefined,
-        MainScreen,
-        DoctorScreen,
-        EventScreen,
-        ChallengeScreen,
-        AchievementScreen,
-        MissionReturnScreen
-    }
-
-
     public partial class ShopOffer
     {
         public int LevelMin { get; set; }
         public int LevelMax { get; set; }
-
         public int AgeMin { get; set; }
         public int AgeMax { get; set; }
-
         public int LowSoftCurrencyThreshold { get; set; }
         public int LowHardCurrencyThreshold { get; set; }
-
         public int LowEnergyThreshold { get; set; }
-
-
-
         public bool EvaluateRequirement(MetaDataStateBase state, DateTime utcNow)
         {
 
@@ -115,29 +96,24 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         public string TitleResourceKey { get; set; }
         public string DescResourceKey { get; set; }
 
-        public string PushTitleResourceKey { get; set; }
-        public string PushDescResourceKey { get; set; }
-
         public string StartTimeString { get; set; }
         public string EndTimeString { get; set; }
         public int TimerDurationInHours { get; set; }
 
         public int RedeemMaxCount { get; set; }
-        public bool SendPushOnGoLive { get; set; }
-
         public int ShowDaysBefore { get; set; }
 
         public int ShowPopupEveryHours { get; set; }
         public int Priority { get; set; }
         public DisplayTagType DisplayTagType { get; set; }
 
-        public string PriorityPlacementString { get; set; }
+        public string PlacementsPriority { get; set; }
 
         public List<ShopOfferPlacementType> GetPlacementPriorities()
         {
             List<ShopOfferPlacementType> result = new List<ShopOfferPlacementType>();
-            if (PriorityPlacementString == null) return result;
-            var allString = PriorityPlacementString.Split(';');
+            if (PlacementsPriority == null) return result;
+            var allString = PlacementsPriority.Split(';');
             foreach (var placement in allString)
             {
                 try { result.Add((ShopOfferPlacementType)Enum.Parse(typeof(ShopOfferPlacementType), placement)); } catch { };
@@ -242,13 +218,18 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         }
 
 
+        public OfferDataStateEntry GetLastOfferDataState()
+        {
+            return MetaDataStateBase.Current.OfferDataState.AllOffersState.Where(y => y.OfferId == InternalId).LastOrDefault();
+        }
+
         [IgnoreCodeFirst, Ignore]
         public DateTime LastTimeShown
         {
             get
             {
-                //var offerState = MetaDataStateBase.Current.OfferDataState.AllOffersState.Where(y => y.OfferId == this.InternalId).LastOrDefault();
-                //if (offerState != null) return offerState.LastTimeShown;
+                var offerState = GetLastOfferDataState();
+                if (offerState != null) return offerState.LastTimeShown;
                 return DateTime.MinValue;
             }
         }
@@ -258,8 +239,8 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         {
             get
             {
-                //var offerState = MetaDataStateBase.Current.OfferDataState.AllOffersState.Where(y => y.OfferId == this.InternalId).LastOrDefault();
-                //if (offerState != null) return offerState.ActivationDate;
+                var offerState = GetLastOfferDataState();
+                if (offerState != null) return offerState.ActivationDate;
                 return DateTime.MinValue;
             }
         }
@@ -294,52 +275,48 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         {
             get
             {
+                if (TimerDurationInHours > 0)
+                {
+                    var offerState = GetLastOfferDataState();
+
+                    if (offerState != null)
+                    {
+                        var Timeleft = offerState.ActivationDate.AddHours(TimerDurationInHours) - MetaDataStateBase.Current.GetServerUTCDatetime();
+
+                        if (Timeleft.TotalSeconds < 0)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else if (Duration > 0)
+                {
+                    if (ActivationDate == DateTime.MinValue)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        if (MetaDataStateBase.Current.GetServerUTCDatetime() > ActivationDate.AddHours(Duration))
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            return true;
+                        }
+                    }
+                }
+
                 return true;
-
-                //if (TimerDurationInHours > 0)
-                //{
-                //    //var offerState = gamedata.GameData.Current.OfferDataState.AllOffersState.Where(y => y.OfferId == this.InternalId).LastOrDefault();
-
-                //    var offerState = "tmp";
-             
-                //    if (offerState != null)
-                //    {
-                //        var Timeleft = offerState.ActivationDate.AddHours(TimerDurationInHours) - MetaDataStateBase.Current.GetServerUTCDatetime();
-
-                //        if (Timeleft.TotalSeconds < 0)
-                //        {
-                //            return false;
-                //        }
-                //        else
-                //        {
-                //            return true;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        return false;
-                //    }
-                //}
-                //else if (Duration > 0)
-                //{
-                //    if (ActivationDate == DateTime.MinValue)
-                //    {
-                //        return false;
-                //    }
-                //    else
-                //    {
-                //        if (MetaDataStateBase.Current.GetServerUTCDatetime() > ActivationDate.AddHours(Duration))
-                //        {
-                //            return false;
-                //        }
-                //        else
-                //        {
-                //            return true;
-                //        }
-                //    }
-                //}
-
-                //return true;
             }
         }
 
@@ -348,32 +325,32 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         {
             get
             {
-                //if (ShowPopupEveryHours > 0)
-                //{
-                //    var offerState = gamedata.GameData.Current.OfferDataState.AllOffersState.Where(y => y.OfferId == this.InternalId).LastOrDefault();
-                //    if (offerState != null)
-                //    {
-                //        if (DateTime.UtcNow.Subtract(offerState.LastTimeShown).TotalHours >= this.ShowPopupEveryHours)
-                //        {
-                //            return true;
-                //        }
-                //        else
-                //        {
-                //            return false;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        return true;
-                //    }
-                //}
+                if (ShowPopupEveryHours > 0)
+                {
+                    var offerState = GetLastOfferDataState();
+                    if (offerState != null)
+                    {
+                        if (DateTime.UtcNow.Subtract(offerState.LastTimeShown).TotalHours >= this.ShowPopupEveryHours)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
                 return false;
             }
         }
 
         public void MarkAsShown(ShopOfferPlacementType placement, bool popup)
         {
-            //gamedata.GameData.Current.OfferDataState.MarkAsShown(this.InternalId, placement, this, popup);
+            MetaDataStateBase.Current.OfferDataState.MarkAsShown(this.InternalId, placement, this, popup);
         }
 #endif
     }

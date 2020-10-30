@@ -49,7 +49,7 @@ namespace MetaLoop.Common.PlatformCommon
             {
 
 #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_IOS || UNITY_ANDROID
-                database = Path.GetStreamingAssetsPersistantPath(MetaStateSettings._DatabaseName);
+                database = Path.GetStreamingAssetsPersistantPath(database);
                 Connection = new SQLiteConnection(database, SQLiteOpenFlags.ReadOnly, true);
 #endif
             }

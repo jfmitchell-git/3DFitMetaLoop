@@ -12,6 +12,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema.Types
     }
 
 
+
     public enum ShopItemType
     {
         Undefined,
