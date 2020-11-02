@@ -13,6 +13,8 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
     public class PurchasableItem : RewardObject
     {
 
+
+
         public string InternalId { get; set; }
         public string iOSBillingID { get; set; }
         public string PlayBillingID { get; set; }
