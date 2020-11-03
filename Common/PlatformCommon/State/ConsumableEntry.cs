@@ -1,6 +1,4 @@
-﻿using dryginstudios.bioinc.data;
-using dryginstudios.bioinc.data.meta;
-using MetaLoop.Common.PlatformCommon.Data.Schema;
+﻿using MetaLoop.Common.PlatformCommon.Data.Schema;
 using MetaLoop.Common.PlatformCommon;
 using Newtonsoft.Json;
 using System;

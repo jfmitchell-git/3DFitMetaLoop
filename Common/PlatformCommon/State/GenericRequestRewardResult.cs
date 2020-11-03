@@ -1,5 +1,4 @@
-﻿using dryginstudios.bioinc.data.meta;
-using MetaLoop.Common.PlatformCommon.Data.Schema;
+﻿using MetaLoop.Common.PlatformCommon.Data.Schema;
 using System;
 using System.Collections.Generic;
 using System.Linq;

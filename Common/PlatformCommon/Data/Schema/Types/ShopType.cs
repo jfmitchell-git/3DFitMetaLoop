@@ -17,7 +17,8 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema.Types
     {
         Undefined,
         Offers,
-        HardCurrency
+        HardCurrency,
+        SoftCurrency
 
     }
 

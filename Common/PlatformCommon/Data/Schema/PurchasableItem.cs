@@ -80,6 +80,10 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
 
         public string GetDisplayPrice()
         {
+
+#if UNITY_EDITOR
+            return RetailPrice.ToString();
+#endif
             return RetailPriceString;
         }
 

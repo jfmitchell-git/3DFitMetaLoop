@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 
 
-namespace dryginstudios.bioinc.data.meta
+namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
 
 

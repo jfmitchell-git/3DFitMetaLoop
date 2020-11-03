@@ -11,7 +11,7 @@ using System.Linq;
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
 
-    public class VariableCostData
+    public class VariableCostData : CostObject
     {
         private int id;
         [PrimaryKey, AutoIncrement]
@@ -30,34 +30,22 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
 
         public VariableCostDataType PurchaseType { get; set; }
         public int PurchaseCount { get; set; }
-        public int Amount { get; set; }
-        public int PrimaryConsumable_Id { get; set; }
-        public int SecondaryConsumable_Id { get; set; }
-
 
         [Ignore, IgnoreCodeFirst]
-        public Consumable PrimaryConsumable
+        public ConsumableCostItem PrimaryConsumable
         {
             get
             {
-                if (PrimaryConsumable_Id > 0)
-                {
-                    return Consumable.GetById(PrimaryConsumable_Id);
-                }
-                return null;
+                return Cost.ConsumableCostItems.ElementAtOrDefault(0);
             }
         }
 
         [Ignore, IgnoreCodeFirst]
-        public Consumable SecondaryConsumable
+        public ConsumableCostItem SecondaryConsumable
         {
             get
             {
-                if (SecondaryConsumable_Id > 0)
-                {
-                    return Consumable.GetById(SecondaryConsumable_Id);
-                }
-                return null;
+                return Cost.ConsumableCostItems.ElementAtOrDefault(1);
             }
         }
 
@@ -91,17 +79,17 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
 
             if (costData.SecondaryConsumable == null)
             {
-                result.ConsumableCostItems.Add(new ConsumableCostItem() { ConsumableId = costData.PrimaryConsumable.Id, Ammount = costData.Amount });
+                result.ConsumableCostItems.Add(new ConsumableCostItem() { ConsumableId = costData.PrimaryConsumable.ConsumableId, Ammount = costData.PrimaryConsumable.Ammount });
             }
             else
             {
-                if (state.Consumables.CheckBalance(costData.PrimaryConsumable, costData.Amount) >= 0)
+                if (state.Consumables.CheckBalance(costData.PrimaryConsumable.Consumable, costData.PrimaryConsumable.Ammount) >= 0)
                 {
-                    result.ConsumableCostItems.Add(new ConsumableCostItem() { ConsumableId = costData.PrimaryConsumable.Id, Ammount = costData.Amount });
+                    result.ConsumableCostItems.Add(new ConsumableCostItem() { ConsumableId = costData.PrimaryConsumable.ConsumableId, Ammount = costData.PrimaryConsumable.Ammount });
                 }
                 else
                 {
-                    result.ConsumableCostItems.Add(new ConsumableCostItem() { ConsumableId = costData.SecondaryConsumable.Id, Ammount = costData.Amount });
+                    result.ConsumableCostItems.Add(new ConsumableCostItem() { ConsumableId = costData.SecondaryConsumable.ConsumableId, Ammount = costData.SecondaryConsumable.Ammount });
                 }
             }
 

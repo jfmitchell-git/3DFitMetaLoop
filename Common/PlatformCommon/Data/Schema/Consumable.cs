@@ -9,13 +9,13 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
     [Serializable]
     public class Consumable : CostObject
     {
-      
+
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         public string Name { get; set; }
         public string DerivedName { get; set; }
         public int DerivedAmount { get; set; }
- 
+
         bool tryFindDerived = false;
 
         private Consumable derivedConsumable;
@@ -45,7 +45,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
 
 
 #if !BACKOFFICE
-        public string DisplayName
+        public virtual string DisplayName
         {
             get
             {
@@ -54,7 +54,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
             }
         }
 
-        public string Description
+        public virtual string Description
         {
             get
             {
