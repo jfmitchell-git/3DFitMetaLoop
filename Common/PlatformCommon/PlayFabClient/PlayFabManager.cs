@@ -1,6 +1,6 @@
 ﻿#if !BACKOFFICE
 using DG.Tweening;
-using dryginstudios.commonscripts.gameservices;
+using MetaLoop.Common.PlatformCommon.GameServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using PlayFab;
@@ -282,8 +282,8 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
 
 #elif UNITY_ANDROID
 
-            HandleDefaultLoginMethod(loginSuccess, loginFailure, customId);
-            //HandleAndroidLoginMethod(loginSuccess, loginFailure);
+            //HandleDefaultLoginMethod(loginSuccess, loginFailure, customId);
+            HandleAndroidLoginMethod(loginSuccess, loginFailure);
 
 #elif UNITY_IOS
            

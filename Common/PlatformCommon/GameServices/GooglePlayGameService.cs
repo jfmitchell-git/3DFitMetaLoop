@@ -3,7 +3,7 @@ using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using System;
 
-namespace dryginstudios.commonscripts.gameservices
+namespace MetaLoop.Common.PlatformCommon.GameServices
 {
     public class GooglePlayGameService : GameServiceBase
     {
