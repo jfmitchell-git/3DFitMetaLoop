@@ -1,4 +1,8 @@
-﻿using MetaLoop.Common.PlatformCommon.Data.Schema;
+﻿#if !BACKOFFICE
+using MetaLoop.Common.PlatformCommon.PlayFabClient;
+#endif
+
+using MetaLoop.Common.PlatformCommon.Data.Schema;
 using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
 using System;
 using System.Collections.Generic;
@@ -32,8 +36,6 @@ namespace MetaLoop.Common.PlatformCommon.State
     {
         public List<OfferDataStateEntry> AllOffersState;
         public List<PlacementTypeState> AllPlacementTypeState;
-
-
 
         public DateTime LastSupplyRefresh;
 
@@ -91,6 +93,15 @@ namespace MetaLoop.Common.PlatformCommon.State
                 entry.LastTimeShown = DateTime.UtcNow;
             }
 
+
+
+#if !BACKOFFICE
+            CloudScriptMethod cloudScriptMethod = new CloudScriptMethod("RegisterOfferState", false);
+            cloudScriptMethod.Params.Add("offerId", offerId);
+            cloudScriptMethod.Params.Add("placement", placement.ToString());
+            cloudScriptMethod.Params.Add("popup", popup.ToString());
+            PlayFabManager.Instance.AddToStack("RegisterOfferState", cloudScriptMethod);
+#endif
 
         }
 

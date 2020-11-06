@@ -1,4 +1,4 @@
-﻿#if UNITY_ANDROID1
+﻿#if UNITY_ANDROID
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using System;

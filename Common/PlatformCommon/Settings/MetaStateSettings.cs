@@ -105,6 +105,8 @@ namespace MetaLoop.Common.PlatformCommon.Settings
 
         public static string _DataKey_Inbox = "";
 
+        public static string _GoogleLicenseKey = "";
+
         public static List<string> _UserDataToDownload = new List<string>() { _MetaDataStateFileName };
 
 

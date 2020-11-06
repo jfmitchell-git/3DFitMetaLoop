@@ -52,7 +52,7 @@ namespace MetaLoop.Common.PlatformCommon.State
             return item;
         }
 
-        public void RegisterAdWatch(AdPlacementType type, MetaDataStateBase playerState)
+        public void RegisterAdWatch(AdPlacementType type, MetaDataStateBase playerState, Action getAdRewardForTypeMethod)
         {
             AdData adData = AdData.GetAdDataForPlacementType(type);
             AdStateItem adStateItem = GetStateItem(adData.PlacementType);
@@ -61,33 +61,9 @@ namespace MetaLoop.Common.PlatformCommon.State
             {
                 adStateItem.UseCount++;
 
-                //switch (type)
-                //{
-                //    //case PlacementType.DAILY_OBJECTIVE:
-                //    //    playerState.ObjectiveState.RegisterObjective(DailyObjectiveType.WatchAd);
-                //    //    break;
-
-
-                //    //case PlacementType.ADS_MED_KIT:
-                //    //    playerState.Consumables.AddConsumable(Consumable.GetByName(MetaStateSettings.AdKitFragment), MetaStateSettings.AdKitFragmentAmount);
-
-                //    //    break;
-
-
-                //    //case PlacementType.ADS_GOLD:
-                //    //    playerState.Consumables.AddConsumable(Consumable.GetByName(MetaStateSettings.AdGoldKitFragment), MetaStateSettings.AdGoldKitFragmentAmount);
-
-                //    //    break;
-
-                //    //case PlacementType.ENERGY_REFILL:
-                //    //    playerState.Consumables.AddConsumable(Consumable.GetByName(MetaStateSettings.EnergyId), MetaStateSettings.EnergyAdRefillAmount);
-
-                //    //    break;
-                //}
-
+                if (getAdRewardForTypeMethod != null) getAdRewardForTypeMethod.Invoke();
+           
                 playerState.TotalAdWatchedCount++;
-
-
             }
 
 

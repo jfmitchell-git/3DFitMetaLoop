@@ -348,7 +348,7 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
 
         private void HandleAndroidLoginMethod(Action<LoginResult> loginSuccess, Action<PlayFabError> loginFailure)
         {
-#if UNITY_ANDROID1
+#if UNITY_ANDROID
 
             if (GameServiceManager.GameService.IsSignedIn)
             {
@@ -425,7 +425,7 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
             this.lastTokenResponse = loginResult.EntityToken;
             if (!IsImpersonating)
             {
-                //this.PlayerName = GameServiceManager.GameService.PlayerName;
+                this.PlayerName = GameServiceManager.GameService.PlayerName;
             }
 
 
