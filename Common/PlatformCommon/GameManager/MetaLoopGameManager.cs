@@ -257,14 +257,18 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             Debug.Log("MetaLoopGameManager Instancing DataLayer...");
 
 #if UNITY_EDITOR && !PROD
-
             DataLayer.Instance.Init(Application.streamingAssetsPath + @"/" + MetaStateSettings._DatabaseName);
-            //DataLayer.Instance.Init(MetaStateSettings._RemoteAssetsPersistantName + @"/" + MetaStateSettings._AssetManagerStartupFolder + MetaStateSettings._DatabaseName);
+
+            //var caca = Application.persistentDataPath + @"/" + MetaStateSettings._RemoteAssetsPersistantName + @"/" + MetaStateSettings._AssetManagerStartupFolder + MetaStateSettings._DatabaseName;
+            //DataLayer.Instance.Init(caca);
+            // Debug.Log(caca);
             //DataLayer.Instance.Init(Application.persistentDataPath + "/" + MetaStateSettings._RemoteAssetsPersistantName + @"/" + MetaStateSettings._AssetManagerStartupFolder + MetaStateSettings._DatabaseName);
 #else
-             DataLayer.Instance.Init(Application.persistentDataPath + MetaStateSettings._RemoteAssetsPersistantName + @"/" + MetaStateSettings._AssetManagerStartupFolder + MetaStateSettings._DatabaseName);
+              DataLayer.Instance.Init(Application.persistentDataPath + @"/" + MetaStateSettings._RemoteAssetsPersistantName + @"/" + MetaStateSettings._AssetManagerStartupFolder + MetaStateSettings._DatabaseName);               
             //DataLayer.Instance.Init(Application.persistentDataPath + MetaSettings.RemoteAssetsPersistantName + @"/" + MetaSettings.AssetManagerStartupFolder + MetaSettings.DatabaseName);
 #endif
+
+
 
             OnMetaLoopReady();
         }
