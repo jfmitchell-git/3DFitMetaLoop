@@ -2,6 +2,7 @@
 using DG.Tweening;
 using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.Data.Schema;
+using MetaLoop.Common.PlatformCommon.GameServices;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlatformCommon.Protocol;
 using MetaLoop.Common.PlatformCommon.RemoteAssets;
@@ -109,10 +110,31 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
         }
 
+
+
+
+
         protected virtual void GameData_OnGameDataReady()
         {
-            Debug.Log("MetaLoopGameManager GameData_OnGameDataReady; Login in on PlayFab.");
-            PlayFabManager.Instance.Login(OnPlayFabLoginSuccess, OnPlayFabLoginFailed, SystemInfo.deviceUniqueIdentifier);
+            Debug.Log("MetaLoopGameManager GameData_OnGameDataReady; Starting GameServiceManager Login...");
+            GameServiceManager.GameService.OnGameServiceEvent += GameService_OnGameServiceEvent;
+            DOVirtual.DelayedCall(0.5f, () => GameServiceManager.GameService.Init());
+        }
+
+
+        private void GameService_OnGameServiceEvent(GameServiceEvent e)
+        {
+
+            Debug.Log("GameService_OnGameServiceEvent - " + e.EventType.ToString());
+
+            switch (e.EventType)
+            {
+                case GameServiceEventType.SignInSuccess:
+                case GameServiceEventType.SingInFailed:
+                    Debug.Log("MetaLoopGameManager GameData_OnGameDataReady; Login in on PlayFab.");
+                    PlayFabManager.Instance.Login(OnPlayFabLoginSuccess, OnPlayFabLoginFailed, SystemInfo.deviceUniqueIdentifier);
+                    break;
+            }
         }
 
         protected virtual void OnPlayFabLoginSuccess(LoginResult obj)

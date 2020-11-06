@@ -10,6 +10,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema.Types
         DAILY_OBJECTIVE,
         MISSION_REWARD_BOOST,
         ENERGY_REFILL,
-        ADS_GOLD
+        ADS_GOLD,
+        ADS_BIOCOINS
     }
 }

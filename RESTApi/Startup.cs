@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using dryginstudios.bioinc.meta;
 using MetaLoop.Common.DataEngine;
 using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
@@ -69,6 +70,8 @@ namespace MetaLoop.RESTApi
 
             //Statistics
             UpTimeStart = DateTime.UtcNow;
+
+            ShopManager.Init();
 
 
         }
