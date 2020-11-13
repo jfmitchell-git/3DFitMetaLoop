@@ -1,4 +1,5 @@
-﻿using dryginstudios.bioinc.meta;
+﻿using dryginstudios.bioinc.gamedata;
+using dryginstudios.bioinc.meta;
 using dryginstudios.bioinc.meta.Data;
 using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
@@ -35,6 +36,9 @@ namespace MetaLoop.RESTApi.ApiMethods
                         metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.SoftCurrencyId), 1000);
                         metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.EnergyId), 70);
                         metaDataState.CreationDate = DateTime.UtcNow;
+
+                        //Use the game class to set factory settings
+                        new GameSettings(metaDataState).SetFactorySettings();
 
                         var playerProfile = await PlayFabApiHandler.GetPlayerProfileInfo(CurrentUserId);
 

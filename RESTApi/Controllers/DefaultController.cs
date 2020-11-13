@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 
 namespace MetaLoop.RESTApi.Controllers
 {
+    [Route("api/{method}/{param1}/{param2}/{param3}/{param4}")]
     [Route("api/{method}/{param1}/{param2}")]
     [Route("api/{method}/{param1}")]
     [Route("api/{method}")]
@@ -25,7 +26,7 @@ namespace MetaLoop.RESTApi.Controllers
     {
         [HttpGet]
         [HttpPost]
-        public async Task<string> Get(string method, string param1, string param2)
+        public async Task<string> Get(string method, string param1, string param2, string param3, string param4)
         {
             await PlayFabApiHandler.ValidateEntityToken();
 
@@ -96,7 +97,7 @@ namespace MetaLoop.RESTApi.Controllers
                         {
                             CloudScriptRequest request = JsonConvert.DeserializeObject<CloudScriptRequest>(jsonRequest);
                             apiMethod.LoadContext(request);
-                            response = await apiMethod.ExecuteAsync(request, new string[] { param1, param2 });
+                            response = await apiMethod.ExecuteAsync(request, new string[] { param1, param2, param3, param4 });
                         }
 
                     }

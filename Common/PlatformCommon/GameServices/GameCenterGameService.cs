@@ -4,7 +4,7 @@ using UnityEngine.SocialPlatforms;
 using UnityEngine.SocialPlatforms.GameCenter;
 
 
-namespace dryginstudios.commonscripts.gameservices
+namespace MetaLoop.Common.PlatformCommon.GameServices
 {
     public class GameCenterGameService : GameServiceBase
     {

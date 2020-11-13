@@ -32,10 +32,11 @@ namespace MetaLoop.RESTApi.ApiMethods
 
                 cloudData.DataAsString = state.ToJson();
 
-                if (await PlayFabApiHandler.UploadPlayerTitleData(CurrentUserId, new List<PlayFabFileDetails>() { cloudData }))
+                if (await PlayFabApiHandler.UploadPlayerTitleData(playFabId, new List<PlayFabFileDetails>() { cloudData }))
                 {
                     CloudScriptResponse cloudScriptResponse = new CloudScriptResponse() { ResponseCode = ResponseCode.Success, Method = this.GetType().Name };
                     cloudScriptResponse.Params.Add("status", eventId + ":OK");
+                    return cloudScriptResponse;
                 }
             }
 

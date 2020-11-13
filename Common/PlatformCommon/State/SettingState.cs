@@ -25,10 +25,26 @@ namespace MetaLoop.Common.PlatformCommon.State
             }
         }
 
-    
+        public string this[string settingId, bool fromKeyValuePair]
+        {
+            get
+            {
+                if (KeyValuePairs.ContainsKey(settingId)) return KeyValuePairs[settingId];
+                return String.Empty;
+            }
+            set
+            {
+                if (this[settingId, fromKeyValuePair] != value)
+                    SetKeyValuePairs(settingId, value);
+            }
+        }
+
+
+
         [JsonIgnore]
         public string UpdatedPlayerName
         {
+           
             get
             {
                 if (KeyValuePairs.ContainsKey("UpdatedPlayerName")) return KeyValuePairs["UpdatedPlayerName"];

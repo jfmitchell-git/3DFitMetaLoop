@@ -123,7 +123,7 @@ GOTO COMPLETE
 ECHO --------------------------------------------------
 ECHO "Running PlayFabCdnManager... (CDN ONLY MODE)"
 ECHO --------------------------------------------------
-"%CD%\PlayFabCdnManager\bin\MetaLoop.PlayFabCdnManager.exe" -cdnonly "-BaseUnityFolder:%PROJECT_PATH%"
+"%CD%\PlayFabCdnManager\bin\MetaLoop.PlayFabCdnManager.exe" -cdnonly "-BaseUnityFolder:%UNITY3D_PATH%"
 GOTO COMPLETE
 
 :COMPLETE

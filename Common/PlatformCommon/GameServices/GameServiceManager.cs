@@ -24,7 +24,7 @@ namespace MetaLoop.Common.PlatformCommon.GameServices
             if (!isInit)
             {
 
-#if UNITY_EDITOR || UNITY_STANDALONE
+#if UNITY_STANDALONE
 
 
 #if STEAM
