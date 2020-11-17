@@ -78,7 +78,11 @@ namespace MetaLoop.RESTApi.ApiMethods
                         metaDataState.ApplyDailyReset();
                     }
 
-
+                    if (request.CloudScriptMethod.Params.ContainsKey("DisplayName"))
+                    {
+                        metaDataState.ProfileName = request.CloudScriptMethod.Params["DisplayName"].ToString();
+                    }
+                    
                     cloudData.DataAsString = metaDataState.ToJson();
 
                     if (await PlayFabApiHandler.UploadPlayerTitleData(CurrentUserId, new List<PlayFabFileDetails>() { cloudData }))

@@ -21,7 +21,7 @@ namespace MetaLoop.Common.PlatformCommon.State
             set
             {
                 if (this[settingId] != value)
-                    SetSetting("settingId", value);
+                    SetSetting(settingId, value);
             }
         }
 
