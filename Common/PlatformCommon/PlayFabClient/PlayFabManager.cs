@@ -428,6 +428,18 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
                 this.PlayerName = GameServiceManager.GameService.PlayerName;
             }
 
+            if (GameServiceManager.GameService.IsSignedIn)
+            {
+
+#if UNITY_IOS
+                PlayFabClientAPI.LinkIOSDeviceID(new LinkIOSDeviceIDRequest() { DeviceId = SystemInfo.deviceUniqueIdentifier, ForceLink = true }, (LinkIOSDeviceIDResult r) => { }, (PlayFabError e) => { });
+#endif
+
+#if UNITY_ANDROID
+                PlayFabClientAPI.LinkAndroidDeviceID(new LinkAndroidDeviceIDRequest() { AndroidDeviceId = SystemInfo.deviceUniqueIdentifier, ForceLink = true }, (LinkAndroidDeviceIDResult r) => { }, (PlayFabError e) => { });
+#endif
+            }
+
 
             this.GroupManager = new PlayFabGroupManager();
 

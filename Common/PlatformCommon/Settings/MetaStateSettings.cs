@@ -64,6 +64,7 @@ namespace MetaLoop.Common.PlatformCommon.Settings
             }
         }
 
+        public static string _DataLayerDefaultNameSpace = "";
         public static string _RemoteAssetsPersistantName = "";
 
         public static string _ProductionEndpoint = "";

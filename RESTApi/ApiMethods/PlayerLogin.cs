@@ -32,9 +32,14 @@ namespace MetaLoop.RESTApi.ApiMethods
                     else
                     {
                         metaDataState = new MetaDataState();
-                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.HardCurrencyId), 100);
-                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.SoftCurrencyId), 1000);
-                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.EnergyId), 70);
+
+                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.HardCurrencyId), 120);
+                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.SoftCurrencyId), 5000);
+                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.EnergyId), MetaSettings.EnergyCap);
+
+                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.DeathSkillsToken), 200);
+                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.LifeSkillsToken), 200);
+
                         metaDataState.CreationDate = DateTime.UtcNow;
 
                         //Use the game class to set factory settings

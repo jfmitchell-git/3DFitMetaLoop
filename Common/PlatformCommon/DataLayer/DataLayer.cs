@@ -92,6 +92,8 @@ namespace MetaLoop.Common.PlatformCommon
 
         public List<T> GetTable<T>() where T : new()
         {
+
+
             KeyValuePair<Type, object> result = CachedObjects.Where(y => y.Key == typeof(T)).SingleOrDefault();
             if (!result.Equals(new KeyValuePair<Type, object>()))
             {

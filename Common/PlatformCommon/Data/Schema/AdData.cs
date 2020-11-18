@@ -67,6 +67,17 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
             }
         }
 
+        public int UseCount
+        {
+            get
+            {
+                int numOfTimeUsed = 0;
+                var adStateEntry = MetaDataStateBase.Current.AdState.AllAdStateItems.Where(y => y.AdType == this.PlacementType).SingleOrDefault();
+                if (adStateEntry != null) numOfTimeUsed = adStateEntry.UseCount;
+                return numOfTimeUsed;
+            }
+        }
+
 #endif
 
 
