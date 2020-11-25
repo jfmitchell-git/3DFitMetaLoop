@@ -13,7 +13,7 @@ namespace MetaLoop.Common.PlatformCommon.GameServices
             //GameInfo.WebClientId = webClientId;
         }
 
-        private bool isInit = false;
+
 
         public override bool IsSignedIn
         {
@@ -62,7 +62,7 @@ namespace MetaLoop.Common.PlatformCommon.GameServices
 
         public override void Init()
         {
-            if (isInit) return;
+            
             //The following grants profile access to the Google Play Games SDK.
             //Note: If you also want to capture the player's Google email, be sure to add
             //.RequestEmail() to the PlayGamesClientConfiguration
@@ -83,7 +83,7 @@ namespace MetaLoop.Common.PlatformCommon.GameServices
 
 
             PlayGamesPlatform.Instance.Authenticate(OnAuthenticateCompleted);
-            isInit = true;
+             GameServiceManager.IsInit = true;
         }
 
         private void OnAuthenticateCompleted(bool success)

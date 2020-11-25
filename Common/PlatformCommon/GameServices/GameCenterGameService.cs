@@ -8,7 +8,7 @@ namespace MetaLoop.Common.PlatformCommon.GameServices
 {
     public class GameCenterGameService : GameServiceBase
     {
-        private bool isInit = false;
+   
         public override bool IsSignedIn
         {
             get
@@ -44,9 +44,9 @@ namespace MetaLoop.Common.PlatformCommon.GameServices
 
         public override void Init()
         {
-            if (isInit) return;
+       
             Social.localUser.Authenticate(OnAuthenticateCompleted);
-            isInit = true;
+            GameServiceManager.IsInit = true;
         }
 
         private void OnAuthenticateCompleted(bool success)

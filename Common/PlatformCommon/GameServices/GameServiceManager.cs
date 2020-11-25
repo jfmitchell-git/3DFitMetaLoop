@@ -4,7 +4,7 @@ namespace MetaLoop.Common.PlatformCommon.GameServices
 {
     public class GameServiceManager
     {
-        private static bool isInit = false;
+        public static bool IsInit { get; set; }
         private static GameServiceBase gameService = null;
         public static GameServiceBase GameService
         {
@@ -21,7 +21,7 @@ namespace MetaLoop.Common.PlatformCommon.GameServices
 
         private static void CreateGameService()
         {
-            if (!isInit)
+            if (!IsInit)
             {
 
 #if UNITY_STANDALONE
@@ -39,7 +39,7 @@ namespace MetaLoop.Common.PlatformCommon.GameServices
             }
 
             if (gameService == null) gameService = new GameServiceBase();
-            isInit = true;
+            IsInit = true;
         }
     }
 }

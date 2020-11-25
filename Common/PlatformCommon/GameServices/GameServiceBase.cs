@@ -16,8 +16,10 @@ namespace MetaLoop.Common.PlatformCommon.GameServices
 
         public virtual void Init()
         {
+
             RaiseGameServiceEvent(new GameServiceEvent(GameServiceEventType.SignInSuccess));
             RaiseGameServiceEvent(new GameServiceEvent(GameServiceEventType.AchievementsReady));
+            GameServiceManager.IsInit = true;
         }
 
         public void RaiseGameServiceEvent(GameServiceEvent e)

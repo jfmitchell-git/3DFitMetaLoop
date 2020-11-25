@@ -25,6 +25,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 {
     public class MetaLoopGameManager : MonoBehaviour
     {
+        public bool RequireMetaLoopRestart { get; set; }
         public static bool UseStagingForPreProdBuild { get; set; }
         public static bool IsFirtsStart = true;
         public static bool IsFirtsStartInPorgress = true;
@@ -32,13 +33,16 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         private int lastServerInfoCacheVersion;
         public bool IsGameAvailable { get; set; }
 
-        private bool isPlayFabConfigReady = false; 
+        private bool isPlayFabConfigReady = false;
 
+        public Action OnRestartMetaLoopCompleted = null;
         protected virtual void Awake()
         {
             Debug.Log("MetaLoopGameManager Awake() invoked.");
             if (IsFirtsStart)
             {
+                GameData.OnGameDataReady += GameData_OnGameDataReady;
+                GameServiceManager.GameService.OnGameServiceEvent += GameService_OnGameServiceEvent;
                 //force reflection engine. 
                 new MetaStateSettings();
 #if PROD
@@ -47,12 +51,29 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
                 AwakeFirtsInit_ServerInfoReady(null);
 #endif
             }
-            
-            GameData.OnGameDataReady += GameData_OnGameDataReady;
+
+
             GameData.Load();
 
 
             IsFirtsStart = false;
+        }
+
+        public void RestartMetaLoop(Action onRestartMetaLoopCompleted)
+        {
+            if (DataLayer.Instance != null)
+            {
+                DataLayer.Instance.Kill();
+            }
+#if PROD
+                UnityWebRequestHandler.Instance.GetBodyFromHttp(MetaStateSettings._ProductionEndpoint + MetaStateSettings._ServerAppVersionUrl, null, (UnityWebRequest r) => AwakeFirtsInit_ServerInfoReady(r));
+#else
+            AwakeFirtsInit_ServerInfoReady(null);
+#endif
+
+            this.OnRestartMetaLoopCompleted = onRestartMetaLoopCompleted;
+
+            GameData.Load();
         }
 
 
@@ -113,7 +134,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
             PlayFabManager.Instance.OnDataMissMatchDetected += OnDataMissMatchDetected;
 
-         
+
             Debug.Log("MetaLoopGameManager Setting Environement: " + PlayFabManager.Instance.BackOfficeEnvironement.ToString());
 
             isPlayFabConfigReady = true;
@@ -128,9 +149,8 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         protected virtual void GameData_OnGameDataReady()
         {
 
-            if (IsFirtsStartInPorgress)
+            if (IsFirtsStartInPorgress && !GameServiceManager.IsInit)
             {
-                GameData.OnGameDataReady -= GameData_OnGameDataReady;
                 StartCoroutine(GameDataWaitForPlayFabConfig());
 
             }
@@ -152,7 +172,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             }
 
             Debug.Log("MetaLoopGameManager GameData_OnGameDataReady; Starting GameServiceManager Login...");
-            GameServiceManager.GameService.OnGameServiceEvent += GameService_OnGameServiceEvent;
+
             DOVirtual.DelayedCall(0.5f, () => GameServiceManager.GameService.Init());
         }
 
@@ -189,23 +209,15 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             Debug.Log("MetaLoopGameManager Downloading TitleData Completed...");
             if (result != null)
             {
-                ReadTitleData(result, false);
+                if (!ReadTitleData(result, false))
+                {
+                    return;
+                }
             }
             else
             {
                 ShowUnavailableMessage(GameUnavailableMessageType.HOST_UNREACHABLE);
                 return;
-            }
-
-            //Read ServerInfo...
-            if (result.Data.ContainsKey(MetaStateSettings._TitleDataKey_ServerInfo))
-            {
-                ServerInfo serverInfo = JsonConvert.DeserializeObject<ServerInfo>(result.Data[MetaStateSettings._TitleDataKey_ServerInfo]);
-                if (serverInfo.ServerStatus != ServerStatus.Online)
-                {
-                    ShowUnavailableMessage(GameUnavailableMessageType.MAINTENANCE);
-                    return;
-                }
             }
 
             AssetManifest assetManifest;
@@ -309,15 +321,14 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         }
 
 
-        public void ReadTitleData(GetTitleDataResult obj, bool fromRoutineTaskManager = true)
+        public bool ReadTitleData(GetTitleDataResult obj, bool fromRoutineTaskManager = true)
         {
             ServerInfo serverInfo;
             if (obj != null && obj.Data.ContainsKey(MetaStateSettings._TitleDataKey_ServerInfo))
             {
                 serverInfo = JsonConvert.DeserializeObject<ServerInfo>(obj.Data[MetaStateSettings._TitleDataKey_ServerInfo]);
 
-                if ((serverInfo.CacheVersion < lastServerInfoCacheVersion) && IsGameAvailable) return;
-
+                if ((serverInfo.CacheVersion < lastServerInfoCacheVersion) && IsGameAvailable) return true; //ignore this manifest.
                 lastServerInfoCacheVersion = serverInfo.CacheVersion;
 
                 if (serverInfo.ServerStatus != ServerStatus.Online)
@@ -335,7 +346,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
                     ShowUnavailableMessage(gameUnavailableMessageType);
 
-                    return;
+                    return false;
                 }
                 else if (serverInfo.ServerStatus == ServerStatus.Online)
                 {
@@ -374,8 +385,10 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
                 }
 
-                return;
+                return false;
             }
+
+            return true;
         }
 
         public bool CheckInternetConnection()
@@ -386,6 +399,13 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         public virtual void OnMetaLoopReady()
         {
             IsFirtsStartInPorgress = false;
+
+
+            if (OnRestartMetaLoopCompleted != null)
+            {
+                OnRestartMetaLoopCompleted.Invoke();
+                OnRestartMetaLoopCompleted = null;
+            }
         }
 
         public virtual void OnDataMissMatchDetected(OnDataMissMatchDetectedEventType type)
