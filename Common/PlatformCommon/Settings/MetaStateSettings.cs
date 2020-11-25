@@ -9,6 +9,7 @@ namespace MetaLoop.Common.PlatformCommon.Settings
     public partial class MetaStateSettings
     {
 
+        
 
         public static float _MAJOR_VERSION = 0.1f;
         public static string GetMajorVersion()
@@ -64,12 +65,17 @@ namespace MetaLoop.Common.PlatformCommon.Settings
             }
         }
 
+
         public static string _DataLayerDefaultNameSpace = "";
         public static string _RemoteAssetsPersistantName = "";
 
         public static string _ProductionEndpoint = "";
         public static string _StagingEndpoint = "";
         public static string _DevEndpoint = "";
+
+
+        public static string _ServerAppVersionUrl = "AppVersion";
+
 
         public static string _PlayerXpId = "";
         public static string _SoftCurrencyId = "";
@@ -109,6 +115,17 @@ namespace MetaLoop.Common.PlatformCommon.Settings
         public static string _GoogleLicenseKey = "";
 
         public static List<string> _UserDataToDownload = new List<string>() { _MetaDataStateFileName };
+
+        public static string _AppleAppId = "";
+        public static string _GooglePlayPackageId = "";
+        public static string GetStoreLink()
+        {
+#if UNITY_IOS
+            return @"http://itunes.apple.com/app/id" + _AppleAppId;
+#endif
+            return @"https://play.google.com/store/apps/details?id=" + _GooglePlayPackageId;
+        }
+
 
 
     }

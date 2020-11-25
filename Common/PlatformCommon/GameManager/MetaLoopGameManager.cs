@@ -3,12 +3,14 @@ using DG.Tweening;
 using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.Data.Schema;
 using MetaLoop.Common.PlatformCommon.GameServices;
+using MetaLoop.Common.PlatformCommon.HttpClient;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlatformCommon.Protocol;
 using MetaLoop.Common.PlatformCommon.RemoteAssets;
 using MetaLoop.Common.PlatformCommon.Server;
 using MetaLoop.Common.PlatformCommon.Settings;
 using MetaLoop.Common.PlatformCommon.State;
+using MetaLoop.GameLogic;
 using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -25,21 +27,30 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
     {
         public static bool UseStagingForPreProdBuild { get; set; }
         public static bool IsFirtsStart = true;
+        public static bool IsFirtsStartInPorgress = true;
         public static Type MetaDataStateType = typeof(MetaDataStateBase);
         private int lastServerInfoCacheVersion;
         public bool IsGameAvailable { get; set; }
+
+        private bool isPlayFabConfigReady = false; 
 
         protected virtual void Awake()
         {
             Debug.Log("MetaLoopGameManager Awake() invoked.");
             if (IsFirtsStart)
             {
+                //force reflection engine. 
+                new MetaStateSettings();
 #if PROD
-                UnityWebRequestHandler.Instance.GetBodyFromHttp(MetaStateSettings.ServerAppVersionUrl, null, (UnityWebRequest r) => AwakeFirtsInit_ServerInfoReady(r));
+                UnityWebRequestHandler.Instance.GetBodyFromHttp(MetaStateSettings._ProductionEndpoint + MetaStateSettings._ServerAppVersionUrl, null, (UnityWebRequest r) => AwakeFirtsInit_ServerInfoReady(r));
 #else
                 AwakeFirtsInit_ServerInfoReady(null);
 #endif
             }
+            
+            GameData.OnGameDataReady += GameData_OnGameDataReady;
+            GameData.Load();
+
 
             IsFirtsStart = false;
         }
@@ -102,10 +113,10 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
             PlayFabManager.Instance.OnDataMissMatchDetected += OnDataMissMatchDetected;
 
-            GameData.OnGameDataReady += GameData_OnGameDataReady;
-            GameData.Load();
-
+         
             Debug.Log("MetaLoopGameManager Setting Environement: " + PlayFabManager.Instance.BackOfficeEnvironement.ToString());
+
+            isPlayFabConfigReady = true;
 
 
         }
@@ -116,6 +127,30 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
         protected virtual void GameData_OnGameDataReady()
         {
+
+            if (IsFirtsStartInPorgress)
+            {
+                GameData.OnGameDataReady -= GameData_OnGameDataReady;
+                StartCoroutine(GameDataWaitForPlayFabConfig());
+
+            }
+            else
+            {
+                PlayFabManager.Instance.Login(OnPlayFabLoginSuccess, OnPlayFabLoginFailed, SystemInfo.deviceUniqueIdentifier);
+                Debug.Log("GAMEMANAGER LoginPlayFab MANUAL");
+            }
+
+
+
+        }
+
+        private IEnumerator GameDataWaitForPlayFabConfig()
+        {
+            while (!isPlayFabConfigReady)
+            {
+                yield return null;
+            }
+
             Debug.Log("MetaLoopGameManager GameData_OnGameDataReady; Starting GameServiceManager Login...");
             GameServiceManager.GameService.OnGameServiceEvent += GameService_OnGameServiceEvent;
             DOVirtual.DelayedCall(0.5f, () => GameServiceManager.GameService.Init());
@@ -305,7 +340,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
                 else if (serverInfo.ServerStatus == ServerStatus.Online)
                 {
                     //"0.1" is wildcard for dev/staging env
-                    if (serverInfo.AppVersion == MetaStateSettings.GetMajorVersion() || serverInfo.AppVersion == "0.10")
+                    if (serverInfo.AppVersion == MetaStateSettings.GetMajorVersion() || serverInfo.AppVersion == "0.10" || serverInfo.AppVersion == "0.1")
                     {
                         IsGameAvailable = true;
 
@@ -350,7 +385,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
         public virtual void OnMetaLoopReady()
         {
-
+            IsFirtsStartInPorgress = false;
         }
 
         public virtual void OnDataMissMatchDetected(OnDataMissMatchDetectedEventType type)
