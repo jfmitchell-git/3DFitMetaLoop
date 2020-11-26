@@ -15,6 +15,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="AppVersion.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="AppVersion.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\..\BioIncRedemptionMobile\UnityMobile\Assets\StreamingAssets\BioInc.db" Link="BioInc.db">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -30,12 +40,6 @@
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Configuration\Configuration.csproj" />
     <ProjectReference Include="..\GameLogic\GameLogic.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="AppVersion.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 

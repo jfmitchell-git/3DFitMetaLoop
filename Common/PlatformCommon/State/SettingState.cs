@@ -16,7 +16,7 @@ namespace MetaLoop.Common.PlatformCommon.State
             get
             {
                 if (Settings.ContainsKey(settingId)) return Settings[settingId];
-                return -1;
+                return 0;
             }
             set
             {

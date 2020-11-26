@@ -425,6 +425,7 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
             this.lastTokenResponse = loginResult.EntityToken;
             if (!IsImpersonating)
             {
+                PlayerName = "Player" + "#" + loginResult.EntityToken.Entity.Id.Substring(0, 4);
                 this.PlayerName = GameServiceManager.GameService.PlayerName;
             }
 
@@ -440,6 +441,11 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
 #endif
             }
 
+
+            if (PlayerName == string.Empty)
+            {
+
+            }
 
             this.GroupManager = new PlayFabGroupManager();
 

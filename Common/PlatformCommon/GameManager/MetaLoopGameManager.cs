@@ -53,9 +53,6 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             }
 
 
-            GameData.Load();
-
-
             IsFirtsStart = false;
         }
 
@@ -72,13 +69,12 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 #endif
 
             this.OnRestartMetaLoopCompleted = onRestartMetaLoopCompleted;
-
-            GameData.Load();
         }
 
 
         protected virtual void AwakeFirtsInit_ServerInfoReady(UnityWebRequest serverResponse)
         {
+            GameData.Load();
             Debug.Log("MetaLoopGameManager Fetching AppVersion.txt Completed.");
 
             if (serverResponse != null && serverResponse.isDone && !serverResponse.isHttpError && !serverResponse.isNetworkError)

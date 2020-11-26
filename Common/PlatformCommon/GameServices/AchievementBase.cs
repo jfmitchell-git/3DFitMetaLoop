@@ -5,6 +5,8 @@ namespace MetaLoop.Common.PlatformCommon.GameServices
 {
     public class AchievementBase
     {
+
+        public bool TrigeredInMission { get; set; }
         protected string id = string.Empty;
         public string Id
         {
