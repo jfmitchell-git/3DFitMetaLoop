@@ -52,9 +52,11 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
 
         public int GetCompletion(MetaDataStateBase state)
         {
-            float completion = GetCurrentCount(state) / (float)RequirementCount;
+            float completion = (float) ((float)GetCurrentCount(state)) / ((float)RequirementCount) * 100f;
             if (completion < 0) completion = 0;
             if (completion > 100) completion = 100;
+
+           
             return (int)completion;
         }
         public AchievementDataStateEntry GetAchievementStateItem(MetaDataStateBase state)
