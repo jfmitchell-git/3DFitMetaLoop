@@ -43,6 +43,10 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             {
                 GameData.OnGameDataReady += GameData_OnGameDataReady;
                 GameServiceManager.GameService.OnGameServiceEvent += GameService_OnGameServiceEvent;
+
+                GameData.Load();
+
+
                 //force reflection engine. 
                 new MetaStateSettings();
 #if PROD
@@ -74,7 +78,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
         protected virtual void AwakeFirtsInit_ServerInfoReady(UnityWebRequest serverResponse)
         {
-            GameData.Load();
+         
             Debug.Log("MetaLoopGameManager Fetching AppVersion.txt Completed.");
 
             if (serverResponse != null && serverResponse.isDone && !serverResponse.isHttpError && !serverResponse.isNetworkError)
@@ -133,21 +137,12 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
             Debug.Log("MetaLoopGameManager Setting Environement: " + PlayFabManager.Instance.BackOfficeEnvironement.ToString());
 
-            isPlayFabConfigReady = true;
-
-
-        }
-
-
-
-
-
-        protected virtual void GameData_OnGameDataReady()
-        {
+  
 
             if (IsFirtsStartInPorgress && !GameServiceManager.IsInit)
             {
-                StartCoroutine(GameDataWaitForPlayFabConfig());
+                Debug.Log("MetaLoopGameManager GameData_OnGameDataReady; Starting GameServiceManager Login...");
+                DOVirtual.DelayedCall(0.5f, () => GameServiceManager.GameService.Init());
 
             }
             else
@@ -157,19 +152,12 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             }
 
 
-
         }
 
-        private IEnumerator GameDataWaitForPlayFabConfig()
+        protected virtual void GameData_OnGameDataReady()
         {
-            while (!isPlayFabConfigReady)
-            {
-                yield return null;
-            }
 
-            Debug.Log("MetaLoopGameManager GameData_OnGameDataReady; Starting GameServiceManager Login...");
 
-            DOVirtual.DelayedCall(0.5f, () => GameServiceManager.GameService.Init());
         }
 
 
