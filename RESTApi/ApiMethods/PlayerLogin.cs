@@ -33,12 +33,12 @@ namespace MetaLoop.RESTApi.ApiMethods
                     {
                         metaDataState = new MetaDataState();
 
-                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.HardCurrencyId), 120);
-                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.SoftCurrencyId), 5000);
+                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.HardCurrencyId), 50);
+                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.SoftCurrencyId), 3000);
                         metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.EnergyId), MetaSettings.EnergyCap);
 
-                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.DeathSkillsToken), 200);
-                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.LifeSkillsToken), 200);
+                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.DeathSkillsToken), 120);
+                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.LifeSkillsToken), 120);
 
                         metaDataState.CreationDate = DateTime.UtcNow;
 

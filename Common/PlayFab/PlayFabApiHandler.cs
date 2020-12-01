@@ -45,7 +45,7 @@ namespace MetaLoop.Common.PlayFabWrapper
 
         public static async Task ValidateEntityToken()
         {
-            if (CurrentEntityToken == null || DateTime.UtcNow >= CurrentEntityToken.TokenExpiration)
+            if (CurrentEntityToken == null || DateTime.UtcNow >= CurrentEntityToken.TokenExpiration.Value)
             {
                 CurrentEntityToken = await GetEntityToken();
             }
