@@ -28,7 +28,6 @@ namespace MetaLoop.RESTApi.ApiMethods
 
                     bool result = MissionManager.ClaimDailyObjective(metaDataState, type);
 
-
                     cloudData.DataAsString = metaDataState.ToJson();
 
                     if (result && await PlayFabApiHandler.UploadPlayerTitleData(CurrentUserId, new List<PlayFabFileDetails>() { cloudData }))

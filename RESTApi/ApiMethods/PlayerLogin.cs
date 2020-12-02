@@ -33,7 +33,7 @@ namespace MetaLoop.RESTApi.ApiMethods
                     {
                         metaDataState = new MetaDataState();
 
-                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.HardCurrencyId), 50);
+                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.HardCurrencyId), 100);
                         metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.SoftCurrencyId), 3000);
                         metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.EnergyId), MetaSettings.EnergyCap);
 

@@ -15,8 +15,8 @@ namespace MetaLoop.RESTApi
             {
 
 #if DEBUG
-                CurrentUserId = "E5FFC164A1183E0E";
-                return true;
+                //CurrentUserId = "E5FFC164A1183E0E";
+                //return true;
 #endif
                 return !string.IsNullOrEmpty(CurrentUserId) || !string.IsNullOrEmpty(CurrentEntity);
             }

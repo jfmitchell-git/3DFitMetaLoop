@@ -67,7 +67,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
                 DataLayer.Instance.Kill();
             }
 #if PROD
-                UnityWebRequestHandler.Instance.GetBodyFromHttp(MetaStateSettings._ProductionEndpoint + MetaStateSettings._ServerAppVersionUrl, null, (UnityWebRequest r) => AwakeFirtsInit_ServerInfoReady(r));
+            UnityWebRequestHandler.Instance.GetBodyFromHttp(MetaStateSettings._ProductionEndpoint + MetaStateSettings._ServerAppVersionUrl, null, (UnityWebRequest r) => AwakeFirtsInit_ServerInfoReady(r));
 #else
             AwakeFirtsInit_ServerInfoReady(null);
 #endif
@@ -78,7 +78,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
         protected virtual void AwakeFirtsInit_ServerInfoReady(UnityWebRequest serverResponse)
         {
-         
+
             Debug.Log("MetaLoopGameManager Fetching AppVersion.txt Completed.");
 
             if (serverResponse != null && serverResponse.isDone && !serverResponse.isHttpError && !serverResponse.isNetworkError)
@@ -111,8 +111,8 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             PlayFabManager.Instance.BackOfficeEnvironement = BackOfficeEnvironement.Staging;
 
 #if PROD
-        PlayFabManager.Instance.BackOfficeEnvironement = BackOfficeEnvironement.Prod;
-        if (UseStagingForPreProdBuild) PlayFabManager.Instance.BackOfficeEnvironement = BackOfficeEnvironement.Staging;
+            PlayFabManager.Instance.BackOfficeEnvironement = BackOfficeEnvironement.Prod;
+            if (UseStagingForPreProdBuild) PlayFabManager.Instance.BackOfficeEnvironement = BackOfficeEnvironement.Staging;
 #endif
 
             switch (PlayFabManager.Instance.BackOfficeEnvironement)
@@ -137,7 +137,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
             Debug.Log("MetaLoopGameManager Setting Environement: " + PlayFabManager.Instance.BackOfficeEnvironement.ToString());
 
-  
+
 
             if (IsFirtsStartInPorgress && !GameServiceManager.IsInit)
             {
@@ -295,7 +295,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             // Debug.Log(caca);
             //DataLayer.Instance.Init(Application.persistentDataPath + "/" + MetaStateSettings._RemoteAssetsPersistantName + @"/" + MetaStateSettings._AssetManagerStartupFolder + MetaStateSettings._DatabaseName);
 #else
-              DataLayer.Instance.Init(Application.persistentDataPath + @"/" + MetaStateSettings._RemoteAssetsPersistantName + @"/" + MetaStateSettings._AssetManagerStartupFolder + MetaStateSettings._DatabaseName);               
+            DataLayer.Instance.Init(Application.persistentDataPath + @"/" + MetaStateSettings._RemoteAssetsPersistantName + @"/" + MetaStateSettings._AssetManagerStartupFolder + MetaStateSettings._DatabaseName);
             //DataLayer.Instance.Init(Application.persistentDataPath + MetaSettings.RemoteAssetsPersistantName + @"/" + MetaSettings.AssetManagerStartupFolder + MetaSettings.DatabaseName);
 #endif
 
