@@ -72,7 +72,7 @@ namespace MetaLoop.Common.PlatformCommon.State
             {
                 if (shopOffer.Duration > 0)
                 {
-                    if (MetaDataStateBase.Current.GetServerUTCDatetime() > entry.ActivationDate.AddHours(shopOffer.Duration))
+                    if (DateTime.UtcNow > entry.ActivationDate.AddHours(shopOffer.Duration))
                     {
                         entry.ActivationDate = DateTime.UtcNow;
                     }

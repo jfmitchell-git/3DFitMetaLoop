@@ -24,32 +24,32 @@ namespace MetaLoop.Common.PlayFabWrapper
         public static bool UseEntityFiles { get; set; }
 
         private const string title_player_account = "title_player_account";
-        public static GetEntityTokenResponse CurrentEntityToken { get; set; }
+        //public static GetEntityTokenResponse CurrentEntityToken { get; set; }
 
-        public static PlayFabAuthenticationContext GetPlayFabAuthenticationContext()
-        {
-            if (CurrentEntityToken != null)
-            {
-                return new PlayFabAuthenticationContext()
-                {
-                    EntityId = CurrentEntityToken.Entity.Id,
-                    EntityToken = CurrentEntityToken.EntityToken,
-                    EntityType = CurrentEntityToken.Entity.Type
-                };
-            }
-            else
-            {
-                return null;
-            }
-        }
+        //public static PlayFabAuthenticationContext GetPlayFabAuthenticationContext()
+        //{
+        //    if (CurrentEntityToken != null)
+        //    {
+        //        return new PlayFabAuthenticationContext()
+        //        {
+        //            EntityId = CurrentEntityToken.Entity.Id,
+        //            EntityToken = CurrentEntityToken.EntityToken,
+        //            EntityType = CurrentEntityToken.Entity.Type
+        //        };
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
 
-        public static async Task ValidateEntityToken()
-        {
-            if (CurrentEntityToken == null || DateTime.UtcNow >= CurrentEntityToken.TokenExpiration.Value)
-            {
-                CurrentEntityToken = await GetEntityToken();
-            }
-        }
+        //public static async Task ValidateEntityToken()
+        //{
+        //    if (CurrentEntityToken == null || DateTime.UtcNow >= CurrentEntityToken.TokenExpiration.Value)
+        //    {
+        //        CurrentEntityToken = await GetEntityToken();
+        //    }
+        //}
 
 
         public static async Task<GetEntityTokenResponse> GetEntityToken(params string[] keys)
@@ -125,131 +125,131 @@ namespace MetaLoop.Common.PlayFabWrapper
             }
         }
 
-        public static async Task<bool> GetEntityFiles(string entityId, List<PlayFabFileDetails> files, EntityType entityType = EntityType.title_player_account, int retryAttemptsOnFailure = 2)
-        {
-            bool hasOperationError = false;
+        //public static async Task<bool> GetEntityFiles(string entityId, List<PlayFabFileDetails> files, EntityType entityType = EntityType.title_player_account, int retryAttemptsOnFailure = 2)
+        //{
+        //    bool hasOperationError = false;
 
-            var request = new PlayFab.DataModels.GetFilesRequest()
-            {
-                Entity = new PlayFab.DataModels.EntityKey { Id = entityId, Type = entityType.ToString() },
-                AuthenticationContext = GetPlayFabAuthenticationContext()
-            };
+        //    var request = new PlayFab.DataModels.GetFilesRequest()
+        //    {
+        //        Entity = new PlayFab.DataModels.EntityKey { Id = entityId, Type = entityType.ToString() },
+        //        AuthenticationContext = GetPlayFabAuthenticationContext()
+        //    };
 
-            var requestResult = await PlayFabDataAPI.GetFilesAsync(request);
+        //    var requestResult = await PlayFabDataAPI.GetFilesAsync(request);
 
-            if (requestResult.Error == null)
-            {
-                foreach (var file in files)
-                {
-                    if (requestResult.Result.Metadata.ContainsKey(file.FileName))
-                    {
-                        var fileInfo = requestResult.Result.Metadata[file.FileName];
-                        var client = new HttpClient();
-                        var httpGetResult = await client.GetAsync(fileInfo.DownloadUrl);
+        //    if (requestResult.Error == null)
+        //    {
+        //        foreach (var file in files)
+        //        {
+        //            if (requestResult.Result.Metadata.ContainsKey(file.FileName))
+        //            {
+        //                var fileInfo = requestResult.Result.Metadata[file.FileName];
+        //                var client = new HttpClient();
+        //                var httpGetResult = await client.GetAsync(fileInfo.DownloadUrl);
 
-                        if (httpGetResult.IsSuccessStatusCode)
-                        {
-                            file.ExistOnServer = true;
-                            file.Data = await httpGetResult.Content.ReadAsByteArrayAsync();
-                            file.DataAsString = await httpGetResult.Content.ReadAsStringAsync();
-                        }
-                        else
-                        {
-                            hasOperationError = true;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                hasOperationError = true;
-            }
+        //                if (httpGetResult.IsSuccessStatusCode)
+        //                {
+        //                    file.ExistOnServer = true;
+        //                    file.Data = await httpGetResult.Content.ReadAsByteArrayAsync();
+        //                    file.DataAsString = await httpGetResult.Content.ReadAsStringAsync();
+        //                }
+        //                else
+        //                {
+        //                    hasOperationError = true;
+        //                }
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        hasOperationError = true;
+        //    }
 
-            return !hasOperationError;
+        //    return !hasOperationError;
 
-        }
-        public static async Task<bool> UploadEntityFiles(string entityId, List<PlayFabFileDetails> files, EntityType entityType = EntityType.title_player_account, int retryAttemptsOnFailure = 2)
-        {
-            bool hasOperationError = false;
+        //}
+        //public static async Task<bool> UploadEntityFiles(string entityId, List<PlayFabFileDetails> files, EntityType entityType = EntityType.title_player_account, int retryAttemptsOnFailure = 2)
+        //{
+        //    bool hasOperationError = false;
 
-            var request = new PlayFab.DataModels.InitiateFileUploadsRequest
-            {
-                Entity = new PlayFab.DataModels.EntityKey { Id = entityId, Type = entityType.ToString() },
-                FileNames = files.Select(y => y.FileName).ToList(),
-                AuthenticationContext = GetPlayFabAuthenticationContext()
-            };
+        //    var request = new PlayFab.DataModels.InitiateFileUploadsRequest
+        //    {
+        //        Entity = new PlayFab.DataModels.EntityKey { Id = entityId, Type = entityType.ToString() },
+        //        FileNames = files.Select(y => y.FileName).ToList(),
+        //        AuthenticationContext = GetPlayFabAuthenticationContext()
+        //    };
 
-            var requestResult = await PlayFabDataAPI.InitiateFileUploadsAsync(request);
+        //    var requestResult = await PlayFabDataAPI.InitiateFileUploadsAsync(request);
 
-            if (requestResult.Result != null)
-            {
-                foreach (var fileInfo in requestResult.Result.UploadDetails)
-                {
-                    var fileUploadDetails = files.Where(y => y.FileName == fileInfo.FileName).SingleOrDefault();
+        //    if (requestResult.Result != null)
+        //    {
+        //        foreach (var fileInfo in requestResult.Result.UploadDetails)
+        //        {
+        //            var fileUploadDetails = files.Where(y => y.FileName == fileInfo.FileName).SingleOrDefault();
 
-                    if (fileUploadDetails != null)
-                    {
-                        var client = new HttpClient();
+        //            if (fileUploadDetails != null)
+        //            {
+        //                var client = new HttpClient();
 
-                        if (fileUploadDetails.DataAsString != null)
-                        {
-                            StringContent data = new StringContent(fileUploadDetails.DataAsString);
-                            var response = await client.PutAsync(fileInfo.UploadUrl, data);
-                            if (!response.IsSuccessStatusCode)
-                            {
-                                hasOperationError = true;
-                            }
-                        }
-                        else if (fileUploadDetails.Data != null)
-                        {
-                            ByteArrayContent data = new ByteArrayContent(fileUploadDetails.Data);
-                            var response = await client.PutAsync(fileInfo.UploadUrl, data);
-                            if (!response.IsSuccessStatusCode)
-                            {
-                                hasOperationError = true;
-                            }
-                        }
-                        else
-                        {
-                            hasOperationError = true;
-                        }
-                    }
-                    else
-                    {
-                        hasOperationError = true;
-                    }
-                }
-            }
-            else
-            {
-                if (requestResult.Error != null && retryAttemptsOnFailure > 0)
-                {
-                    switch (requestResult.Error.Error)
-                    {
-                        case PlayFabErrorCode.EntityFileOperationPending:
-                            await Task.Delay(120);
-                            return await UploadEntityFiles(entityId, files, entityType, retryAttemptsOnFailure - 1);
-                    }
-                }
+        //                if (fileUploadDetails.DataAsString != null)
+        //                {
+        //                    StringContent data = new StringContent(fileUploadDetails.DataAsString);
+        //                    var response = await client.PutAsync(fileInfo.UploadUrl, data);
+        //                    if (!response.IsSuccessStatusCode)
+        //                    {
+        //                        hasOperationError = true;
+        //                    }
+        //                }
+        //                else if (fileUploadDetails.Data != null)
+        //                {
+        //                    ByteArrayContent data = new ByteArrayContent(fileUploadDetails.Data);
+        //                    var response = await client.PutAsync(fileInfo.UploadUrl, data);
+        //                    if (!response.IsSuccessStatusCode)
+        //                    {
+        //                        hasOperationError = true;
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    hasOperationError = true;
+        //                }
+        //            }
+        //            else
+        //            {
+        //                hasOperationError = true;
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if (requestResult.Error != null && retryAttemptsOnFailure > 0)
+        //        {
+        //            switch (requestResult.Error.Error)
+        //            {
+        //                case PlayFabErrorCode.EntityFileOperationPending:
+        //                    await Task.Delay(120);
+        //                    return await UploadEntityFiles(entityId, files, entityType, retryAttemptsOnFailure - 1);
+        //            }
+        //        }
 
-                hasOperationError = true;
-            }
-
-
-            var finalizeRequest = new PlayFab.DataModels.FinalizeFileUploadsRequest
-            {
-                Entity = new PlayFab.DataModels.EntityKey { Id = entityId, Type = entityType.ToString() },
-                FileNames = files.Select(y => y.FileName).ToList(),
-                AuthenticationContext = GetPlayFabAuthenticationContext()
-            };
+        //        hasOperationError = true;
+        //    }
 
 
-            await PlayFabDataAPI.FinalizeFileUploadsAsync(finalizeRequest);
+        //    var finalizeRequest = new PlayFab.DataModels.FinalizeFileUploadsRequest
+        //    {
+        //        Entity = new PlayFab.DataModels.EntityKey { Id = entityId, Type = entityType.ToString() },
+        //        FileNames = files.Select(y => y.FileName).ToList(),
+        //        AuthenticationContext = GetPlayFabAuthenticationContext()
+        //    };
 
 
-            return !hasOperationError;
+        //    await PlayFabDataAPI.FinalizeFileUploadsAsync(finalizeRequest);
 
-        }
+
+        //    return !hasOperationError;
+
+        //}
 
 
 

@@ -115,6 +115,12 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             if (UseStagingForPreProdBuild) PlayFabManager.Instance.BackOfficeEnvironement = BackOfficeEnvironement.Staging;
 #endif
 
+//#if UNITY_EDITOR
+//            PlayFabManager.Instance.BackOfficeEnvironement = BackOfficeEnvironement.Dev;
+//#endif
+
+
+
             switch (PlayFabManager.Instance.BackOfficeEnvironement)
             {
                 case BackOfficeEnvironement.Dev:

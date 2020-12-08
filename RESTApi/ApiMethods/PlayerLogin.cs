@@ -77,7 +77,8 @@ namespace MetaLoop.RESTApi.ApiMethods
                     metaDataState.SyncLoginCalendar();
                     metaDataState.ServerDateTime = DateTime.UtcNow;
 
-                 
+                    PlayerStatus.AddEnergyToPlayer(metaDataState);
+
                     if (DateTime.UtcNow > metaDataState.NextDailyReset)
                     {
                         metaDataState.ApplyDailyReset();

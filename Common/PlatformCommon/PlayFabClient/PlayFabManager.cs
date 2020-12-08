@@ -163,6 +163,8 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
                 return;
             }
 
+            if (cloudScriptStackMethods == null) cloudScriptStackMethods = new List<CloudScriptStackMethod>();
+
             float callDelay = 0f;
             //UnityEngine.Debug.Log("--------PLAYFAB STACK TIMER GOOD ");
             if (cloudScriptStackMethods.Count > 0)

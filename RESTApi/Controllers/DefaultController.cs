@@ -28,7 +28,7 @@ namespace MetaLoop.RESTApi.Controllers
         [HttpPost]
         public async Task<string> Get(string method, string param1, string param2, string param3, string param4)
         {
-            await PlayFabApiHandler.ValidateEntityToken();
+            //await PlayFabApiHandler.ValidateEntityToken();
 
             //Response.ContentType = "application/json; charset=utf-8";
 
