@@ -90,13 +90,11 @@ namespace MetaLoop.RESTApi.Controllers
                         if (isStackCall)
                         {
                             CloudScriptRequestStack requests = JsonConvert.DeserializeObject<CloudScriptRequestStack>(jsonRequest);
-                            apiMethod.LoadContext(requests);
                             response = await apiMethod.ExecuteStackAsync(requests);
                         }
                         else
                         {
                             CloudScriptRequest request = JsonConvert.DeserializeObject<CloudScriptRequest>(jsonRequest);
-                            apiMethod.LoadContext(request);
                             response = await apiMethod.ExecuteAsync(request, new string[] { param1, param2, param3, param4 });
                         }
 

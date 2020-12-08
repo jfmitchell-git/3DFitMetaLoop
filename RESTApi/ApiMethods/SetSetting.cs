@@ -15,11 +15,11 @@ namespace MetaLoop.RESTApi.ApiMethods
         public override async Task<CloudScriptResponse> ExecuteStackAsync(CloudScriptRequestStack request)
         {
             DateTime benginRequest = DateTime.UtcNow;
-            if (IsClientValidRequest)
+            if (IsClientValidRequest(request))
             {
                 var cloudData = new PlayFabFileDetails(MetaSettings.MetaDataStateFileName);
 
-                if (await PlayFabApiHandler.GetPlayerTitleData(CurrentUserId, new List<PlayFabFileDetails>() { cloudData }))
+                if (await PlayFabApiHandler.GetPlayerTitleData(request.UserId, new List<PlayFabFileDetails>() { cloudData }))
                 {
                     MetaDataState state = MetaDataState.FromJson(cloudData.DataAsString);
 
@@ -49,7 +49,7 @@ namespace MetaLoop.RESTApi.ApiMethods
 
                     cloudData.DataAsString = state.ToJson();
 
-                    if (await PlayFabApiHandler.UploadPlayerTitleData(CurrentUserId, new List<PlayFabFileDetails>() { cloudData }))
+                    if (await PlayFabApiHandler.UploadPlayerTitleData(request.UserId, new List<PlayFabFileDetails>() { cloudData }))
                     {
                         var response = new CloudScriptResponse() { ResponseCode = ResponseCode.Success };
                         return response;

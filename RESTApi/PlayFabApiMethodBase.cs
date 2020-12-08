@@ -9,39 +9,15 @@ namespace MetaLoop.RESTApi
 {
     public class PlayFabApiMethodBase : IPlayFabApiMethod
     {
-        public bool IsClientValidRequest
+        public bool IsClientValidRequest(CloudScriptRequest r)
         {
-            get
-            {
-
-#if DEBUG
-                //CurrentUserId = "E5FFC164A1183E0E";
-                //return true;
-#endif
-                return !string.IsNullOrEmpty(CurrentUserId) || !string.IsNullOrEmpty(CurrentEntity);
-            }
-        }
-        public string CurrentUserId { get; set; }
-        public string CurrentEntity { get; set; }
-
-        
-
-        public void LoadContext(CloudScriptRequest r)
-        {
-            if (r != null)
-            {
-                CurrentUserId = r.UserId;
-                CurrentEntity = r.EntityId;
-            }
+            return !string.IsNullOrEmpty(r.UserId) || !string.IsNullOrEmpty(r.EntityId);
         }
 
-        public void LoadContext(CloudScriptRequestStack r)
+
+        public bool IsClientValidRequest(CloudScriptRequestStack r)
         {
-            if (r != null)
-            {
-                CurrentUserId = r.UserId;
-                CurrentEntity = r.EntityId;
-            }
+            return !string.IsNullOrEmpty(r.UserId) || !string.IsNullOrEmpty(r.EntityId);
         }
 
         public virtual async Task<CloudScriptResponse> ExecuteAsync(CloudScriptRequest request, string[] urlArguments)

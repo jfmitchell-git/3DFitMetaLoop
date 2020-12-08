@@ -15,9 +15,6 @@ namespace MetaLoop.Common.PlatformCommon.Server
 
         Task<CloudScriptResponse> ExecuteStackAsync(CloudScriptRequestStack request);
         Task<CloudScriptResponse> ExecuteAsync(CloudScriptRequest request, string[] urlArguments);
-
-        void LoadContext(CloudScriptRequest r);
-        void LoadContext(CloudScriptRequestStack r);
     }
 
 }
