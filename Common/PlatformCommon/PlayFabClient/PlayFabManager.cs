@@ -135,22 +135,29 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
 
         public List<Action> realtimeQueue = new List<Action>();
 
-
+        private int ticker;
         public void Update()
         {
 
-            if (DateTime.Now.Subtract(timerProcessStackLastTime).TotalSeconds > 3.7f)
-            {
-                TimerProcessStacks_Elapsed();
-                timerProcessStackLastTime = DateTime.Now;
-            }
+            ticker++;
 
-            if (DateTime.Now.Subtract(timerProcessRealtimeLastTime).TotalMilliseconds > 100)
+            if (ticker > 50)
             {
-                TimerProcessRealtime_Elapsed();
-                timerProcessRealtimeLastTime = DateTime.Now;
-            }
 
+                if (DateTime.Now.Subtract(timerProcessStackLastTime).TotalSeconds > 3.7f)
+                {
+                    TimerProcessStacks_Elapsed();
+                    timerProcessStackLastTime = DateTime.Now;
+                }
+
+                if (DateTime.Now.Subtract(timerProcessRealtimeLastTime).TotalMilliseconds > 100)
+                {
+                    TimerProcessRealtime_Elapsed();
+                    timerProcessRealtimeLastTime = DateTime.Now;
+                }
+
+                ticker = 0;
+            }
 
         }
 
