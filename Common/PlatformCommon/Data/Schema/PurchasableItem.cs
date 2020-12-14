@@ -82,7 +82,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         {
 
 #if UNITY_EDITOR
-            return RetailPrice.ToString();
+            return DefaultUsdPrice.ToString();
 #endif
             return RetailPriceString;
         }
