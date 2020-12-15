@@ -8,3 +8,4 @@
 [1128/163616.097:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
 [1129/163616.100:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
 [1130/161315.254:ERROR:filesystem_win.cc(148)] DeleteFile C:\Users\qreve\AppData\Local\Google\Chrome\User Data\Crashpad\reports\207e4aa6-613e-4155-985a-e2aae8913798.dmp: The process cannot access the file because it is being used by another process. (0x20)
+[1215/102454.672:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)

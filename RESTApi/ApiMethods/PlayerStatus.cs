@@ -75,7 +75,7 @@ namespace MetaLoop.RESTApi.ApiMethods
             bool isEnergyCapped = false;
 
             // Energy not linked to player level in this case.
-            if (state.Consumables.GetConsumableAmount(Consumable.GetByName(MetaSettings.EnergyId)) >= MetaSettings.EnergyCap)
+            if (state.Consumables.GetConsumableAmount(Consumable.GetByName(MetaSettings.EnergyId)) >= state.EnergyCap)
             {
                 isEnergyCapped = true;
             }
@@ -85,9 +85,9 @@ namespace MetaLoop.RESTApi.ApiMethods
                 if (!isEnergyCapped)
                 {
                     int newBalance = state.Consumables.GetConsumableAmount(Consumable.GetByName(MetaSettings.EnergyId)) + (int)totalEnergy;
-                    if (newBalance >= MetaSettings.EnergyCap)
+                    if (newBalance >= state.EnergyCap)
                     {
-                        totalEnergy = MetaSettings.EnergyCap - state.Consumables.GetConsumableAmount(Consumable.GetByName(MetaSettings.EnergyId));
+                        totalEnergy = state.EnergyCap - state.Consumables.GetConsumableAmount(Consumable.GetByName(MetaSettings.EnergyId));
                     }
                     state.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.EnergyId), (int)totalEnergy);
                 }
