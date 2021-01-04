@@ -35,7 +35,7 @@ namespace MetaLoop.Common.PlatformCommon.HttpClient
 
         public void GetBodyFromHttp(string url, WWWForm postData, Action<UnityWebRequest> callback)
         {
-            StartCoroutine(CreateStandardWebRequest(url, postData, callback));
+            StartCoroutine(CreateStandardWebRequest(url, postData, callback, false));
         }
 
         public void GetBodyFromHttpWithProgress(string url, WWWForm postData, Action<UnityWebRequest> callback)
@@ -58,28 +58,6 @@ namespace MetaLoop.Common.PlatformCommon.HttpClient
             sprite = Sprite.Create(www.texture, new Rect(0, 0, www.texture.width, www.texture.height), new Vector2(0, 0));
             callback.Invoke(sprite);
         }
-
-        private IEnumerator CreateStandardWebRequest(string url, WWWForm postData, Action<UnityWebRequest> callback)
-        {
-
-            UnityWebRequest www;
-            if (postData != null)
-            {
-                www = UnityWebRequest.Post(url, postData);
-            }
-            else
-            {
-                www = UnityWebRequest.Get(url);
-            }
-
-
-
-            yield return www.SendWebRequest();
-            callback.Invoke(www);
-            yield break;
-
-        }
-
 
         private List<ulong> lastDownloadValue;
         private IEnumerator CreateStandardWebRequest(string url, WWWForm postData, Action<UnityWebRequest> callback, bool reportProgress)
@@ -107,15 +85,17 @@ namespace MetaLoop.Common.PlatformCommon.HttpClient
                     Debug.Log("FILE DOWNLOAD IS STALLED, RETRYING");
                     www.Abort();
                     StartCoroutine(CreateStandardWebRequest(url, postData, callback, reportProgress));
-                    yield break;
                 }
                 else
                 {
                     lastDownloadValue.Add(www.downloadedBytes);
-                    callback.Invoke(www);
-                    yield return new WaitForSecondsRealtime(0.1f);
+                    if (reportProgress)
+                    {
+                        callback.Invoke(www);
+                    }
                 }
 
+                yield return new WaitForSecondsRealtime(0.2f);
 
             }
 

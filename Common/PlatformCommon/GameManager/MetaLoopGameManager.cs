@@ -25,6 +25,8 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 {
     public class MetaLoopGameManager : MonoBehaviour
     {
+
+        private bool gameServiceResponded = false;
         public bool RequireMetaLoopRestart { get; set; }
         public static bool UseStagingForPreProdBuild { get; set; }
         public static bool IsFirtsStart = true;
@@ -149,6 +151,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             {
                 Debug.Log("MetaLoopGameManager GameData_OnGameDataReady; Starting GameServiceManager Login...");
                 DOVirtual.DelayedCall(0.5f, () => GameServiceManager.GameService.Init());
+                //DOVirtual.DelayedCall(15f, () => CancelGameServiceManager());
 
             }
             else
@@ -158,6 +161,12 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             }
 
 
+        }
+
+        private void CancelGameServiceManager()
+        {
+            if (gameServiceResponded) return;
+            GameService_OnGameServiceEvent(new GameServiceEvent(GameServiceEventType.SingInFailed));
         }
 
         protected virtual void GameData_OnGameDataReady()
@@ -178,8 +187,11 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
                 case GameServiceEventType.SingInFailed:
                     Debug.Log("MetaLoopGameManager GameData_OnGameDataReady; Login in on PlayFab.");
                     PlayFabManager.Instance.Login(OnPlayFabLoginSuccess, OnPlayFabLoginFailed, SystemInfo.deviceUniqueIdentifier);
+                    gameServiceResponded = true;
                     break;
             }
+
+            //GameServiceManager.GameService.OnGameServiceEvent -= GameService_OnGameServiceEvent;
         }
 
         protected virtual void OnPlayFabLoginSuccess(LoginResult obj)
