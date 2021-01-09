@@ -9,6 +9,14 @@ using UnityEngine;
 
 namespace MetaLoop.Common.PlatformCommon.GameManager
 {
+    public enum LoginType
+    {
+        Undefined,
+        Device,
+        GameService,
+        Facebook,
+    }
+
     [Serializable]
     public partial class GameData
     {
@@ -23,6 +31,8 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
         public Dictionary<string, int> RemoteAssetManagerState { get; set; }
         public bool NotificationEnabled { get; set; }
+
+        public LoginType LoginType { get; set; }
 
         public GameData()
         {

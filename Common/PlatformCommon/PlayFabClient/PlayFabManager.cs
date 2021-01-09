@@ -1,5 +1,6 @@
 ﻿#if !BACKOFFICE
 using DG.Tweening;
+using MetaLoop.Common.PlatformCommon.GameManager;
 using MetaLoop.Common.PlatformCommon.GameServices;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -280,6 +281,10 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
                 testAccount = ImpersonateId;
             }
 
+
+#if TESTCLIENT
+            customId = "TESTCLIENT";
+#endif
             if (string.IsNullOrEmpty(testAccount))
             {
                 HandleDefaultLoginMethod(loginSuccess, loginFailure, customId);
@@ -292,10 +297,12 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
 #elif UNITY_ANDROID
 
             //HandleDefaultLoginMethod(loginSuccess, loginFailure, customId);
+
             HandleAndroidLoginMethod(loginSuccess, loginFailure);
 
-#elif UNITY_IOS
            
+#elif UNITY_IOS
+            
             HandleiOSLoginMethod(loginSuccess, loginFailure);
 #endif
 
@@ -343,16 +350,37 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
             PlayFabClientAPI.LoginWithCustomID(request, (LoginResult loginResult) => { OnPlayerLogin(loginResult); loginSuccess.Invoke(loginResult); IsLogged = true; PlayFabId = loginResult.PlayFabId; }, (PlayFabError e) => loginFailure.Invoke(e));
         }
 
-        private void HandleAndroidDeviceIdLoginMethod(Action<LoginResult> loginSuccess, Action<PlayFabError> loginFailure)
+        private void HandleAndroidDeviceIdLoginMethod(Action<LoginResult> loginSuccess, Action<PlayFabError> loginFailure, bool mustLinkGooglePlay = false)
         {
+#if UNITY_ANDROID
             var request = new LoginWithAndroidDeviceIDRequest { AndroidDeviceId = SystemInfo.deviceUniqueIdentifier, CreateAccount = true };
             PlayFabClientAPI.LoginWithAndroidDeviceID(request, (LoginResult loginResult) => { OnPlayerLogin(loginResult); loginSuccess.Invoke(loginResult); IsLogged = true; PlayFabId = loginResult.PlayFabId; }, (PlayFabError e) => loginFailure.Invoke(e));
+            GameData.Current.LoginType = LoginType.Device;
+
+            if (mustLinkGooglePlay)
+            {
+                var authCode = ((GooglePlayGameService)GameServiceManager.GameService).GetServerAuthCode();
+                var requestLink = new LinkGoogleAccountRequest() {  ServerAuthCode = authCode };
+                PlayFabClientAPI.LinkGoogleAccount(requestLink, (LinkGoogleAccountResult r) => {GameData.Current.LoginType = LoginType.GameService;}, (PlayFabError e) => loginFailure.Invoke(e));
+            }
+
+#endif
+
+
+
         }
 
-        private void HandleiOSDeviceIdLoginMethod(Action<LoginResult> loginSuccess, Action<PlayFabError> loginFailure)
+        private void HandleiOSDeviceIdLoginMethod(Action<LoginResult> loginSuccess, Action<PlayFabError> loginFailure, bool linkGameService = false)
         {
             var request = new LoginWithIOSDeviceIDRequest { DeviceId = SystemInfo.deviceUniqueIdentifier, CreateAccount = true };
             PlayFabClientAPI.LoginWithIOSDeviceID(request, (LoginResult loginResult) => { OnPlayerLogin(loginResult); loginSuccess.Invoke(loginResult); IsLogged = true; PlayFabId = loginResult.PlayFabId; }, (PlayFabError e) => loginFailure.Invoke(e));
+            GameData.Current.LoginType = LoginType.Device;
+
+            if (linkGameService)
+            {
+                var requestLink = new LinkGameCenterAccountRequest() { GameCenterId = GameServiceManager.GameService.PlayerId };
+                PlayFabClientAPI.LinkGameCenterAccount(requestLink, (LinkGameCenterAccountResult r) => { GameData.Current.LoginType = LoginType.GameService; }, (PlayFabError e) => loginFailure.Invoke(e));
+            }
         }
 
         private void HandleAndroidLoginMethod(Action<LoginResult> loginSuccess, Action<PlayFabError> loginFailure)
@@ -361,6 +389,14 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
 
             if (GameServiceManager.GameService.IsSignedIn)
             {
+
+                if (GameData.Current.LoginType != LoginType.Undefined && GameData.Current.LoginType != LoginType.GameService)
+                {
+                    HandleAndroidDeviceIdLoginMethod(loginSuccess, loginFailure, true);
+                    return;
+                }
+
+
                 string authCode;
 
                 if (IsFirtsLogin)
@@ -376,6 +412,9 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
 
                 var request = new LoginWithGoogleAccountRequest() { ServerAuthCode = authCode, CreateAccount = true };
                 PlayFabClientAPI.LoginWithGoogleAccount(request, (LoginResult loginResult) => { OnPlayerLogin(loginResult); loginSuccess.Invoke(loginResult); IsLogged = true; PlayFabId = loginResult.PlayFabId; }, (PlayFabError e) => loginFailure.Invoke(e));
+
+                GameData.Current.LoginType = LoginType.GameService;
+
             }
             else
             {
@@ -402,8 +441,16 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
             if (GameServiceManager.GameService.IsSignedIn)
             {
 
+                if (GameData.Current.LoginType != LoginType.Undefined && GameData.Current.LoginType != LoginType.GameService)
+                {
+                    HandleiOSDeviceIdLoginMethod(loginSuccess, loginFailure);
+                    return;
+                }
+
+
                 var request = new LoginWithGameCenterRequest() { PlayerId = GameServiceManager.GameService.PlayerId, CreateAccount = true };
                 PlayFabClientAPI.LoginWithGameCenter(request, (LoginResult loginResult) => { OnPlayerLogin(loginResult); loginSuccess.Invoke(loginResult); IsLogged = true; PlayFabId = loginResult.PlayFabId; }, (PlayFabError e) => loginFailure.Invoke(e));
+                GameData.Current.LoginType = LoginType.GameService;
             }
             else
             {
@@ -442,11 +489,11 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
             {
 
 #if UNITY_IOS
-                PlayFabClientAPI.LinkIOSDeviceID(new LinkIOSDeviceIDRequest() { DeviceId = SystemInfo.deviceUniqueIdentifier, ForceLink = true }, (LinkIOSDeviceIDResult r) => { }, (PlayFabError e) => { });
+                PlayFabClientAPI.LinkIOSDeviceID(new LinkIOSDeviceIDRequest() { DeviceId = SystemInfo.deviceUniqueIdentifier, ForceLink = false }, (LinkIOSDeviceIDResult r) => { }, (PlayFabError e) => { });
 #endif
 
 #if UNITY_ANDROID
-                PlayFabClientAPI.LinkAndroidDeviceID(new LinkAndroidDeviceIDRequest() { AndroidDeviceId = SystemInfo.deviceUniqueIdentifier, ForceLink = true }, (LinkAndroidDeviceIDResult r) => { }, (PlayFabError e) => { });
+                PlayFabClientAPI.LinkAndroidDeviceID(new LinkAndroidDeviceIDRequest() { AndroidDeviceId = SystemInfo.deviceUniqueIdentifier, ForceLink = false }, (LinkAndroidDeviceIDResult r) => { }, (PlayFabError e) => { });
 #endif
             }
 

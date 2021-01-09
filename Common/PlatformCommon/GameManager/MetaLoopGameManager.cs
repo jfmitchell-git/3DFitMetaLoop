@@ -293,7 +293,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         {
             Debug.Log("MetaLoopGameManager Instancing DataLayer...");
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && TEST
             DataLayer.Instance.Init(Application.streamingAssetsPath + @"/" + MetaStateSettings._DatabaseName);
 
             //var caca = Application.persistentDataPath + @"/" + MetaStateSettings._RemoteAssetsPersistantName + @"/" + MetaStateSettings._AssetManagerStartupFolder + MetaStateSettings._DatabaseName;
@@ -396,6 +396,8 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
                 OnRestartMetaLoopCompleted.Invoke();
                 OnRestartMetaLoopCompleted = null;
             }
+
+            GameData.Save();
         }
 
         public virtual void OnDataMissMatchDetected(OnDataMissMatchDetectedEventType type)

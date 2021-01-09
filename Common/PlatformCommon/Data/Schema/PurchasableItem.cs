@@ -33,27 +33,9 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
             }
         }
 
-        private string retailPriceString = "";
         [IgnoreCodeFirst, Ignore]
-        public string RetailPriceString
-        {
-            get
-            {
-                if (RetailPrice == 0f)
-                {
-                    return DefaultUsdPrice.ToString("C");
-                }
-                else
-                {
-                    return retailPriceString;
-                }
-            }
-            set
-            {
-                retailPriceString = value;
-            }
+        public string RetailPriceString { get; set; }
 
-        }
 
         private float retailPrice = 0f;
         [IgnoreCodeFirst, Ignore]

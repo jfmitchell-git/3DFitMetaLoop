@@ -151,6 +151,17 @@ namespace MetaLoop.Common.PlatformCommon.RemoteAssets
 
         private void UpdateManifest(AssetManifest manifest)
         {
+
+//#if UNITY_EDITOR
+
+//            this.AssetManifest = manifest;
+//            this.StartupFiles = new List<RemoteAssetInfo>();
+//            this.OnDemandFiles = new List<RemoteAssetInfo>();
+//            this.OnGameReadyFiles = new List<RemoteAssetInfo>();
+//            ReadManifest();
+//            return;
+//#endif
+
             //if its not a NEW manifest, ignore it.
             if (lastManifestVersion > 0 && manifest.ManifestVersion <= lastManifestVersion)
             {
@@ -213,7 +224,6 @@ namespace MetaLoop.Common.PlatformCommon.RemoteAssets
                     mustDownloadFile = true;
                 }
 
-
                 if (!File.Exists(fullFilename))
                 {
                     mustDownloadFile = true;
@@ -233,7 +243,12 @@ namespace MetaLoop.Common.PlatformCommon.RemoteAssets
 
                 }
 
+
+#if UNITY_EDITOR
+                mustDownloadFile = true;
+#endif
                 var newFileInfo = new RemoteAssetInfo() { File = file, RequireDownload = mustDownloadFile, Version = version };
+
 
 
                 if (file.RelativeName.StartsWith(MetaStateSettings._AssetManagerStartupFolder))

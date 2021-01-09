@@ -48,6 +48,8 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
                     consumable = DataLayer.Instance.GetTable<Consumable>().Where(y => y.Id == Consumable_Id).SingleOrDefault();
                 return consumable;
             }
+
+       
         }
 
     }
