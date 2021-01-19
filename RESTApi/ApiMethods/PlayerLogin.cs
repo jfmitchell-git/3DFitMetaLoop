@@ -91,6 +91,11 @@ namespace MetaLoop.RESTApi.ApiMethods
                     
                     cloudData.DataAsString = metaDataState.ToJson();
 
+                    if (metaDataState.CountryCode == "CN")
+                    {
+                        return new CloudScriptResponse() { ResponseCode = ResponseCode.Error };
+                    }
+
                     if (await PlayFabApiHandler.UploadPlayerTitleData(request.UserId, new List<PlayFabFileDetails>() { cloudData }))
                     {
                         var response = new CloudScriptResponse() { ResponseCode = ResponseCode.Success };
