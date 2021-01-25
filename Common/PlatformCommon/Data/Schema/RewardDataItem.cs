@@ -9,7 +9,7 @@ using System.Text;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-    public class RewardDataItem
+    public sealed class RewardDataItem
     {
         private int id;
         [PrimaryKey, AutoIncrement]
@@ -45,7 +45,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
             get
             {
                 if (consumable == null)
-                    consumable = DataLayer.Instance.GetTable<Consumable>().Where(y => y.Id == Consumable_Id).SingleOrDefault();
+                    consumable = Consumable.GetById(Consumable_Id);
                 return consumable;
             }
 

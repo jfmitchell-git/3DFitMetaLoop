@@ -1,9 +1,8 @@
-﻿using dryginstudios.bioinc.meta;
-using dryginstudios.bioinc.meta.Data;
-using MetaLoop.Common.PlatformCommon;
+﻿using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlayFabWrapper;
+using MetaLoop.GameLogic.Shared;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,13 +21,13 @@ namespace MetaLoop.RESTApi.ApiMethods
                 if (await PlayFabApiHandler.GetPlayerTitleData(request.UserId, new List<PlayFabFileDetails>() { cloudData }))
                 {
 
-                    MetaDataState metaDataState = MetaDataState.FromJson(cloudData.DataAsString);
+                    MetaDataState metaDataState = MetaDataState.FromJson<MetaDataState>(cloudData.DataAsString);
 
                     bool success = true;
 
                     foreach (var stack in request.CloudScriptMethod)
                     {
-                        ShopManager.OfferMarkAsShown_Server(metaDataState, stack);
+                        //ShopManager.OfferMarkAsShown_Server(metaDataState, stack);
                     }
 
                     cloudData.DataAsString = metaDataState.ToJson();
@@ -46,6 +45,16 @@ namespace MetaLoop.RESTApi.ApiMethods
 
             return new CloudScriptResponse() { ResponseCode = ResponseCode.Error };
         }
+
+        //public static ShopRequestResult OfferMarkAsShown_Server(MetaDataState metaDataState, CloudScriptMethod cloudScriptMethod)
+        //{
+        //    string offerId = cloudScriptMethod.Params["offerId"].ToString();
+        //    ShopOfferPlacementType placementType = (ShopOfferPlacementType)Enum.Parse(typeof(ShopOfferPlacementType), cloudScriptMethod.Params["placement"].ToString());
+        //    bool popup = Convert.ToBoolean(cloudScriptMethod.Params["popup"].ToString());
+        //    ShopOffer item = DataLayer.Instance.GetTable<ShopOffer>().Where(y => y.InternalId == offerId).FirstOrDefault();
+        //    metaDataState.OfferDataState.MarkAsShown(offerId, placementType, item, popup);
+        //    return null;
+        //}
         public override async Task<CloudScriptResponse> ExecuteAsync(CloudScriptRequest request, string[] urlArguments)
         {
             return null;

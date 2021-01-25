@@ -29,11 +29,5 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         public string Name { get; set; }
         public int DropRate { get; set; }
 
-
-
-
-
-
-
     }
 }

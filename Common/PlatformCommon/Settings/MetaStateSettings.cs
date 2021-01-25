@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MetaLoop.Common.PlatformCommon.Data.Schema;
+using MetaLoop.Common.PlatformCommon.State;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -8,9 +10,8 @@ namespace MetaLoop.Common.PlatformCommon.Settings
 {
     public partial class MetaStateSettings
     {
-
-        
-
+        public static Dictionary<Type, Type> PolymorhTypes;
+    
         public static float _MAJOR_VERSION = 0.1f;
         public static string GetMajorVersion()
         {
@@ -23,6 +24,7 @@ namespace MetaLoop.Common.PlatformCommon.Settings
         public static string SettingsClassName;
         static MetaStateSettings()
         {
+            PolymorhTypes = new Dictionary<Type, Type>();
 
             var allProviders = AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes())
                           .Where(x => typeof(ISettingsProvider).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract)

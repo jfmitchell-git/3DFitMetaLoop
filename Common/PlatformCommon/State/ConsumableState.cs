@@ -137,7 +137,7 @@ namespace MetaLoop.Common.PlatformCommon.State
         public int GetConsumableAmount(Consumable consumable)
         {
 
-            return Consumables.Where(y => y.Consumable != null && (y.Consumable == consumable || y.Consumable.DerivedConsumable == consumable)).Sum(y => y.TotalAmount);
+            return Consumables.Where(y => y.Consumable != null && (y.Consumable == consumable )).Sum(y => y.TotalAmount);
         }
 
         public int CheckBalance(Consumable consumable, int amount)

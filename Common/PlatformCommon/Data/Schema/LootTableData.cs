@@ -9,7 +9,7 @@ using System.Text;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-    public class LootTableData
+    public abstract class LootTableData
     {
         private int id;
         [PrimaryKey, AutoIncrement]

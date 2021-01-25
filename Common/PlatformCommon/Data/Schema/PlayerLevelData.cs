@@ -10,7 +10,7 @@ using System.Text;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-    public class PlayerLevelData : RewardObject
+    public abstract class PlayerLevelData : RewardObject
     {
         private int id;
         [PrimaryKey, AutoIncrement]
@@ -26,23 +26,22 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
                 //Load relationships here...
             }
         }
-
         public int LevelId { get; set; }
         public int XpRequired { get; set; }
         public int EnergyCap { get; set; }
 
         public PlayerLevelData GetNextLevel()
         {
-            int index = DataLayer.Instance.GetTable<PlayerLevelData>().IndexOf(this);
-            return DataLayer.Instance.GetTable<PlayerLevelData>().ElementAtOrDefault(index + 1);
+            int index = DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(PlayerLevelData)]).IndexOf(this);
+            return (PlayerLevelData)DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(PlayerLevelData)]).ElementAtOrDefault(index + 1);
         }
 
         public static PlayerLevelData GetPlayerLevelData(int currentXp)
         {
-            var level = DataLayer.Instance.GetTable<PlayerLevelData>().Where(y => currentXp >= y.XpRequired).OrderByDescending(y => y.XpRequired).Take(1).Single();
+            var level = DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(PlayerLevelData)]).Cast<PlayerLevelData>().Where(y => currentXp >= y.XpRequired).OrderByDescending(y => y.XpRequired).Take(1).Single();
             if (level.LevelId > MetaStateSettings._MaxPlayerLevel)
             {
-                level = DataLayer.Instance.GetTable<PlayerLevelData>().Where(y => y.LevelId == MetaStateSettings._MaxPlayerLevel).Single();
+                level = DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(PlayerLevelData)]).Cast<PlayerLevelData>().Where(y => y.LevelId == MetaStateSettings._MaxPlayerLevel).Single();
             }
             return level;
         }

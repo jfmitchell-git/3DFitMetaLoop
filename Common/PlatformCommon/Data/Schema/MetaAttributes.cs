@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-    public class MetaAttributes
+    public abstract class MetaAttributes
     {
         private int id;
         [PrimaryKey, AutoIncrement]

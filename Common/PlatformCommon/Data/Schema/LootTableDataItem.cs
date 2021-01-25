@@ -7,7 +7,7 @@ using System.Text;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-    public class LootTableDataItem
+    public sealed class LootTableDataItem
     {
         private int id;
         [PrimaryKey, AutoIncrement]

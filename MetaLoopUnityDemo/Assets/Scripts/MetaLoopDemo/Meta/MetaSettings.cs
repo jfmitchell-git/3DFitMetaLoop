@@ -1,10 +1,29 @@
 ﻿
+using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
 using MetaLoop.Common.PlatformCommon.Settings;
+using System;
 
-namespace MetaLoopDemo.Meta
+namespace MetaLoop.GameLogic.Shared
 {
     public class MetaSettings : ISettingsProvider
     {
+        public static DateTime GetNextDailyReset(MetaTimeZone timeZone, DateTime currentServerUTCTime)
+        {
+            DateTime nextUTCRefresh = new DateTime(currentServerUTCTime.Year, currentServerUTCTime.Month, currentServerUTCTime.Day, 0, 0, 0).AddDays(1);
+
+            switch (timeZone)
+            {
+                case MetaTimeZone.UTC:
+                case MetaTimeZone.EU:
+                    return nextUTCRefresh;
+                case MetaTimeZone.NA:
+                    return nextUTCRefresh.AddHours(+4);
+                case MetaTimeZone.ASIA:
+                    return nextUTCRefresh.AddHours(-8);
+            }
+
+            return nextUTCRefresh;
+        }
 
 
         public const string ProductionEndpoint = @"https://metaloopdemo.azurewebsites.net/api/";

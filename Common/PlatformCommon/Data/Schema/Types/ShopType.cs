@@ -19,9 +19,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema.Types
         Offers,
         HardCurrency,
         SoftCurrency,
-        Energy,
-        AdToken,
-        SkillsGacha
+        Energy
 
     }
 

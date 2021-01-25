@@ -32,7 +32,7 @@ namespace MetaLoop.Common.PlatformCommon.State
 
         public bool RegisterAchievementCount(AchievementType type)
         {
-            var achievementData = DataLayer.Instance.GetTable<AchievementData>().Where(y => y.AchievementType == type).LastOrDefault();
+            var achievementData = AchievementData.GetAchievementData(type);
             if (achievementData != null)
             {
                 var stateItem = Achievements.Where(y => y.AchievementType == type).SingleOrDefault();

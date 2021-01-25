@@ -1,9 +1,7 @@
-﻿using dryginstudios.bioinc.gamedata;
-using dryginstudios.bioinc.meta;
-using dryginstudios.bioinc.meta.Data;
-using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
+﻿using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlayFabWrapper;
+using MetaLoop.GameLogic.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,23 +25,19 @@ namespace MetaLoop.RESTApi.ApiMethods
                     //if file does not exist yet, create default for content, otherwise perfom Login Activies.
                     if (cloudData.ExistOnServer)
                     {
-                        metaDataState = MetaDataState.FromJson(cloudData.DataAsString);
+                        metaDataState = MetaDataState.FromJson<MetaDataState>(cloudData.DataAsString);
                     }
                     else
                     {
                         metaDataState = new MetaDataState();
 
-                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.HardCurrencyId), 100);
-                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.SoftCurrencyId), 3000);
-                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.EnergyId), MetaSettings.EnergyCap);
-
-                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.DeathSkillsToken), 120);
-                        metaDataState.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.LifeSkillsToken), 120);
+                        metaDataState.Consumables.AddConsumable(Consumable.GetByName<Consumable>(MetaSettings.HardCurrencyId), 100);
+                        metaDataState.Consumables.AddConsumable(Consumable.GetByName<Consumable>(MetaSettings.SoftCurrencyId), 3000);
+                        metaDataState.Consumables.AddConsumable(Consumable.GetByName<Consumable>(MetaSettings.EnergyId),72);
 
                         metaDataState.CreationDate = DateTime.UtcNow;
 
-                        //Use the game class to set factory settings
-                        new GameSettings(metaDataState).SetFactorySettings();
+    
 
                         var playerProfile = await PlayFabApiHandler.GetPlayerProfileInfo(request.UserId);
 

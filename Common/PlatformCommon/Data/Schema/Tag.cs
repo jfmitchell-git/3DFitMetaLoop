@@ -5,11 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-
+using MetaLoop.Common.PlatformCommon.Settings;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-    public class Tag
+    public abstract class Tag
     {
         private int id;
         [PrimaryKey, AutoIncrement]
@@ -31,13 +31,14 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
 
         public static Tag GetTagById(int id)
         {
-            return DataLayer.Instance.GetTable<Tag>().Where(y => y.Id == id).SingleOrDefault();
+            return DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(Tag)]).Cast<Tag>().Where(y => y.Id == id).SingleOrDefault();
         }
 
-        //JF: j ai pas trouve rune autre facon intelligente de faire ca, tu le fixeras comme bon te sembleras! :D
         public static Tag GetTagByName(string name)
         {
-            return DataLayer.Instance.GetTable<Tag>().Where(y => y.TagName == name).SingleOrDefault();
+            return DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(Tag)]).Cast<Tag>().SingleOrDefault();
         }
+
+
     }
 }

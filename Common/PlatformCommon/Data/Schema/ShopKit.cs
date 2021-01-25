@@ -9,7 +9,7 @@ using System.Text;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-    public class ShopKit : IRewardObject
+    public  abstract class ShopKit : IRewardObject
     {
         private int id;
         [PrimaryKey, AutoIncrement]
@@ -32,7 +32,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         {
             get
             {
-                return DataLayer.Instance.GetTable<LootCrateData>().Where(y => y.Id == KitData_Id).Single();
+                return DataLayer.Instance.GetTable(typeof(LootCrateData)).Cast<LootCrateData>().Where(y => y.Id == KitData_Id).SingleOrDefault();
             }
         }
 

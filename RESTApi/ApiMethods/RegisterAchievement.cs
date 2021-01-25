@@ -1,9 +1,8 @@
-﻿using dryginstudios.bioinc.meta;
-using dryginstudios.bioinc.meta.Data;
-using MetaLoop.Common.PlatformCommon;
+﻿using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlayFabWrapper;
+using MetaLoop.GameLogic.Shared;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,7 +21,7 @@ namespace MetaLoop.RESTApi.ApiMethods
                 if (await PlayFabApiHandler.GetPlayerTitleData(request.UserId, new List<PlayFabFileDetails>() { cloudData }))
                 {
 
-                    MetaDataState metaDataState = MetaDataState.FromJson(cloudData.DataAsString);
+                    MetaDataState metaDataState = MetaDataState.FromJson<MetaDataState>(cloudData.DataAsString);
 
                     bool success = true;
 

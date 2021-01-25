@@ -11,8 +11,45 @@ using MetaLoop.Common.PlatformCommon.Settings;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-    public partial class ShopOffer
+    public abstract partial class ShopOffer : PurchasableItem
     {
+
+        private int id;
+        [PrimaryKey, AutoIncrement]
+        public int Id
+        {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+                //Load relationships here...
+            }
+        }
+
+        public int Duration { get; set; }
+        public int ResetAfter = 168;
+        public int DisplayTagTypeVal { get; set; }
+        public string MainUiImage { get; set; }
+        public string ShopImage { get; set; }
+        public string TitleResourceKey { get; set; }
+        public string DescResourceKey { get; set; }
+
+        public string StartTimeString { get; set; }
+        public string EndTimeString { get; set; }
+        public int TimerDurationInHours { get; set; }
+
+        public int RedeemMaxCount { get; set; }
+        public int ShowDaysBefore { get; set; }
+
+        public int ShowPopupEveryHours { get; set; }
+        public int Priority { get; set; }
+        public DisplayTagType DisplayTagType { get; set; }
+
+        public string PlacementsPriority { get; set; }
+
         public int LevelMin { get; set; }
         public int LevelMax { get; set; }
         public int AgeMin { get; set; }
@@ -67,47 +104,6 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
 
             return true;
         }
-    }
-
-
-    public partial class ShopOffer : PurchasableItem
-    {
-
-        private int id;
-        [PrimaryKey, AutoIncrement]
-        public int Id
-        {
-            get
-            {
-                return id;
-            }
-            set
-            {
-                id = value;
-                //Load relationships here...
-            }
-        }
-
-        public int Duration { get; set; }
-        public int ResetAfter = 168;
-        public int DisplayTagTypeVal { get; set; }
-        public string MainUiImage { get; set; }
-        public string ShopImage { get; set; }
-        public string TitleResourceKey { get; set; }
-        public string DescResourceKey { get; set; }
-
-        public string StartTimeString { get; set; }
-        public string EndTimeString { get; set; }
-        public int TimerDurationInHours { get; set; }
-
-        public int RedeemMaxCount { get; set; }
-        public int ShowDaysBefore { get; set; }
-
-        public int ShowPopupEveryHours { get; set; }
-        public int Priority { get; set; }
-        public DisplayTagType DisplayTagType { get; set; }
-
-        public string PlacementsPriority { get; set; }
 
         public List<ShopOfferPlacementType> GetPlacementPriorities()
         {
@@ -206,7 +202,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
 #if BACKOFFICE
         public static List<ShopOffer> GetActiveOffers(DateTime UtcNow)
         {
-            return DataLayer.Instance.GetTable<ShopOffer>().Where(y => UtcNow >= y.StartTime && UtcNow < y.EndTime).OrderBy(y => y.Priority).OrderByDescending(y => y.StartTime).ToList();
+            return DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(ShopOffer)]).Cast<ShopOffer>().Where(y => UtcNow >= y.StartTime && UtcNow < y.EndTime).OrderBy(y => y.Priority).OrderByDescending(y => y.StartTime).ToList();
         }
 #endif
 

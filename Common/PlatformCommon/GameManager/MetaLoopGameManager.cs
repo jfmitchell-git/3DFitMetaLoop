@@ -31,7 +31,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         public static bool UseStagingForPreProdBuild { get; set; }
         public static bool IsFirtsStart = true;
         public static bool IsFirtsStartInPorgress = true;
-        public static Type MetaDataStateType = typeof(MetaDataStateBase);
+        private static Type MetaDataStateType = MetaStateSettings.RequiredPolyforms[typeof(MetaDataStateBase)];
         private int lastServerInfoCacheVersion;
         public bool IsGameAvailable { get; set; }
 

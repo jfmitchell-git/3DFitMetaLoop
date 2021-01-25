@@ -8,8 +8,13 @@ using System.Text;
 
 namespace MetaLoop.Common.PlatformCommon.State
 {
+
+
     public class MetaDataStateBase
     {
+
+
+
         private static MetaDataStateBase current;
         public static void LoadData(MetaDataStateBase data)
         {
@@ -153,6 +158,20 @@ namespace MetaLoop.Common.PlatformCommon.State
 
         public virtual void ApplyDailyReset()
         {
+        }
+
+
+    
+        public static object FromJson(string json)
+        {
+
+            Type polyformType = MetaStateSettings.PolymorhTypes[typeof(MetaDataStateBase)];
+            return JsonConvert.DeserializeObject(json, polyformType);
+        }
+
+        public static T FromJson<T>(string json) where T : new()
+        {
+            return (T)JsonConvert.DeserializeObject(json, typeof(T).GetType());
         }
 
         public string ToJson()

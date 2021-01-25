@@ -7,11 +7,12 @@ using SQLite4Unity3d;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MetaLoop.Common.PlatformCommon.Settings;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
 
-    public class VariableCostData : CostObject
+    public abstract class VariableCostData : CostObject
     {
         private int id;
         [PrimaryKey, AutoIncrement]
@@ -54,11 +55,11 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
             if (count == 0) count = 1;
 
             VariableCostData costData;
-            costData = DataLayer.Instance.GetTable<VariableCostData>().Where(y => y.PurchaseType == costType && y.PurchaseCount == count).SingleOrDefault();
+            costData = DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(VariableCostData)]).Cast<VariableCostData>().Where(y => y.PurchaseType == costType && y.PurchaseCount == count).SingleOrDefault();
 
             if (costData == null)
             {
-                costData = DataLayer.Instance.GetTable<VariableCostData>().Where(y => y.PurchaseType == costType).OrderBy(y => y.PurchaseCount).Last();
+                costData = DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(VariableCostData)]).Cast<VariableCostData>().Where(y => y.PurchaseType == costType).OrderBy(y => y.PurchaseCount).Last();
             }
 
             return costData;
@@ -68,11 +69,11 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
             VariableCostData costData;
             int purchaseCount = state.ShopState.GetVariableCostData(costType) + 1;
 
-            costData = DataLayer.Instance.GetTable<VariableCostData>().Where(y => y.PurchaseType == costType && y.PurchaseCount == purchaseCount).SingleOrDefault();
+            costData = DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(VariableCostData)]).Cast<VariableCostData>().Where(y => y.PurchaseType == costType && y.PurchaseCount == purchaseCount).SingleOrDefault();
 
             if (costData == null)
             {
-                costData = DataLayer.Instance.GetTable<VariableCostData>().Where(y => y.PurchaseType == costType).OrderBy(y => y.PurchaseCount).Last();
+                costData = DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(VariableCostData)]).Cast<VariableCostData>().Where(y => y.PurchaseType == costType).OrderBy(y => y.PurchaseCount).Last();
             }
 
             ConsumableCost result = new ConsumableCost(true);

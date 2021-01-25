@@ -1,5 +1,6 @@
 ﻿using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.Data;
+using MetaLoop.Common.PlatformCommon.Settings;
 using SQLite4Unity3d;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Text;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-    public class LootCrateDataItem
+    public sealed class LootCrateDataItem
     {
         private int id;
         [PrimaryKey, AutoIncrement]
@@ -32,7 +33,6 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         public float Weight { get; set; }
 
   
-        
         private LootTableData lootTableData;
         [Ignore, IgnoreCodeFirst]
         public LootTableData LootTableData
@@ -41,7 +41,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
             {
                 if (lootTableData == null)
                 {
-                    lootTableData = DataLayer.Instance.GetTable<LootTableData>().Where(y => y.Id == LootTableData_Id).SingleOrDefault();
+                    lootTableData = (LootTableData)DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(LootTableData)]).Where(y => ((LootTableData)y).Id == LootTableData_Id).SingleOrDefault();
                 }
                 return lootTableData;
             }

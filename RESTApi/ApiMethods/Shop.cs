@@ -1,8 +1,7 @@
-﻿using dryginstudios.bioinc.meta;
-using dryginstudios.bioinc.meta.Data;
-using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
+﻿using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlayFabWrapper;
+using MetaLoop.GameLogic.Shared;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -22,20 +21,20 @@ namespace MetaLoop.RESTApi.ApiMethods
 
                 if (await PlayFabApiHandler.GetPlayerTitleData(request.UserId, new List<PlayFabFileDetails>() { cloudData }))
                 {
-                    MetaDataState state = MetaDataState.FromJson(cloudData.DataAsString);
+                    MetaDataState state = MetaDataState.FromJson<MetaDataState>(cloudData.DataAsString);
                     cloudData.DataAsString = state.ToJson();
 
                     string methodName = urlArguments[0] + ServerMethodSuffix;
 
-                    Type shopManager = typeof(ShopManager);
-                    ShopRequestResult shopRequestResult = shopManager.GetMethod(methodName).Invoke(null, new object[] { state, request.CloudScriptMethod }) as ShopRequestResult;
+                    //Type shopManager = typeof(ShopManager);
+                    //ShopRequestResult shopRequestResult = shopManager.GetMethod(methodName).Invoke(null, new object[] { state, request.CloudScriptMethod }) as ShopRequestResult;
 
                     cloudData.DataAsString = state.ToJson();
 
                     if (await PlayFabApiHandler.UploadPlayerTitleData(request.UserId, new List<PlayFabFileDetails>() { cloudData }))
                     {
                         CloudScriptResponse response = new CloudScriptResponse() { ResponseCode = ResponseCode.Success, Method = this.GetType().Name };
-                        response.Params.Add("ShopRequestResult", JsonConvert.SerializeObject(shopRequestResult));
+                        //response.Params.Add("ShopRequestResult", JsonConvert.SerializeObject(shopRequestResult));
                         return response;
                     }
                 }

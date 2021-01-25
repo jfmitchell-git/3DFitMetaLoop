@@ -1,10 +1,8 @@
-﻿using dryginstudios.bioinc.meta;
-using dryginstudios.bioinc.meta.Data;
-using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
+﻿using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlatformCommon.State;
 using MetaLoop.Common.PlayFabWrapper;
-using Newtonsoft.Json;
+using MetaLoop.GameLogic.Shared;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -25,10 +23,10 @@ namespace MetaLoop.RESTApi.ApiMethods
 
             if (await PlayFabApiHandler.GetPlayerTitleData(playFabId, new List<PlayFabFileDetails>() { cloudData }))
             {
-                MetaDataState state = MetaDataState.FromJson(cloudData.DataAsString);
+                MetaDataState state = MetaDataStateBase.FromJson<MetaDataState>(cloudData.DataAsString);
 
                 AdPlacementType adPlacementType = (AdPlacementType)(Enum.Parse(typeof(AdPlacementType), placementId));
-                state.AdState.RegisterAdWatch(adPlacementType, state, () => AdData.GetAdRewardForTypeMethod(adPlacementType, state));
+                //state.AdState.RegisterAdWatch(adPlacementType, state, () => AdData.GetAdRewardForTypeMethod(adPlacementType, state));
 
                 cloudData.DataAsString = state.ToJson();
 

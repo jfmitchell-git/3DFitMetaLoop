@@ -1,5 +1,6 @@
 ﻿using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.Data;
+using MetaLoop.Common.PlatformCommon.Settings;
 using SQLite4Unity3d;
 using System;
 using System.Linq;
@@ -7,40 +8,27 @@ using System.Linq;
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
     [Serializable]
-    public class Consumable : CostObject
+    public abstract partial class Consumable : CostObject
     {
-
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
         public string Name { get; set; }
-        public string DerivedName { get; set; }
-        public int DerivedAmount { get; set; }
 
-        bool tryFindDerived = false;
-
-        private Consumable derivedConsumable;
-
-        [IgnoreCodeFirst]
-        public Consumable DerivedConsumable
-        {
-            get
-            {
-                if (!tryFindDerived)
-                {
-                    derivedConsumable = DataLayer.Instance.GetTable<Consumable>().Where(y => y.Name == DerivedName).SingleOrDefault();
-                    tryFindDerived = true;
-                }
-                return derivedConsumable;
-            }
-        }
         public static Consumable GetByName(string name)
         {
-            return DataLayer.Instance.GetTable<Consumable>().Where(y => y.Name == name).SingleOrDefault();
+            return DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(Consumable)]).Cast<Consumable>().Where(y => y.Name == name).SingleOrDefault();
         }
-
         public static Consumable GetById(int id)
         {
-            return DataLayer.Instance.GetTable<Consumable>().Where(y => y.Id == id).SingleOrDefault();
+            return DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(Consumable)]).Cast<Consumable>().Where(y => y.Id == id).SingleOrDefault();
+        }
+        public static T GetById<T>(int id) where T : new()
+        {
+            return (T)DataLayer.Instance.GetTable<T>().Where(y => ((Consumable)(object)y).Id == id).SingleOrDefault();
+        }
+        public static T GetByName<T>(string name) where T : new()
+        {
+            return (T)DataLayer.Instance.GetTable<T>().Where(y => ((Consumable)(object)y).Name == name).SingleOrDefault();
         }
 
 

@@ -1,8 +1,7 @@
-﻿using dryginstudios.bioinc.meta;
-using dryginstudios.bioinc.meta.Data;
-using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
+﻿using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlayFabWrapper;
+using MetaLoop.GameLogic.Shared;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,7 +19,7 @@ namespace MetaLoop.RESTApi.ApiMethods
 
                 if (await PlayFabApiHandler.GetPlayerTitleData(request.UserId, new List<PlayFabFileDetails>() { cloudData }))
                 {
-                    MetaDataState metaDataState = MetaDataState.FromJson(cloudData.DataAsString);
+                    MetaDataState metaDataState = MetaDataState.FromJson<MetaDataState>(cloudData.DataAsString);
 
                     if (metaDataState != null)
                     {
@@ -52,7 +51,7 @@ namespace MetaLoop.RESTApi.ApiMethods
                         CloudScriptResponse response = new CloudScriptResponse();
                         response.Method = this.GetType().Name;
                         response.ResponseCode = ResponseCode.Success;
-                        response.Params.Add("EnergyBalance", metaDataState.Consumables.GetConsumableAmount(Consumable.GetByName(MetaSettings.EnergyId)).ToString());
+                        response.Params.Add("EnergyBalance", metaDataState.Consumables.GetConsumableAmount(Consumable.GetByName<Consumable>(MetaSettings.EnergyId)).ToString());
                         response.Params.Add("ApplyDailyReset", applyDailyReset.ToString());
                         response.Params.Add("UniqueId", metaDataState.UniqueId);
                         return response;
@@ -64,39 +63,40 @@ namespace MetaLoop.RESTApi.ApiMethods
 
         public static int AddEnergyToPlayer(MetaDataState state)
         {
-            DateTime lastRefill = state.LastEnergyRefil;
-            TimeSpan span = DateTime.UtcNow.Subtract(lastRefill);
-            float totalMinutes = (float)span.TotalMinutes;
+            //DateTime lastRefill = state.LastEnergyRefil;
+            //TimeSpan span = DateTime.UtcNow.Subtract(lastRefill);
+            //float totalMinutes = (float)span.TotalMinutes;
 
-            float totalEnergy = totalMinutes * MetaSettings.EnergyPerMinute;
-            float leftOver = totalEnergy - (int)totalEnergy;
-            double totalMinutesLeftOver = leftOver / MetaSettings.EnergyPerMinute;
+            //float totalEnergy = totalMinutes * MetaSettings.EnergyPerMinute;
+            //float leftOver = totalEnergy - (int)totalEnergy;
+            //double totalMinutesLeftOver = leftOver / MetaSettings.EnergyPerMinute;
 
-            bool isEnergyCapped = false;
+            //bool isEnergyCapped = false;
 
-            // Energy not linked to player level in this case.
-            if (state.Consumables.GetConsumableAmount(Consumable.GetByName(MetaSettings.EnergyId)) >= state.EnergyCap)
-            {
-                isEnergyCapped = true;
-            }
+            //// Energy not linked to player level in this case.
+            //if (state.Consumables.GetConsumableAmount(Consumable.GetByName(MetaSettings.EnergyId)) >= state.EnergyCap)
+            //{
+            //    isEnergyCapped = true;
+            //}
 
-            if (totalEnergy >= 1f)
-            {
-                if (!isEnergyCapped)
-                {
-                    int newBalance = state.Consumables.GetConsumableAmount(Consumable.GetByName(MetaSettings.EnergyId)) + (int)totalEnergy;
-                    if (newBalance >= state.EnergyCap)
-                    {
-                        totalEnergy = state.EnergyCap - state.Consumables.GetConsumableAmount(Consumable.GetByName(MetaSettings.EnergyId));
-                    }
-                    state.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.EnergyId), (int)totalEnergy);
-                }
-                state.LastEnergyRefil = DateTime.UtcNow.AddMinutes(-totalMinutesLeftOver);
-            }
+            //if (totalEnergy >= 1f)
+            //{
+            //    if (!isEnergyCapped)
+            //    {
+            //        int newBalance = state.Consumables.GetConsumableAmount(Consumable.GetByName(MetaSettings.EnergyId)) + (int)totalEnergy;
+            //        if (newBalance >= state.EnergyCap)
+            //        {
+            //            totalEnergy = state.EnergyCap - state.Consumables.GetConsumableAmount(Consumable.GetByName(MetaSettings.EnergyId));
+            //        }
+            //        state.Consumables.AddConsumable(Consumable.GetByName(MetaSettings.EnergyId), (int)totalEnergy);
+            //    }
+            //    state.LastEnergyRefil = DateTime.UtcNow.AddMinutes(-totalMinutesLeftOver);
+            //}
 
-            if (isEnergyCapped) totalEnergy = 0;
+            //if (isEnergyCapped) totalEnergy = 0;
 
-            return (int)totalEnergy;
+            //return (int)totalEnergy;
+            return 0;
         }
 
     }

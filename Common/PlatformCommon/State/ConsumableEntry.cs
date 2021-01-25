@@ -22,13 +22,7 @@ namespace MetaLoop.Common.PlatformCommon.State
         {
             get
             {
-                if (Consumable.DerivedConsumable != null)
-                {
-                    return Amount * Consumable.DerivedAmount;
-                } else
-                {
-                    return Amount;
-                }
+                return Amount;
             }
         }
 
@@ -38,8 +32,7 @@ namespace MetaLoop.Common.PlatformCommon.State
             get
             {
                 if (cache != null) return cache;
-
-                cache = DataLayer.Instance.GetTable<Consumable>().Where(y => y.Name == Id).SingleOrDefault();
+                cache = MetaLoop.Common.PlatformCommon.Data.Schema.Consumable.GetByName(Id);
                 return cache;
             }
         }

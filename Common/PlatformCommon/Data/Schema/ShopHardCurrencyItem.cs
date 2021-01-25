@@ -11,7 +11,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
 
 
 
-    public class ShopHardCurrencyItem : PurchasableItem
+    public abstract class ShopHardCurrencyItem : PurchasableItem
     {
         private int id;
         [PrimaryKey, AutoIncrement]

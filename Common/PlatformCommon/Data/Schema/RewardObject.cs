@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-    public class RewardObject
+    public abstract class RewardObject
     {
 
 

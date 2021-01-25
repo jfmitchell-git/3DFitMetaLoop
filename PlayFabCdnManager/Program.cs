@@ -26,7 +26,7 @@ namespace MetaLoop.PlayFabCdnManager
         static void Main(string[] args)
         {
 
-            _MetaStateSettings.Init();
+            //_MetaStateSettings.Init();
 
             bool isCdnOnlyMode = false;
 

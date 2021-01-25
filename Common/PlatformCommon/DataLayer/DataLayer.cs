@@ -108,6 +108,26 @@ namespace MetaLoop.Common.PlatformCommon
             }
         }
 
+
+
+        public List<Object> GetTable(Type type)
+        {
+            KeyValuePair<Type, object> result = CachedObjects.Where(y => y.Key == type).SingleOrDefault();
+            if (!result.Equals(new KeyValuePair<Type, object>()))
+            {
+                return (List<Object>)result.Value;
+
+            }
+            else
+            {
+                List<Object> data = Connection.Table<Object>(type).ToList();
+                CachedObjects.Add(type, data);
+                return data;
+            }
+        }
+
+
+
         public void FlushCache()
         {
             CachedObjects.Clear();

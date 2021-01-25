@@ -2,10 +2,11 @@
 using System.Linq;
 using MetaLoop.Common.PlatformCommon.Data;
 using MetaLoop.Common.PlatformCommon;
+using MetaLoop.Common.PlatformCommon.Settings;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-    public class ConsumableCostItem
+    public sealed class ConsumableCostItem
     {
         private int id;
         [PrimaryKey, AutoIncrement]
@@ -31,9 +32,9 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         {
             get
             {
-               
+
                 if (consumable == null)
-                    consumable = DataLayer.Instance.GetTable<Consumable>().Where(y => y.Id == ConsumableId).SingleOrDefault();
+                    consumable = Consumable.GetById(ConsumableId);
                 return consumable;
             }
         }

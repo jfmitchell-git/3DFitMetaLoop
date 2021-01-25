@@ -19,7 +19,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         CanBeClaimed,
         Claimed
     }
-    public class DailyObjectiveData : RewardObject
+    public abstract class DailyObjectiveData : RewardObject
     {
         private int id;
         [PrimaryKey, AutoIncrement]

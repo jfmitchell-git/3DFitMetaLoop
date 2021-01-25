@@ -20,7 +20,7 @@ namespace MetaLoop.AutomationsTools
         public static List<string> allFunctions = new List<string>() { "exit", "importdb" };
         static void Main(string[] args)
         {
-            _MetaStateSettings.Init();
+            //_MetaStateSettings.Init();
 
             Console.WriteLine("MetaLoop Automation Tools.");
 

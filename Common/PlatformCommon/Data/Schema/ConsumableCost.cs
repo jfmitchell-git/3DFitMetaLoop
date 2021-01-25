@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-    public class ConsumableCost
+    public sealed partial class ConsumableCost
     {
         private int id;
         [PrimaryKey, AutoIncrement]

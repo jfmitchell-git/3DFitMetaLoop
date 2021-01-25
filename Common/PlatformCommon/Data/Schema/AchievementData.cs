@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MetaLoop.Common.PlatformCommon.Settings;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
@@ -20,7 +21,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         Claimed
     }
 
-    public partial class AchievementData : RewardObject
+    public abstract partial class AchievementData : RewardObject
     {
         private int id;
         [PrimaryKey, AutoIncrement]
@@ -63,6 +64,20 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         {
             return state.AchievementDataState.Achievements.Where(y => y.AchievementType == AchievementType).SingleOrDefault();
         }
+
+
+
+        public static AchievementData GetAchievementData(AchievementType achievementType)
+        {
+            return DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(AchievementData)]).Cast<AchievementData>().Where(y => y.AchievementType == achievementType).SingleOrDefault();
+        }
+        public static T GetAchievementData<T>(AchievementType achievementType) where T : new()
+        {
+            return (T)DataLayer.Instance.GetTable<T>().Where(y => ((AchievementData)(object)y).AchievementType == achievementType).SingleOrDefault();
+        }
+
+
+
         public AchievementStatus GetAchievementStatus(MetaDataStateBase state)
         {
             var stateItem = GetAchievementStateItem(state);

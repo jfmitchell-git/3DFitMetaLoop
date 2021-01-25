@@ -9,7 +9,7 @@ using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-    public class RewardData
+    public sealed class RewardData
     {
         private int id;
         [PrimaryKey, AutoIncrement]

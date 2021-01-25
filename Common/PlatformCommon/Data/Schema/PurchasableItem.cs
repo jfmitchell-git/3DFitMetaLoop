@@ -10,7 +10,7 @@ using System.Text;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
-    public class PurchasableItem : RewardObject
+    public abstract class PurchasableItem : RewardObject
     {
 
 
