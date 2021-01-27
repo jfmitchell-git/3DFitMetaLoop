@@ -100,7 +100,7 @@ namespace MetaLoop.Common.PlatformCommon.Settings
         public static string _TitleDataKey_EventManager = "";
         public static string _TitleDataKey_CdnManifest = "";
         public static string _TitleDataKey_ServerInfo = "";
-
+        public static string _TitleDataKey_RemoteConfig = "";
 
         public static string _AssetManagerVersionString = "";
         public static string _AssetManagerStartupFolder = "";

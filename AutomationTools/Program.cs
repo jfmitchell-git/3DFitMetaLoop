@@ -20,7 +20,7 @@ namespace MetaLoop.AutomationsTools
         public static List<string> allFunctions = new List<string>() { "exit", "importdb" };
         static void Main(string[] args)
         {
-            //_MetaStateSettings.Init();
+            _MetaStateSettings.Init();
 
             Console.WriteLine("MetaLoop Automation Tools.");
 
@@ -77,14 +77,18 @@ namespace MetaLoop.AutomationsTools
 
         public static void importdb(List<string> args)
         {
-            var pathArg = args.Where(y => y.StartsWith("-BaseUnityFolder:")).SingleOrDefault();
-            if (pathArg != null)
+            var unityPathArg = args.Where(y => y.StartsWith("-BaseUnityFolder:")).SingleOrDefault();
+            if (unityPathArg != null)
             {
-                MetaStateSettings._BaseUnityFolder = pathArg.Replace("-BaseUnityFolder:", string.Empty);
+                MetaStateSettings._BaseUnityFolder = unityPathArg.Replace("-BaseUnityFolder:", string.Empty);
             }
 
-            string excelFileName = Path.GetFullPath(MetaStateSettings._BaseUnityFolder + @"\" + args.First(), Directory.GetCurrentDirectory());
+
+
+            string excelFileName = Path.GetFullPath(args.First(), Directory.GetCurrentDirectory());
             string databaseFileName = Path.GetFullPath(MetaStateSettings._BaseUnityFolder + @"\" + MetaStateSettings._DatabaseFileName, Directory.GetCurrentDirectory());
+
+
 
 
             if (!File.Exists(databaseFileName))

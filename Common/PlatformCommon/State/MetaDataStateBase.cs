@@ -9,11 +9,10 @@ using System.Text;
 namespace MetaLoop.Common.PlatformCommon.State
 {
 
-
+    [Serializable]
     public class MetaDataStateBase
     {
-
-
+        public int Version { get; set; }
 
         private static MetaDataStateBase current;
         public static void LoadData(MetaDataStateBase data)
@@ -27,6 +26,10 @@ namespace MetaLoop.Common.PlatformCommon.State
                 return current;
             }
 
+        }
+        public static T GetCurrent<T>() where T : new()
+        {
+            return (T)(current as Object);
         }
 
         private TimeSpan serverUTCDiff;
@@ -154,6 +157,8 @@ namespace MetaLoop.Common.PlatformCommon.State
             Statistics = new Dictionary<string, int>();
             DailyMissionStats = new Dictionary<string, int>();
             OfferDataState = new OfferDataState();
+
+            Version = 1;
         }
 
         public virtual void ApplyDailyReset()

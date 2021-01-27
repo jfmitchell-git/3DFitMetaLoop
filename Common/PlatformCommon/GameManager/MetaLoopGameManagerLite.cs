@@ -22,8 +22,9 @@ using UnityEngine.Networking;
 
 namespace MetaLoop.Common.PlatformCommon.GameManager
 {
-    public class MetaLoopGameManager : MonoBehaviour
+    public class MetaLoopGameManagerLite : MonoBehaviour
     {
+        public bool IsOfflineMode { get; set; }
 
         private bool gameServiceResponded = false;
         public bool RequireMetaLoopRestart { get; set; }
@@ -41,19 +42,28 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             Debug.Log("MetaLoopGameManager Awake() invoked.");
             if (IsFirtsStart)
             {
-                GameData.OnGameDataReady += GameData_OnGameDataReady;
+                new MetaStateSettings();
+
                 GameServiceManager.GameService.OnGameServiceEvent += GameService_OnGameServiceEvent;
 
+                switch (PlayFabManager.Instance.BackOfficeEnvironement)
+                {
+                    case BackOfficeEnvironement.Dev:
+                    case BackOfficeEnvironement.Staging:
+                        PlayFabSettings.TitleId = MetaStateSettings._PlayFabTitleId_Staging;
+                        break;
+
+                    case BackOfficeEnvironement.Prod:
+                        PlayFabSettings.TitleId = MetaStateSettings._PlayFabTitleId;
+                        break;
+                }
+
+                PlayFabManager.Instance.OnDataMissMatchDetected += OnDataMissMatchDetected;
+                Debug.Log("MetaLoopGameManager Setting Environement: " + PlayFabManager.Instance.BackOfficeEnvironement.ToString());
+
+                GameData.OnGameDataReady += GameData_OnGameDataReady;
                 GameData.Load();
 
-
-                //force reflection engine. 
-                new MetaStateSettings();
-#if PROD
-                UnityWebRequestHandler.Instance.GetBodyFromHttp(MetaStateSettings._ProductionEndpoint + MetaStateSettings._ServerAppVersionUrl, null, (UnityWebRequest r) => AwakeFirtsInit_ServerInfoReady(r));
-#else
-                AwakeFirtsInit_ServerInfoReady(null);
-#endif
             }
 
 
@@ -66,112 +76,15 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             {
                 DataLayer.Instance.Kill();
             }
-#if PROD
-            UnityWebRequestHandler.Instance.GetBodyFromHttp(MetaStateSettings._ProductionEndpoint + MetaStateSettings._ServerAppVersionUrl, null, (UnityWebRequest r) => AwakeFirtsInit_ServerInfoReady(r));
-#else
-            AwakeFirtsInit_ServerInfoReady(null);
-#endif
-
             this.OnRestartMetaLoopCompleted = onRestartMetaLoopCompleted;
-        }
-
-
-        protected virtual void AwakeFirtsInit_ServerInfoReady(UnityWebRequest serverResponse)
-        {
-
-            Debug.Log("MetaLoopGameManager Fetching AppVersion.txt Completed.");
-
-            if (serverResponse != null && serverResponse.isDone && !serverResponse.isHttpError && !serverResponse.isNetworkError)
-            {
-                string majorServerVersion = serverResponse.downloadHandler.text;
-                if (majorServerVersion != MetaStateSettings.GetMajorVersion())
-                {
-                    int localVersion = Convert.ToInt32(MetaStateSettings.GetMajorVersion().Replace(".", ""));
-                    int serverVersion = 0;
-                    try
-                    {
-                        serverVersion = Convert.ToInt32(majorServerVersion.Replace(".", ""));
-                    }
-                    catch
-                    {
-                        ShowUnavailableMessage(GameUnavailableMessageType.INTERNET_ERROR);
-                        return;
-                    }
-
-                    if (localVersion > serverVersion) UseStagingForPreProdBuild = true;
-                }
-
-            }
-            else if (serverResponse != null && (!serverResponse.isDone || serverResponse.isHttpError || serverResponse.isNetworkError))
-            {
-                ShowUnavailableMessage(GameUnavailableMessageType.INTERNET_ERROR);
-                return;
-            }
-
-            PlayFabManager.Instance.BackOfficeEnvironement = BackOfficeEnvironement.Staging;
-
-#if PROD
-            PlayFabManager.Instance.BackOfficeEnvironement = BackOfficeEnvironement.Prod;
-            if (UseStagingForPreProdBuild) PlayFabManager.Instance.BackOfficeEnvironement = BackOfficeEnvironement.Staging;
-#endif
-
-#if UNITY_EDITOR
-            //PlayFabManager.Instance.BackOfficeEnvironement = BackOfficeEnvironement.Dev;
-#endif
-
-
-
-            switch (PlayFabManager.Instance.BackOfficeEnvironement)
-            {
-                case BackOfficeEnvironement.Dev:
-                case BackOfficeEnvironement.Staging:
-                    PlayFabSettings.TitleId = MetaStateSettings._PlayFabTitleId_Staging;
-
-                    break;
-
-                case BackOfficeEnvironement.Prod:
-
-                    PlayFabSettings.TitleId = MetaStateSettings._PlayFabTitleId;
-                    break;
-            }
-
-            PlayFabSettings.RequestType = WebRequestType.UnityWebRequest;
-
-
-            PlayFabManager.Instance.OnDataMissMatchDetected += OnDataMissMatchDetected;
-
-
-            Debug.Log("MetaLoopGameManager Setting Environement: " + PlayFabManager.Instance.BackOfficeEnvironement.ToString());
-
-
-
-            if (IsFirtsStartInPorgress && !GameServiceManager.IsInit)
-            {
-                Debug.Log("MetaLoopGameManager GameData_OnGameDataReady; Starting GameServiceManager Login...");
-                DOVirtual.DelayedCall(0.5f, () => GameServiceManager.GameService.Init());
-                //DOVirtual.DelayedCall(15f, () => CancelGameServiceManager());
-
-            }
-            else
-            {
-                PlayFabManager.Instance.Login(OnPlayFabLoginSuccess, OnPlayFabLoginFailed, SystemInfo.deviceUniqueIdentifier);
-                Debug.Log("GAMEMANAGER LoginPlayFab MANUAL");
-            }
-
-
-        }
-
-        private void CancelGameServiceManager()
-        {
-            if (gameServiceResponded) return;
-            GameService_OnGameServiceEvent(new GameServiceEvent(GameServiceEventType.SingInFailed));
         }
 
         protected virtual void GameData_OnGameDataReady()
         {
-
-
+            PlayFabManager.Instance.Login(OnPlayFabLoginSuccess, OnPlayFabLoginFailed, SystemInfo.deviceUniqueIdentifier);
         }
+
+
 
 
         private void GameService_OnGameServiceEvent(GameServiceEvent e)
@@ -179,17 +92,15 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
             Debug.Log("GameService_OnGameServiceEvent - " + e.EventType.ToString());
 
-            switch (e.EventType)
-            {
-                case GameServiceEventType.SignInSuccess:
-                case GameServiceEventType.SingInFailed:
-                    Debug.Log("MetaLoopGameManager GameData_OnGameDataReady; Login in on PlayFab.");
-                    PlayFabManager.Instance.Login(OnPlayFabLoginSuccess, OnPlayFabLoginFailed, SystemInfo.deviceUniqueIdentifier);
-                    gameServiceResponded = true;
-                    break;
-            }
-
-            //GameServiceManager.GameService.OnGameServiceEvent -= GameService_OnGameServiceEvent;
+            //switch (e.EventType)
+            //{
+            //    case GameServiceEventType.SignInSuccess:
+            //    case GameServiceEventType.SingInFailed:
+            //        Debug.Log("MetaLoopGameManager GameData_OnGameDataReady; Login in on PlayFab.");
+            //        PlayFabManager.Instance.Login(OnPlayFabLoginSuccess, OnPlayFabLoginFailed, SystemInfo.deviceUniqueIdentifier);
+            //        gameServiceResponded = true;
+            //        break;
+            //}
         }
 
         protected virtual void OnPlayFabLoginSuccess(LoginResult obj)
@@ -200,7 +111,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         protected virtual void DownloadTitleData()
         {
             GetTitleDataRequest getTitleDataRequest = new GetTitleDataRequest();
-            getTitleDataRequest.Keys = new List<string>() { MetaStateSettings._TitleDataKey_CdnManifest, MetaStateSettings._TitleDataKey_ServerInfo, MetaStateSettings._TitleDataKey_EventManager };
+            getTitleDataRequest.Keys = new List<string>() { MetaStateSettings._TitleDataKey_CdnManifest, MetaStateSettings._TitleDataKey_ServerInfo, MetaStateSettings._TitleDataKey_EventManager, MetaStateSettings._TitleDataKey_RemoteConfig };
             PlayFabClientAPI.GetTitleData(getTitleDataRequest, DownloadTitleData_Completed, (PlayFabError obj) => DownloadTitleData_Completed(null));
         }
 
@@ -227,6 +138,17 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
                 RemoteAssetsManager.Init(assetManifest);
             }
 
+
+            if (result.Data.ContainsKey(MetaStateSettings._TitleDataKey_RemoteConfig))
+            {
+                RemoteConfigData.Load(result.Data[MetaStateSettings._TitleDataKey_RemoteConfig]);
+            }
+            else
+            {
+                RemoteConfigData.Load(null);
+            }
+
+
             EventManagerState eventManagerState;
             if (result.Data.ContainsKey(MetaStateSettings._TitleDataKey_EventManager))
             {
@@ -237,45 +159,26 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
                 eventManagerState = new EventManagerState();
             }
 
-            // GameData.Current.EventManagerState = eventManagerState;
-
             Debug.Log("MetaLoopGameManager Downloading Startup Remote Assets");
 
-            RemoteAssetsManager.Instance.DownloadStartupAssets(OnRemoteAssetsDownloaded);
+            DownloadUserData();
 
         }
 
-        protected virtual void OnRemoteAssetsDownloaded()
-        {
-            Debug.Log("MetaLoopGameManager Startup Assets Completed, Login in BackOffice.");
-            BackOfficeLogin();
-        }
-
-
-
-        protected virtual void BackOfficeLogin()
-        {
-            CloudScriptMethod method = new CloudScriptMethod();
-            method.Method = "PlayerLogin";
-            //Use case only valid for BOTS//Impersonates
-            if (!PlayFabManager.IsImpersonating)
-            {
-                method.Params.Add("DisplayName", PlayFabManager.Instance.PlayerName);
-            }
-
-            method.Params.Add("UniqueId", SystemInfo.deviceUniqueIdentifier);
-            PlayFabManager.Instance.InvokeBackOffice(method, OnBackOfficePlayerLoginComplete);
-        }
-
-        protected virtual void OnPlayFabLoginFailed(PlayFabError obj) { }
-
-        protected virtual void OnBackOfficePlayerLoginComplete(CloudScriptResponse response, CloudScriptMethod method)
+        public void DownloadUserData()
         {
             Debug.Log("MetaLoopGameManager BackOffice Logged In, Downloading User Data...");
             List<string> keys = MetaStateSettings._UserDataToDownload;
             var request = new GetUserDataRequest { Keys = keys };
-            PlayFabClientAPI.GetUserReadOnlyData(request, OnUserDataComplete, OnUserDataError);
+            PlayFabClientAPI.GetUserData(request, OnUserDataComplete, OnUserDataError);
         }
+        protected virtual void OnPlayFabLoginFailed(PlayFabError obj)
+        {
+            IsOfflineMode = true;
+            MetaDataStateBase.LoadData(GameData.Current.MetaDataState);
+
+        }
+
         protected virtual void OnUserDataError(PlayFabError obj)
         {
             ShowUnavailableMessage(GameUnavailableMessageType.HOST_UNREACHABLE);
@@ -284,18 +187,26 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         {
             Debug.Log("MetaLoopGameManager User Data downloaded...");
 
-            if (result != null && result.Data.ContainsKey(MetaStateSettings._MetaDataStateFileName))
+            if (result != null && result.Data.ContainsKey(MetaStateSettings._MetaDataStateFileName) && !string.IsNullOrEmpty(result.Data[MetaStateSettings._MetaDataStateFileName].Value))
             {
-                var gameDataObject = JsonConvert.DeserializeObject(result.Data[MetaStateSettings._MetaDataStateFileName].Value, MetaStateSettings.PolymorhTypes[typeof(MetaDataStateBase)]);
-                MetaDataStateBase.LoadData((MetaDataStateBase)gameDataObject);
+                MetaDataStateBase onlineData = (MetaDataStateBase)JsonConvert.DeserializeObject(result.Data[MetaStateSettings._MetaDataStateFileName].Value, MetaStateSettings.PolymorhTypes[typeof(MetaDataStateBase)]);
 
-                OnGameDataAndBackOfficeReady();
-
+                if (onlineData.Version > GameData.Current.MetaDataState.Version)
+                {
+                    MetaDataStateBase.LoadData(onlineData);
+                    GameData.Current.OverwriteMetaDataState(onlineData);
+                }
+                else
+                {
+                    MetaDataStateBase.LoadData(GameData.Current.MetaDataState);
+                }
             }
             else
             {
-                ShowUnavailableMessage(GameUnavailableMessageType.BACKOFFICE_ERROR);
+                MetaDataStateBase.LoadData(GameData.Current.MetaDataState);
             }
+
+            OnGameDataAndBackOfficeReady();
         }
 
 
@@ -305,17 +216,9 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
 #if UNITY_EDITOR
             DataLayer.Instance.Init(Application.streamingAssetsPath + @"/" + MetaStateSettings._DatabaseName);
-
-            //var caca = Application.persistentDataPath + @"/" + MetaStateSettings._RemoteAssetsPersistantName + @"/" + MetaStateSettings._AssetManagerStartupFolder + MetaStateSettings._DatabaseName;
-            //DataLayer.Instance.Init(caca);
-            // Debug.Log(caca);
-            //DataLayer.Instance.Init(Application.persistentDataPath + "/" + MetaStateSettings._RemoteAssetsPersistantName + @"/" + MetaStateSettings._AssetManagerStartupFolder + MetaStateSettings._DatabaseName);
 #else
             DataLayer.Instance.Init(Application.persistentDataPath + @"/" + MetaStateSettings._RemoteAssetsPersistantName + @"/" + MetaStateSettings._AssetManagerStartupFolder + MetaStateSettings._DatabaseName);
-            //DataLayer.Instance.Init(Application.persistentDataPath + MetaSettings.RemoteAssetsPersistantName + @"/" + MetaSettings.AssetManagerStartupFolder + MetaSettings.DatabaseName);
 #endif
-
-
 
             OnMetaLoopReady();
         }

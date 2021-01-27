@@ -1,4 +1,9 @@
-﻿#if UNITY_ANDROID
+﻿
+#if !BACKOFFICE
+
+
+
+#if UNITY_ANDROID && USEGOOGLEPLAY
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
 using System;
@@ -100,4 +105,55 @@ namespace MetaLoop.Common.PlatformCommon.GameServices
     }
 }
 
+#else
+
+using System;
+
+namespace MetaLoop.Common.PlatformCommon.GameServices
+{
+    public class GooglePlayGameService : GameServiceBase
+    {
+ 
+
+
+        public override bool IsSignedIn
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override string PlayerName
+        {
+            get
+            {
+                return "Guest";
+            }
+        }
+
+
+        public override string PlayerId
+        {
+            get
+            {
+                return   "Guest";
+            }
+        }
+
+        public string GetServerAuthCode()
+        {
+            return string.Empty;
+        }
+
+
+        public void GetAnotherServerAuthCode(Action<string> callback)
+        {
+    
+        }
+
+    }
+}
+
+#endif
 #endif

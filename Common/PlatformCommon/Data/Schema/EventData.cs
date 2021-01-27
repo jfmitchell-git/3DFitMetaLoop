@@ -182,15 +182,15 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
 
         }
 
-        //public static List<EventData> GetAllEvents()
-        //{
-        //    return DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(EventData)]).Where(y => DateTime.UtcNow < ((EventData)y).EndTime.AddDays(CleanAfterDays + 1)).ToList();
-        //}
+        public static List<EventData> GetAllEvents()
+        {
+            return DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(EventData)]).Cast<EventData>().Where(y => DateTime.UtcNow < ((EventData)y).EndTime.AddDays(CleanAfterDays + 1)).ToList();
+        }
 
-        //public static List<EventData> GetRecentlyCompletedEvents(int delay = 24)
-        //{
-        //    return DataLayer.Instance.GetTable<EventData>().Where(y => DateTime.UtcNow > y.EndTime && DateTime.UtcNow < y.EndTime.AddHours(delay)).ToList();
-        //}
+        public static List<EventData> GetRecentlyCompletedEvents(int delay = 24)
+        {
+            return DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(EventData)]).Cast<EventData>().Where(y => DateTime.UtcNow > y.EndTime && DateTime.UtcNow < y.EndTime.AddHours(delay)).ToList();
+        }
 
 
 

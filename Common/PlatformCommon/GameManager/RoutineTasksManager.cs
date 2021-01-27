@@ -1,5 +1,4 @@
 ﻿#if !BACKOFFICE
-using dryginstudios.commonscripts.ui;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlatformCommon.Protocol;
 using MetaLoop.Common.PlatformCommon.Settings;

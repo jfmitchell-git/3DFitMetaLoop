@@ -5,9 +5,9 @@ ECHO Loading PublishBot.Config...
 
 set MSBUILD_PATH="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe"
 
-set STAGING_PUBXML="%CD%\RESTApi\Properties\bioinredemptionmobile-staging - Web Deploy.pubxml"
-set PROD_PUBXML="%CD%\RESTApi\Properties\PublishProfiles\bioinredemptionmobile - Web Deploy.pubxml"
+set STAGING_PUBXML=""
+set PROD_PUBXML="%CD%\RESTApi\Properties\PublishProfiles\Deploy.pubxml"
 
-set PROJECT_PATH=..\BioIncRedemptionMobile
-set UNITY3D_PATH=..\BioIncRedemptionMobile\UnityMobile
-set EXCEL_PATH=BioIncRedemptionMetaLoop.xlsx
+set PROJECT_PATH=..\
+set UNITY3D_PATH=..\3DFit_Unity
+set EXCEL_PATH=..\3DFiData.xlsx

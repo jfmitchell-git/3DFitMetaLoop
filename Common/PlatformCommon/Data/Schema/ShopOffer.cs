@@ -210,7 +210,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
 
         public static List<ShopOffer> GetActiveOffers(DateTime UtcNow)
         {
-            return DataLayer.Instance.GetTable<ShopOffer>().Where(y => y.EvaluateRequirement(MetaDataStateBase.Current, UtcNow) && UtcNow >= y.StartTime && UtcNow < y.EndTime && !y.ReachedMaxRedeemCount).OrderBy(y => y.Priority).OrderByDescending(y => y.StartTime).ToList();
+            return DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(ShopOffer)]).Cast<ShopOffer>().Where(y => y.EvaluateRequirement(MetaDataStateBase.Current, UtcNow) && UtcNow >= y.StartTime && UtcNow < y.EndTime && !y.ReachedMaxRedeemCount).OrderBy(y => y.Priority).OrderByDescending(y => y.StartTime).ToList();
         }
 
 

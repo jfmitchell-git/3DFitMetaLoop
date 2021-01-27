@@ -602,6 +602,8 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
         }
 
 
+      
+
         private void FromExecuteCloudScriptResult(ExecuteCloudScriptResult result, CloudScriptMethod cloudScriptMethod, Action<CloudScriptResponse, CloudScriptMethod> resultCallBack)
         {
             isWorking = false;

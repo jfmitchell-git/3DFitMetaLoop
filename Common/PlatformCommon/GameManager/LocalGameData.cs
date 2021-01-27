@@ -20,6 +20,10 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
     [Serializable]
     public partial class GameData
     {
+
+        public static Action SaveCallBack { get; set; }
+
+
         public delegate void OnGameDataReadyEvent();
         [field: NonSerialized]
         public static event OnGameDataReadyEvent OnGameDataReady;
@@ -79,6 +83,12 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         public static void Save()
         {
             UserProfileManager.Instance.SaveLocal();
+
+            if (SaveCallBack != null)
+            {
+                MetaDataStateBase.Current.Version++;
+                SaveCallBack.Invoke();
+            }
         }
 
         private static void Instance_OnUserProfileEvent(UserProfileEvent e)

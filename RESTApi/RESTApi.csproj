@@ -25,13 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\BioIncRedemptionMobile\UnityMobile\Assets\StreamingAssets\BioInc.db" Link="BioInc.db">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="..\..\BioIncRedemptionMobile\UnityMobile\Assets\StreamingAssets\BioInc.db.meta" Link="BioInc.db.meta" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     <PackageReference Include="PlayFabAllSDK" Version="1.78.200805" />
   </ItemGroup>
@@ -40,6 +33,10 @@
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Configuration\Configuration.csproj" />
     <ProjectReference Include="..\GameLogic\GameLogic.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
 

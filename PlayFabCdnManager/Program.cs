@@ -26,7 +26,7 @@ namespace MetaLoop.PlayFabCdnManager
         static void Main(string[] args)
         {
 
-            //_MetaStateSettings.Init();
+            _MetaStateSettings.Init();
 
             bool isCdnOnlyMode = false;
 
@@ -215,7 +215,7 @@ namespace MetaLoop.PlayFabCdnManager
             GetContentUploadUrlRequest request = new GetContentUploadUrlRequest();
             request.ContentType = "binary/octet-stream";
             request.Key = relativeFileName;
-        
+
 
             var result = PlayFabAdminAPI.GetContentUploadUrlAsync(request).GetAwaiter().GetResult();
 
@@ -230,7 +230,8 @@ namespace MetaLoop.PlayFabCdnManager
                 if (uploadResult)
                 {
                     return true;
-                } else
+                }
+                else
                 {
                     Console.WriteLine("HTTP PUT ERROR" + " " + result.Result.URL);
                 }
@@ -272,8 +273,11 @@ namespace MetaLoop.PlayFabCdnManager
         {
 
             int waitingTime = Convert.ToInt32(secondsToWait);
-            var currentStatus = PlayFab.PlayFabServerAPI.GetTitleDataAsync(new PlayFab.ServerModels.GetTitleDataRequest() { Keys = new List<string>() { MetaStateSettings._TitleDataKey_ServerInfo } }).GetAwaiter().GetResult();
+            var currentStatus = PlayFab.PlayFabServerAPI.GetTitleDataAsync(new PlayFab.ServerModels.GetTitleDataRequest() { Keys = new List<string>() { MetaStateSettings._TitleDataKey_ServerInfo, MetaStateSettings._TitleDataKey_RemoteConfig } }).GetAwaiter().GetResult();
             ServerInfo serverInfo = null;
+            RemoteConfigData configData = null;
+            bool updateRemoteConfig = false;
+
             if (currentStatus.Result.Data.ContainsKey(MetaStateSettings._TitleDataKey_ServerInfo))
             {
                 serverInfo = JsonConvert.DeserializeObject<ServerInfo>(currentStatus.Result.Data[MetaStateSettings._TitleDataKey_ServerInfo]);
@@ -283,6 +287,21 @@ namespace MetaLoop.PlayFabCdnManager
                 serverInfo = new ServerInfo();
                 Console.WriteLine("COULD NOT READ ServerInfo, CREATING NEW ONE...");
             }
+
+
+            if (currentStatus.Result.Data.ContainsKey(MetaStateSettings._TitleDataKey_RemoteConfig))
+            {
+                configData = JsonConvert.DeserializeObject<RemoteConfigData>(currentStatus.Result.Data[MetaStateSettings._TitleDataKey_RemoteConfig]);
+            }
+            else
+            {
+                configData = new RemoteConfigData();
+                configData.Values.Add("Foo", "Value");
+                Console.WriteLine("COULD NOT READ RemoteConfigData, CREATING NEW ONE...");
+                updateRemoteConfig = true;
+            }
+
+
 
             serverInfo.ServerStatus = (available || waitingTime == 0) ? ServerStatus.Online : ServerStatus.Offline;
             serverInfo.MaintenanceMessage = (available || waitingTime == 0) ? string.Empty : GameUnavailableMessageType.MAINTENANCE.ToString();
@@ -314,6 +333,17 @@ namespace MetaLoop.PlayFabCdnManager
             }
             else
             {
+
+                if (updateRemoteConfig)
+                {
+                    var updateDataForRemoteConfig = PlayFabServerAPI.SetTitleDataAsync(new PlayFab.ServerModels.SetTitleDataRequest() { Key = MetaStateSettings._TitleDataKey_RemoteConfig, Value = configData.ToJson() }).GetAwaiter().GetResult();
+                    if (updateDataForRemoteConfig.Error == null)
+                    {
+                        Console.WriteLine("RemoteConfig Created.");
+
+                    }
+                }
+
                 Console.WriteLine("Shutting Down Servers...");
                 var updateData = PlayFabServerAPI.SetTitleDataAsync(new PlayFab.ServerModels.SetTitleDataRequest() { Key = MetaStateSettings._TitleDataKey_ServerInfo, Value = serverInfo.ToJson() }).GetAwaiter().GetResult();
                 if (updateData.Error == null)
@@ -321,13 +351,18 @@ namespace MetaLoop.PlayFabCdnManager
                     Console.WriteLine("SUCCESS");
                     WaitFor(Convert.ToInt32(secondsToWait));
                 }
+
             }
 
         }
 
         public static void WakeUpAzureRequests(int numOfRequest)
         {
-
+            if (!BackOfficeStatusUrl.ToLower().StartsWith("http"))
+            {
+                Console.WriteLine("No BackOfficeStatusUrl specified, skipping WakeUp requests.");
+                return;
+            }
             System.Diagnostics.Process.Start(BackOfficeStatusUrl);
 
             for (int i = 0; i < numOfRequest; i++)
