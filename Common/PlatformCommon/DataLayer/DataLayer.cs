@@ -5,6 +5,8 @@ using System;
 using MetaLoop.Common.PlatformCommon.Data;
 using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.Settings;
+using UnityEngine;
+using System.IO;
 #if !BACKOFFICE
 using MetaLoop.Common.PlatformCommon.Utils;
 #endif
@@ -39,13 +41,14 @@ namespace MetaLoop.Common.PlatformCommon
 #if !BACKOFFICE
         public void InitFromStreamingAssets(string DatabaseName)
         {
+            var dbPath = "";
 
 #if UNITY_EDITOR
-            var dbPath = string.Format(@"Assets/StreamingAssets/{0}", DatabaseName);
+            dbPath = string.Format(@"Assets/StreamingAssets/{0}", DatabaseName);
 #else
             // check if file exists in Application.persistentDataPath
             var filepath = string.Format("{0}/{1}", Application.persistentDataPath, DatabaseName);
-
+             dbPath = filepath;
             if (!File.Exists(filepath))
             {
                 Debug.Log("Database not in Persistent path");
@@ -57,6 +60,7 @@ namespace MetaLoop.Common.PlatformCommon
             while (!loadDb.isDone) { }  // CAREFUL here, for safety reasons you shouldn't let this while loop unattended, place a timer and error check
             // then save to Application.persistentDataPath
             File.WriteAllBytes(filepath, loadDb.bytes);
+           
 #elif UNITY_IOS
                  var loadDb = Application.dataPath + "/Raw/" + DatabaseName;  // this is the path to your StreamingAssets in iOS
                 // then save to Application.persistentDataPath
@@ -87,7 +91,7 @@ namespace MetaLoop.Common.PlatformCommon
 
 
             }
-        }
+        
             
 
 #endif
@@ -115,7 +119,7 @@ namespace MetaLoop.Common.PlatformCommon
             {
 
 #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_IOS || UNITY_ANDROID
-                database = Path.GetStreamingAssetsPersistantPath(database);
+                database = MetaLoop.Common.PlatformCommon.Utils.Path.GetStreamingAssetsPersistantPath(database);
                 Connection = new SQLiteConnection(database, SQLiteOpenFlags.ReadOnly, true);
 #endif
             }
@@ -176,17 +180,17 @@ namespace MetaLoop.Common.PlatformCommon
 
 
 
-        public List<Object> GetTable(Type type)
+        public List<System.Object> GetTable(Type type)
         {
             KeyValuePair<Type, object> result = CachedObjects.Where(y => y.Key == type).SingleOrDefault();
             if (!result.Equals(new KeyValuePair<Type, object>()))
             {
-                return (List<Object>)result.Value;
+                return (List<System.Object>)result.Value;
 
             }
             else
             {
-                List<Object> data = Connection.Table<Object>(type).ToList();
+                List<System.Object> data = Connection.Table<System.Object>(type).ToList();
                 CachedObjects.Add(type, data);
                 return data;
             }
