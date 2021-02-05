@@ -83,6 +83,9 @@ namespace MetaLoop.Common.DataEngine
                                         {
                                             MetaDataImportExeption.Log(string.Format("Field {0} must be declared as int to create Relationship.", fieldName), type.ToString());
                                         }
+
+
+
                                         valueToCompare = row[fieldName];
                                     }
                                     else
@@ -157,15 +160,18 @@ namespace MetaLoop.Common.DataEngine
                                         {
                                             var relationValue = ObjectsMemoryCache[dependency.Type.Name].Where(y => p.GetValue(y).Equals(valueToCompare)).SingleOrDefault();
 
-                                            if (relationValue == null)
+                                            if (valueToCompare.ToString() != string.Empty)
                                             {
-                                                MetaDataImportExeption.Log(String.Format("Could not find value of {0} in all objects of Type {1}.", valueToCompare.ToString(), dependency.Type.ToString()), type.Name);
-                                            }
-                                            else
-                                            {
-                                                if (dependency.CreateRelation)
+                                                if (relationValue == null)
                                                 {
-                                                    field.SetValue(newInstance, ((IMetaDataObject)relationValue).Id);
+                                                    MetaDataImportExeption.Log(String.Format("Could not find value of {0} in all objects of Type {1}.", valueToCompare.ToString(), dependency.Type.ToString()), type.Name);
+                                                }
+                                                else
+                                                {
+                                                    if (dependency.CreateRelation)
+                                                    {
+                                                        field.SetValue(newInstance, ((IMetaDataObject)relationValue).Id);
+                                                    }
                                                 }
                                             }
                                         }
