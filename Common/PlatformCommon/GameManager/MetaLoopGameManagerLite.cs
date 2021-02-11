@@ -18,6 +18,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Networking;
 
 namespace MetaLoop.Common.PlatformCommon.GameManager
@@ -37,9 +38,21 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         private bool isPlayFabConfigReady = false;
 
         public Action OnRestartMetaLoopCompleted = null;
+
+        public bool IsMetaLoopReady = false;
+
+        public UnityEvent OnMetaLoopCompletedCallback { get; internal set; }
         protected virtual void Awake()
         {
+            OnMetaLoopCompletedCallback = new UnityEvent();
             Debug.Log("MetaLoopGameManager Awake() invoked.");
+
+
+
+        }
+
+        protected virtual void Start()
+        {
             if (IsFirtsStart)
             {
                 new MetaStateSettings();
@@ -159,9 +172,14 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
                 eventManagerState = new EventManagerState();
             }
 
-            Debug.Log("MetaLoopGameManager Downloading Startup Remote Assets");
+            Debug.Log("MetaLoopGameManager Downloading User Data...");
 
             DownloadUserData();
+
+
+            Debug.Log("MetaLoopGameManager Instancing DataLayer...");
+
+            DataLayer.Instance.InitFromStreamingAssets(MetaStateSettings._DatabaseName);
 
         }
 
@@ -212,10 +230,6 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
         protected virtual void OnGameDataAndBackOfficeReady()
         {
-            Debug.Log("MetaLoopGameManager Instancing DataLayer...");
-
-            DataLayer.Instance.InitFromStreamingAssets(MetaStateSettings._DatabaseName);
-
             OnMetaLoopReady();
         }
 
@@ -299,6 +313,8 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         {
             IsFirtsStartInPorgress = false;
 
+            IsMetaLoopReady = true;
+
 
             if (OnRestartMetaLoopCompleted != null)
             {
@@ -307,6 +323,8 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             }
 
             GameData.Save();
+
+            OnMetaLoopCompletedCallback.Invoke();
         }
 
         public virtual void OnDataMissMatchDetected(OnDataMissMatchDetectedEventType type)
@@ -315,12 +333,6 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         }
 
 
-        // Start is called before the first frame update
-        protected virtual void Start()
-        {
-
-
-        }
         public virtual void ShowUnavailableMessage(GameUnavailableMessageType reason)
         {
             //Show client update/unvailable message...

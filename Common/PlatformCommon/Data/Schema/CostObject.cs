@@ -7,6 +7,7 @@ using System.Text;
 
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
+    [Serializable]
     public class CostObject : ICostObject
     {
 

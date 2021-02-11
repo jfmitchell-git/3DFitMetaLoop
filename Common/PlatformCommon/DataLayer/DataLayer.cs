@@ -5,7 +5,6 @@ using System;
 using MetaLoop.Common.PlatformCommon.Data;
 using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.Settings;
-
 using System.IO;
 #if !BACKOFFICE
 using MetaLoop.Common.PlatformCommon.Utils;
@@ -181,13 +180,13 @@ namespace MetaLoop.Common.PlatformCommon
 
 
 
-        public List<System.Object> GetTable(Type type)
+        public List<object> GetTable(Type type)
         {
             KeyValuePair<Type, object> result = CachedObjects.Where(y => y.Key == type).SingleOrDefault();
             if (!result.Equals(new KeyValuePair<Type, object>()))
             {
-                return (List<System.Object>)result.Value;
 
+                return ((IEnumerable<object>)result.Value).ToList();
             }
             else
             {
