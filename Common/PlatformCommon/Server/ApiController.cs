@@ -1,4 +1,8 @@
-﻿using System;
+﻿
+#if BACKOFFICE
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -33,3 +37,4 @@ namespace MetaLoop.Common.PlatformCommon.Server
 
     }
 }
+#endif
