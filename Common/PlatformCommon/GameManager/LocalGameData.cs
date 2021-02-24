@@ -1,6 +1,7 @@
 ﻿#if !BACKOFFICE
 using MetaLoop.Common.PlatformCommon.State;
 using MetaLoop.Common.PlatformCommon.UserProfile;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,7 +21,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
     [Serializable]
     public partial class GameData
     {
-
+        
         public static Action SaveCallBack { get; set; }
 
 
@@ -105,11 +106,12 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
                     UserProfileManager.Instance.UserProfileData.GameData = current;
                     UserProfileManager.Instance.SaveLocal();
+                    MetaLoopGameManagerLite.IsNewInstall = true;
                     if (OnGameDataReady != null) OnGameDataReady();
                     break;
 
                 case UserProfileEventType.UserProfileLoaded:
-                    current = (GameData)UserProfileManager.Instance.UserProfileData.GameData;
+                    current = JsonConvert.DeserializeObject<GameData>(UserProfileManager.Instance.UserProfileData.GameData.ToString());
                     current.OnUserProfileLoaded();
                     if (OnGameDataReady != null) OnGameDataReady();
                     break;

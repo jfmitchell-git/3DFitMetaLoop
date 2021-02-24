@@ -1,4 +1,5 @@
 ﻿#if !BACKOFFICE
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +13,8 @@ namespace MetaLoop.Common.PlatformCommon.UserProfile
     public class UserProfileManager
     {
 
-        private const string baseFileName = "UserProfile.dat";
+        //private const string baseFileName = "UserProfile.dat";
+        private const string baseFileName = "GameData.dat";
 
         private static UserProfileManager instance;
         public static UserProfileManager Instance
@@ -102,20 +104,20 @@ namespace MetaLoop.Common.PlatformCommon.UserProfile
 
         private UserProfileData LoadLocalData()
         {
-            FileStream file = null;
+            StreamReader reader = null;
             UserProfileData data = null;
+
             try
             {
-                BinaryFormatter bf = new BinaryFormatter();
-                file = File.Open(Filepath, FileMode.Open);
-                data = (UserProfileData)bf.Deserialize(file);
+                reader = new StreamReader(Filepath);
+                data = JsonConvert.DeserializeObject<UserProfileData>(reader.ReadToEnd());
             } catch (Exception e)
             {
                 Debug.LogWarning(e.Message);
             }
             finally
             {
-                if (file != null) file.Close();
+                if (reader != null) reader.Close();
             }
 
             return data;
@@ -133,14 +135,14 @@ namespace MetaLoop.Common.PlatformCommon.UserProfile
             }
         }
 
+
         public void SaveLocal()
         {
             if (userProfileData != null)
             {
-                BinaryFormatter bf = new BinaryFormatter();
-                FileStream file = File.Create(Filepath);
-                bf.Serialize(file, userProfileData);
-                file.Close();
+                StreamWriter writer = new StreamWriter(Filepath, false);
+                writer.Write(JsonConvert.SerializeObject(userProfileData));
+                writer.Close();
                 OnUserProfileEvent(new UserProfileEvent(UserProfileEventType.UserProfileSaved));
                 Debug.Log("User profile saved.");
             }
@@ -149,6 +151,23 @@ namespace MetaLoop.Common.PlatformCommon.UserProfile
                 throw new NotSupportedException("Cannot save null UserProfileData");
             }
         }
+
+        //public void SaveLocal()
+        //{
+        //    if (userProfileData != null)
+        //    {
+        //        BinaryFormatter bf = new BinaryFormatter();
+        //        FileStream file = File.Create(Filepath);
+        //        bf.Serialize(file, userProfileData);
+        //        file.Close();
+        //        OnUserProfileEvent(new UserProfileEvent(UserProfileEventType.UserProfileSaved));
+        //        Debug.Log("User profile saved.");
+        //    }
+        //    else
+        //    {
+        //        throw new NotSupportedException("Cannot save null UserProfileData");
+        //    }
+        //}
     }
 }
 #endif

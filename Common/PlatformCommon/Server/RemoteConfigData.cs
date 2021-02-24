@@ -29,6 +29,20 @@ namespace MetaLoop.Common.PlatformCommon.Server
                 return String.Empty;
             }
         }
+
+        public int GetValueAsInt32(string settingId)
+        {
+
+            if (string.IsNullOrEmpty(this[settingId]))
+            {
+                return 0;
+            }
+            else
+            {
+                return Convert.ToInt32(this[settingId]);
+            }
+
+        }
         public RemoteConfigData()
         {
             if (Values == null)

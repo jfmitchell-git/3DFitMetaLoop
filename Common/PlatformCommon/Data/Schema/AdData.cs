@@ -11,8 +11,7 @@ using MetaLoop.Common.PlatformCommon.Settings;
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
 
-
-    public abstract partial class AdData
+    public abstract partial class AdData : RewardObject
     {
         private int id;
         [PrimaryKey, AutoIncrement]

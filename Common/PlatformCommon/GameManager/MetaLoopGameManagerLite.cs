@@ -10,6 +10,7 @@ using MetaLoop.Common.PlatformCommon.RemoteAssets;
 using MetaLoop.Common.PlatformCommon.Server;
 using MetaLoop.Common.PlatformCommon.Settings;
 using MetaLoop.Common.PlatformCommon.State;
+using MetaLoop.Common.PlatformCommon.UserProfile;
 using Newtonsoft.Json;
 using PlayFab;
 using PlayFab.ClientModels;
@@ -40,6 +41,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         public Action OnRestartMetaLoopCompleted = null;
 
         public bool IsMetaLoopReady = false;
+        public static bool IsNewInstall { get; set; }
 
         public UnityEvent OnMetaLoopCompletedCallback { get; internal set; }
         protected virtual void Awake()
@@ -94,7 +96,13 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
         protected virtual void GameData_OnGameDataReady()
         {
-            PlayFabManager.Instance.Login(OnPlayFabLoginSuccess, OnPlayFabLoginFailed, SystemInfo.deviceUniqueIdentifier);
+
+            string deviceId = SystemInfo.deviceUniqueIdentifier;
+
+#if UNITY_EDITOR
+            deviceId = UserProfileManager.Instance.UserProfileData.Id;
+#endif
+            PlayFabManager.Instance.Login(OnPlayFabLoginSuccess, OnPlayFabLoginFailed, deviceId);
         }
 
 

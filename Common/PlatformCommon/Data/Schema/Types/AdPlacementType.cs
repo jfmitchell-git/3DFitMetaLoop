@@ -7,5 +7,9 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema.Types
     public enum AdPlacementType
     {
         Undefined,
+        REWARDED,
+        INTERSTITIAL,
+        BANNER
+
     }
 }

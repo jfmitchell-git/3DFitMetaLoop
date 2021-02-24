@@ -49,6 +49,7 @@ namespace MetaLoop.Common.PlatformCommon.State
         public DateTime NextDailyReset { get; set; }
         public int LastPlayerLevelClaimed { get; set; }
         public int TotalAdWatchedCount { get; set; }
+        public float TotalAdWatchedValue { get; set; }
         public MetaTimeZone MetaTimeZone { get; set; }
         public ConsumableState Consumables { get; set; }
         public OfferDataState OfferDataState { get; set; }
