@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿#if !BACKOFFICE
+using System.Diagnostics;
 using UnityEngine;
 
 public static class DGLogger
@@ -11,3 +12,4 @@ public static class DGLogger
     }
 
 }
+#endif

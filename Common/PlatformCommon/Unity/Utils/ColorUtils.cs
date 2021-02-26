@@ -1,5 +1,6 @@
-﻿using UnityEngine;
-using UnityEditor;
+﻿#if !BACKOFFICE
+using UnityEngine;
+
 
 namespace MetaLoop.Common.PlatformCommon.Unity.Utils
 {
@@ -55,3 +56,4 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Utils
 
     }
 }
+#endif

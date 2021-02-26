@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if !BACKOFFICE
+using UnityEngine;
 using System.Collections;
 using DG.Tweening;
 
@@ -144,3 +145,4 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Utils
 
     }
 }
+#endif

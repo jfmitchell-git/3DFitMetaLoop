@@ -1,26 +1,29 @@
-﻿using UnityEngine;
+﻿#if !BACKOFFICE
+using UnityEngine;
 using System.Collections;
-namespace MetaLoop.Common.PlatformCommon.Unity.Utils {
-public class UpdateCaller : MonoBehaviour
+namespace MetaLoop.Common.PlatformCommon.Unity.Utils
 {
-    private static UpdateCaller instance = null;
-    public static System.Action OnUpdate;
-
-    void Awake()
+    public class UpdateCaller : MonoBehaviour
     {
-        if (instance == null)
+        private static UpdateCaller instance = null;
+        public static System.Action OnUpdate;
+
+        void Awake()
         {
-            instance = this;
-            DontDestroyOnLoad(this);
+            if (instance == null)
+            {
+                instance = this;
+                DontDestroyOnLoad(this);
+            }
+            else if (this != instance)
+                Destroy(this);
         }
-        else if (this != instance)
-            Destroy(this);
-    }
 
-    void Update()
-    {
-        if (OnUpdate != null)
-            OnUpdate();
+        void Update()
+        {
+            if (OnUpdate != null)
+                OnUpdate();
+        }
     }
 }
-}
+#endif
