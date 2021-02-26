@@ -1,4 +1,5 @@
 ﻿using DryGinStudios.PuzzleFit3D.Meta;
+using DryGinStudios.PuzzleFit3D.Meta.Data;
 using MetaLoop.Common.PlatformCommon.Data.Schema.Types;
 using MetaLoop.Common.PlatformCommon.PlayFabClient;
 using MetaLoop.Common.PlayFabWrapper;
