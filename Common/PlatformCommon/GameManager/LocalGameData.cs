@@ -25,7 +25,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         public static Action SaveCallBack { get; set; }
 
 
-        public delegate void OnGameDataReadyEvent();
+        public delegate void OnGameDataReadyEvent(bool isNewUserProfile = false);
         [field: NonSerialized]
         public static event OnGameDataReadyEvent OnGameDataReady;
 
@@ -106,8 +106,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
                     UserProfileManager.Instance.UserProfileData.GameData = current;
                     UserProfileManager.Instance.SaveLocal();
-                    MetaLoopGameManagerLite.IsNewInstall = true;
-                    if (OnGameDataReady != null) OnGameDataReady();
+                    if (OnGameDataReady != null) OnGameDataReady(true);
                     break;
 
                 case UserProfileEventType.UserProfileLoaded:

@@ -70,7 +70,7 @@ namespace MetaLoop.Common.PlatformCommon.UserProfile
                     userProfileData.LastTimeOpen = DateTime.UtcNow;
                    
                     isSuccess = true;
-                    BackupLocalData();
+                    //BackupLocalData();
                 }
                 catch (Exception e)
                 {

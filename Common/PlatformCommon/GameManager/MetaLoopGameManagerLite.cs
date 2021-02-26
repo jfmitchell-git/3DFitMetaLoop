@@ -41,7 +41,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         public Action OnRestartMetaLoopCompleted = null;
 
         public bool IsMetaLoopReady = false;
-        public static bool IsNewInstall { get; set; }
+        public bool IsNewInstall { get; set; }
 
         public UnityEvent OnMetaLoopCompletedCallback { get; internal set; }
         protected virtual void Awake()
@@ -94,8 +94,9 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             this.OnRestartMetaLoopCompleted = onRestartMetaLoopCompleted;
         }
 
-        protected virtual void GameData_OnGameDataReady()
+        protected virtual void GameData_OnGameDataReady(bool isNewProfile)
         {
+            IsNewInstall = isNewProfile;
 
             string deviceId = SystemInfo.deviceUniqueIdentifier;
 
@@ -215,6 +216,9 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
             if (result != null && result.Data.ContainsKey(MetaStateSettings._MetaDataStateFileName) && !string.IsNullOrEmpty(result.Data[MetaStateSettings._MetaDataStateFileName].Value))
             {
+                //being able to retreive userData confirm that user can't be a new user.
+                IsNewInstall = false;
+
                 MetaDataStateBase onlineData = (MetaDataStateBase)JsonConvert.DeserializeObject(result.Data[MetaStateSettings._MetaDataStateFileName].Value, MetaStateSettings.PolymorhTypes[typeof(MetaDataStateBase)]);
 
                 if (onlineData.Version > GameData.Current.MetaDataState.Version)
@@ -329,8 +333,6 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
                 OnRestartMetaLoopCompleted.Invoke();
                 OnRestartMetaLoopCompleted = null;
             }
-
-            GameData.Save();
 
             OnMetaLoopCompletedCallback.Invoke();
         }

@@ -56,10 +56,13 @@ namespace MetaLoop.Common.PlatformCommon
                 // open StreamingAssets directory and load the db ->
 
 #if UNITY_ANDROID
+                Debug.Log("SQLite begin copy for assets.");
             var loadDb = new WWW("jar:file://" + Application.dataPath + "!/assets/" + DatabaseName);  // this is the path to your StreamingAssets in android
             while (!loadDb.isDone) { }  // CAREFUL here, for safety reasons you shouldn't let this while loop unattended, place a timer and error check
             // then save to Application.persistentDataPath
+            Debug.Log("SQLite reading file completed.");
             File.WriteAllBytes(filepath, loadDb.bytes);
+            Debug.Log("SQLite WriteAllBytes completed.");
            
 #elif UNITY_IOS
                  var loadDb = Application.dataPath + "/Raw/" + DatabaseName;  // this is the path to your StreamingAssets in iOS
@@ -95,12 +98,14 @@ namespace MetaLoop.Common.PlatformCommon
             
 
 #endif
-
+            Debug.Log("SQLite oppening connection...");
             Connection = new SQLiteConnection(dbPath, SQLiteOpenFlags.ReadOnly | SQLiteOpenFlags.Create);
+            Debug.Log("SQLite connection open.");
 
             try
             {
                 DataVersion = this.GetTable<DataVersion>().First();
+                Debug.Log("SQLite DataVersion fetched with code " + DataVersion.Version);
             }
             catch { }
         }

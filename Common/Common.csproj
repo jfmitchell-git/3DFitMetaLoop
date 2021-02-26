@@ -16,6 +16,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="PlatformCommon\Unity\**" />
+    <EmbeddedResource Remove="PlatformCommon\Unity\**" />
+    <None Remove="PlatformCommon\Unity\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="sqlite3.dll" />
   </ItemGroup>
 

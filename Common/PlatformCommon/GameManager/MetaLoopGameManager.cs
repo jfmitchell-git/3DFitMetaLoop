@@ -167,7 +167,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             GameService_OnGameServiceEvent(new GameServiceEvent(GameServiceEventType.SingInFailed));
         }
 
-        protected virtual void GameData_OnGameDataReady()
+        protected virtual void GameData_OnGameDataReady(bool isNewLocalProfile = false)
         {
 
 
