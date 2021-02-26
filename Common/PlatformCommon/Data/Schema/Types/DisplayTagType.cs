@@ -11,6 +11,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema.Types
         LimitedTime,
         MostPopular,
         Deal,
-        Free
+        Free,
+        Discount
     }
 }
