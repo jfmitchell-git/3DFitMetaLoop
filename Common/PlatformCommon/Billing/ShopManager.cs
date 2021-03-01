@@ -42,9 +42,6 @@ namespace MetaLoop.Common.PlatformCommon.Data.Billing
 #endif
             IsInitialized = true;
         }
-
-#if !BACKOFFICE
-
         private static void BuildPurchasables()
         {
             if (allPurchasableItems != null) allPurchasableItems.Clear();
@@ -60,6 +57,10 @@ namespace MetaLoop.Common.PlatformCommon.Data.Billing
                 allPurchasableItems = DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(ShopOffer)]).Cast<PurchasableItem>().ToList();
             }
         }
+
+#if !BACKOFFICE
+
+
         public static void Kill()
         {
             Purchaser.Kill();
