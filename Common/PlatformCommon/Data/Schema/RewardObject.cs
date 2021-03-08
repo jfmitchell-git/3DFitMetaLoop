@@ -20,7 +20,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
 
         protected RewardData rewardData;
         [IgnoreCodeFirst, Ignore]
-        public List<RewardDataItem> Rewards
+        public virtual List<RewardDataItem> Rewards
         {
             get
             {
