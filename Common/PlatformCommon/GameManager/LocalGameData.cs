@@ -111,6 +111,8 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
                 case UserProfileEventType.UserProfileLoaded:
                     current = JsonConvert.DeserializeObject<GameData>(UserProfileManager.Instance.UserProfileData.GameData.ToString());
+                    UserProfileManager.Instance.UserProfileData.GameData = current;
+
                     current.OnUserProfileLoaded();
                     if (OnGameDataReady != null) OnGameDataReady();
                     break;

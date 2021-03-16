@@ -1,5 +1,6 @@
 ﻿#if !BACKOFFICE
 using DG.Tweening;
+using Facebook.Unity;
 using MetaLoop.Common.PlatformCommon;
 using MetaLoop.Common.PlatformCommon.Data.Schema;
 using MetaLoop.Common.PlatformCommon.GameServices;
@@ -44,6 +45,8 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         public bool IsNewInstall { get; set; }
 
         public UnityEvent OnMetaLoopCompletedCallback { get; internal set; }
+
+        private bool forceCloudVersionFromAccountSync = false;
         protected virtual void Awake()
         {
             OnMetaLoopCompletedCallback = new UnityEvent();
@@ -85,47 +88,94 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             IsFirtsStart = false;
         }
 
-        public void RestartMetaLoop(Action onRestartMetaLoopCompleted)
+        public void RestartMetaLoop(Action onRestartMetaLoopCompleted, bool forceCloudVersionFromAccountSync = false)
         {
+            this.forceCloudVersionFromAccountSync = forceCloudVersionFromAccountSync;
+
             if (DataLayer.Instance != null)
             {
                 DataLayer.Instance.Kill();
             }
+
             this.OnRestartMetaLoopCompleted = onRestartMetaLoopCompleted;
+
+            GameData_OnGameDataReady(false);
         }
 
         protected virtual void GameData_OnGameDataReady(bool isNewProfile)
         {
             IsNewInstall = isNewProfile;
 
-            string deviceId = SystemInfo.deviceUniqueIdentifier;
 
+
+            switch (GameData.Current.LoginType)
+            {
+                case LoginType.Undefined:
+                case LoginType.Device:
+                    LoginToPlayFabAsDefault();
+                    break;
+
+                case LoginType.GameService:
+                    GameServiceManager.GameService.Init();
+                    break;
+
+
+                case LoginType.Facebook:
+
+                    if (FB.IsLoggedIn)
+                    {
+                        FB.Mobile.RefreshCurrentAccessToken();
+                    }
+
+
+                    if (Facebook.Unity.AccessToken.CurrentAccessToken != null)
+                    {
+                        PlayFabManager.Instance.LoginWithFacebookAccount(Facebook.Unity.AccessToken.CurrentAccessToken.TokenString, OnPlayFabLoginSuccess, OnPlayFabLoginFailed);
+                        Debug.Log("Facebook Rapid login success: " + Facebook.Unity.AccessToken.CurrentAccessToken.UserId);
+                    } else
+                    {
+                        LoginToPlayFabAsDefault();
+                    }
+
+                    break;
+            }
+
+
+        }
+
+
+        private void LoginToPlayFabAsDefault()
+        {
+            string deviceId = SystemInfo.deviceUniqueIdentifier;
 #if UNITY_EDITOR
             deviceId = UserProfileManager.Instance.UserProfileData.Id;
 #endif
             PlayFabManager.Instance.Login(OnPlayFabLoginSuccess, OnPlayFabLoginFailed, deviceId);
         }
 
-
-
+       
 
         private void GameService_OnGameServiceEvent(GameServiceEvent e)
         {
 
             Debug.Log("GameService_OnGameServiceEvent - " + e.EventType.ToString());
 
-            //switch (e.EventType)
-            //{
-            //    case GameServiceEventType.SignInSuccess:
-            //    case GameServiceEventType.SingInFailed:
-            //        Debug.Log("MetaLoopGameManager GameData_OnGameDataReady; Login in on PlayFab.");
-            //        PlayFabManager.Instance.Login(OnPlayFabLoginSuccess, OnPlayFabLoginFailed, SystemInfo.deviceUniqueIdentifier);
-            //        gameServiceResponded = true;
-            //        break;
-            //}
+            switch (e.EventType)
+            {
+                case GameServiceEventType.SignInSuccess:
+
+                    Debug.Log("MetaLoopGameManager GameData_OnGameDataReady; Login in on PlayFab.");
+                    PlayFabManager.Instance.Login(OnPlayFabLoginSuccess, OnPlayFabLoginFailed, SystemInfo.deviceUniqueIdentifier);
+                    gameServiceResponded = true;
+                    break;
+
+                case GameServiceEventType.SingInFailed:
+                    LoginToPlayFabAsDefault();
+                    break;
+            }
         }
 
-        protected virtual void OnPlayFabLoginSuccess(LoginResult obj)
+        protected virtual void OnPlayFabLoginSuccess(PlayFab.ClientModels.LoginResult obj)
         {
             Debug.Log("MetaLoopGameManager OnPlayFabLoginSuccess, Downloading TitleData...");
             DownloadTitleData();
@@ -186,10 +236,6 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
             DownloadUserData();
 
 
-            Debug.Log("MetaLoopGameManager Instancing DataLayer...");
-
-            DataLayer.Instance.InitFromStreamingAssets(MetaStateSettings._DatabaseName);
-
         }
 
         public void DownloadUserData()
@@ -203,6 +249,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         {
             IsOfflineMode = true;
             MetaDataStateBase.LoadData(GameData.Current.MetaDataState);
+            OnGameDataAndBackOfficeReady();
 
         }
 
@@ -221,7 +268,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
                 MetaDataStateBase onlineData = (MetaDataStateBase)JsonConvert.DeserializeObject(result.Data[MetaStateSettings._MetaDataStateFileName].Value, MetaStateSettings.PolymorhTypes[typeof(MetaDataStateBase)]);
 
-                if (onlineData.Version > GameData.Current.MetaDataState.Version)
+                if (onlineData.Version > GameData.Current.MetaDataState.Version || forceCloudVersionFromAccountSync)
                 {
                     MetaDataStateBase.LoadData(onlineData);
                     GameData.Current.OverwriteMetaDataState(onlineData);
@@ -242,6 +289,12 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
         protected virtual void OnGameDataAndBackOfficeReady()
         {
+
+
+            Debug.Log("MetaLoopGameManager Instancing DataLayer...");
+
+            DataLayer.Instance.InitFromStreamingAssets(MetaStateSettings._DatabaseName);
+
             OnMetaLoopReady();
         }
 

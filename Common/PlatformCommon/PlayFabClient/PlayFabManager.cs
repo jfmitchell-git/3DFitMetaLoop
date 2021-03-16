@@ -325,6 +325,29 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
         //}
 
 
+        public void LinkFacebookAccount(string accessToken, Action<LinkFacebookAccountResult> callBack, Action<PlayFabError> error)
+        {
+            var request = new LinkFacebookAccountRequest { AccessToken = accessToken, ForceLink = false };
+            PlayFabClientAPI.LinkFacebookAccount(request, callBack, error);
+        }
+
+        public void UnlinkFacebookAccount(Action<UnlinkFacebookAccountResult> callBack, Action<PlayFabError> error)
+        {
+            var request = new UnlinkFacebookAccountRequest(); ;
+            PlayFabClientAPI.UnlinkFacebookAccount(request, callBack, error);
+        }
+
+
+
+        public void LoginWithFacebookAccount(string accessToken, Action<LoginResult> callBack, Action<PlayFabError> loginFailure)
+        {
+            var request = new LoginWithFacebookRequest { AccessToken = accessToken };
+            PlayFabClientAPI.LoginWithFacebook(request, callBack, loginFailure);
+        }
+
+
+
+
         public void LoginWithKong(string authTicket, long userId, Action<LoginResult> loginSuccess, Action<PlayFabError> loginFailure)
         {
             var request = new LoginWithKongregateRequest { AuthTicket = authTicket, KongregateId = userId.ToString(), CreateAccount = false };
@@ -360,8 +383,8 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
             if (mustLinkGooglePlay)
             {
                 var authCode = ((GooglePlayGameService)GameServiceManager.GameService).GetServerAuthCode();
-                var requestLink = new LinkGoogleAccountRequest() {  ServerAuthCode = authCode };
-                PlayFabClientAPI.LinkGoogleAccount(requestLink, (LinkGoogleAccountResult r) => {GameData.Current.LoginType = LoginType.GameService;}, (PlayFabError e) => loginFailure.Invoke(e));
+                var requestLink = new LinkGoogleAccountRequest() { ServerAuthCode = authCode };
+                PlayFabClientAPI.LinkGoogleAccount(requestLink, (LinkGoogleAccountResult r) => { GameData.Current.LoginType = LoginType.GameService; }, (PlayFabError e) => loginFailure.Invoke(e));
             }
 
 #endif
@@ -602,7 +625,7 @@ namespace MetaLoop.Common.PlatformCommon.PlayFabClient
         }
 
 
-      
+
 
         private void FromExecuteCloudScriptResult(ExecuteCloudScriptResult result, CloudScriptMethod cloudScriptMethod, Action<CloudScriptResponse, CloudScriptMethod> resultCallBack)
         {

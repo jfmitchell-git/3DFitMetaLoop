@@ -1,4 +1,5 @@
 ﻿using MetaLoop.Common.PlatformCommon.PlayFabClient;
+using MetaLoop.Common.PlatformCommon.Settings;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,7 @@ namespace MetaLoop.Common.PlatformCommon.State
         [JsonIgnore]
         public string UpdatedPlayerName
         {
-           
+
             get
             {
                 if (KeyValuePairs.ContainsKey("UpdatedPlayerName")) return KeyValuePairs["UpdatedPlayerName"];
@@ -85,11 +86,15 @@ namespace MetaLoop.Common.PlatformCommon.State
 
 
 #if !BACKOFFICE
-            CloudScriptMethod cloudScriptMethod = new CloudScriptMethod("SetSetting", false);
-            cloudScriptMethod.Params.Add("type", "setting");
-            cloudScriptMethod.Params.Add("key", settingId);
-            cloudScriptMethod.Params.Add("value", value.ToString());
-            PlayFabManager.Instance.AddToStack("Settings", cloudScriptMethod);
+            if (MetaStateSettings._IsServerAuthoritative)
+            {
+                CloudScriptMethod cloudScriptMethod = new CloudScriptMethod("SetSetting", false);
+                cloudScriptMethod.Params.Add("type", "setting");
+                cloudScriptMethod.Params.Add("key", settingId);
+                cloudScriptMethod.Params.Add("value", value.ToString());
+                PlayFabManager.Instance.AddToStack("Settings", cloudScriptMethod);
+            }
+
 #endif
         }
 
@@ -107,12 +112,14 @@ namespace MetaLoop.Common.PlatformCommon.State
 
 
 #if !BACKOFFICE
-
-            CloudScriptMethod cloudScriptMethod = new CloudScriptMethod("SetSetting", false);
-            cloudScriptMethod.Params.Add("type", "keyvaluepairs");
-            cloudScriptMethod.Params.Add("key", settingId);
-            cloudScriptMethod.Params.Add("value", value.ToString());
-            PlayFabManager.Instance.AddToStack("Settings", cloudScriptMethod);
+            if (MetaStateSettings._IsServerAuthoritative)
+            {
+                CloudScriptMethod cloudScriptMethod = new CloudScriptMethod("SetSetting", false);
+                cloudScriptMethod.Params.Add("type", "keyvaluepairs");
+                cloudScriptMethod.Params.Add("key", settingId);
+                cloudScriptMethod.Params.Add("value", value.ToString());
+                PlayFabManager.Instance.AddToStack("Settings", cloudScriptMethod);
+            }
 #endif
 
         }
@@ -156,11 +163,14 @@ namespace MetaLoop.Common.PlatformCommon.State
             }
 
 #if !BACKOFFICE
-            CloudScriptMethod cloudScriptMethod = new CloudScriptMethod("SetSetting", false);
-            cloudScriptMethod.Params.Add("type", "tutorial");
-            cloudScriptMethod.Params.Add("key", stepId);
-            cloudScriptMethod.Params.Add("value", completed.ToString());
-            PlayFabManager.Instance.AddToStack("Settings", cloudScriptMethod);
+            if (MetaStateSettings._IsServerAuthoritative)
+            {
+                CloudScriptMethod cloudScriptMethod = new CloudScriptMethod("SetSetting", false);
+                cloudScriptMethod.Params.Add("type", "tutorial");
+                cloudScriptMethod.Params.Add("key", stepId);
+                cloudScriptMethod.Params.Add("value", completed.ToString());
+                PlayFabManager.Instance.AddToStack("Settings", cloudScriptMethod);
+            }
 #endif
 
         }

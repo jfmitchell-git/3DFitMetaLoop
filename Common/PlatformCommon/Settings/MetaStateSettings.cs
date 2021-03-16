@@ -120,6 +120,8 @@ namespace MetaLoop.Common.PlatformCommon.Settings
 
         public static string _AppleAppId = "";
         public static string _GooglePlayPackageId = "";
+
+        public static bool _IsServerAuthoritative = true;
         public static string GetStoreLink()
         {
 #if UNITY_IOS
