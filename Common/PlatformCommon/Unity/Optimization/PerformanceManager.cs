@@ -61,7 +61,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
         //doing my OWN fixedDPI code lol
         private int fixedDPIHigh = 300;
         private int fixedDPIMedium = 244;
-        private int fixedDPILow = 144;
+        private int fixedDPILow = 175;
 
         void Awake()
         {
@@ -255,7 +255,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
             }
 
 
-            return;
+           // return;
 
             float screenratio = 1f;
 

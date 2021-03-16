@@ -34,7 +34,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.PageSwiper
         public int CurrentMaxPage = 1;
 
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             RectTransform = this.GetComponent<RectTransform>();
             panelLocation = RectTransform.anchoredPosition;

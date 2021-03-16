@@ -115,7 +115,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Messages
                 var safeArena = messageLayer.Layer.AddComponent<SafeArea>();
                 safeArena.ResizeOnOrientation = true;
                 safeArena.ConformX = true;
-                safeArena.ConformY = false;
+                safeArena.ConformY = true;
 
 
                 messageLayer.Layer.transform.SetParent(this.gameObject.transform);
