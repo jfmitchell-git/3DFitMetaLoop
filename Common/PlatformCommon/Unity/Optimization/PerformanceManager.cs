@@ -63,6 +63,9 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
         private int fixedDPIMedium = 244;
         private int fixedDPILow = 175;
 
+        [HideInInspector]
+        public float CurrentScreenRatio = 1f;
+
         void Awake()
         {
 
@@ -102,7 +105,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
 #endif
 
                  QualitySettings.vSyncCount = 0;  // VSync must be disabled
-                Application.targetFrameRate = 30;
+                Application.targetFrameRate = 60;
                 //QualityInfo.QualityLevel = QualitySettings.GetQualityLevel();
 
 
@@ -257,7 +260,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
 
            // return;
 
-            float screenratio = 1f;
+         
 
             //if we can't detect DPI
             if(Screen.dpi == 0f)
@@ -289,28 +292,28 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
                 {
                     case 0:
 
-                        screenratio = fixedDPILow / Screen.dpi;
+                        CurrentScreenRatio = fixedDPILow / Screen.dpi;
 
                         break;
 
                     case 1:
 
-                        screenratio = fixedDPIMedium / Screen.dpi;
+                        CurrentScreenRatio = fixedDPIMedium / Screen.dpi;
 
                         break;
 
                     case 2:
 
-                        screenratio = fixedDPIHigh / Screen.dpi;
+                        CurrentScreenRatio = fixedDPIHigh / Screen.dpi;
 
                         break;
                 }
 
                 //min max value
-                if (screenratio > 1f) screenratio = 1f;
-                if (screenratio < .5f) screenratio = .5f;
+                if (CurrentScreenRatio > 1f) CurrentScreenRatio = 1f;
+                if (CurrentScreenRatio < .5f) CurrentScreenRatio = .5f;
 
-                Screen.SetResolution(Mathf.RoundToInt(nativeResolution.x * screenratio), Mathf.RoundToInt(nativeResolution.y * screenratio), true, Screen.currentResolution.refreshRate);
+                Screen.SetResolution(Mathf.RoundToInt(nativeResolution.x * CurrentScreenRatio), Mathf.RoundToInt(nativeResolution.y * CurrentScreenRatio), true, Screen.currentResolution.refreshRate);
             }
 
            

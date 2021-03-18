@@ -95,11 +95,14 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
                 if (tmpTheme.AllColors == null)
                     tmpTheme.AllColors = new List<ThemeColorInfo>();
 
+
+                while (tmpTheme.AllColors.Count < themeManager.AllColors.Count)
+                    tmpTheme.AllColors.Add(new ThemeColorInfo());
+
                 //loop all colors
                 for (int j = 0; j < themeManager.AllColors.Count; j++)
                 {
-                    while(tmpTheme.AllColors.Count < j + 1)
-                        tmpTheme.AllColors.Add(new ThemeColorInfo());
+                   
 
                     tmpTheme.AllColors[j].Name = themeManager.AllColors[j];
                     tmpTheme.AllColors[j].Color = EditorGUILayout.ColorField(themeManager.AllColors[j], myTheme.AllColors[j].Color);
@@ -146,7 +149,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
             if (EditorGUI.EndChangeCheck())
             {
                 updateTheme = true;
-                Debug.Log("SOMETHING CHANGED IN THEME! UPDATE ALL THEME ELEMENT");
+               // Debug.Log("SOMETHING CHANGED IN THEME! UPDATE ALL THEME ELEMENT");
             }
 
 
