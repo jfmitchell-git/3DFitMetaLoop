@@ -99,7 +99,9 @@ namespace MetaLoop.Common.PlatformCommon
 
 #endif
             Debug.Log("SQLite oppening connection...");
-            Connection = new SQLiteConnection(dbPath, SQLiteOpenFlags.ReadOnly | SQLiteOpenFlags.Create);
+
+
+            Connection = new SQLiteConnection(dbPath, SQLiteOpenFlags.ReadOnly);
             Debug.Log("SQLite connection open.");
 
             try
@@ -110,6 +112,8 @@ namespace MetaLoop.Common.PlatformCommon
             catch { }
         }
 #endif
+
+
 
 
         public SQLiteConnection Connection { get; set; }
