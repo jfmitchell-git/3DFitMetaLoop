@@ -59,16 +59,18 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
             EditorGUILayout.PropertyField(serializedObject.FindProperty("AllColors"));
             EditorGUILayout.PropertyField(serializedObject.FindProperty("ThemeType"));
             //themeManager.ThemeType = EditorGUILayout("Image Path", myTheme.ImagePath);
-            
-            
 
-           // if (tempThemes == null)
-           //  tempThemes = new List<ThemeInfo>();
-           //tempThemes.Clear();
 
+
+            // if (tempThemes == null)
+            //  tempThemes = new List<ThemeInfo>();
+            //tempThemes.Clear();
+
+            bool addNewTheme = false;
             if (GUILayout.Button("Add New Theme"))
             {
-                themeManager.AllThemes.Add(new ThemeInfo());
+                addNewTheme = true;
+               
             }
             EditorGUILayout.Space();
             EditorGUILayout.Space();
@@ -152,12 +154,19 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
                // Debug.Log("SOMETHING CHANGED IN THEME! UPDATE ALL THEME ELEMENT");
             }
 
+            if(addNewTheme)
+            {
+                themeManager.AllThemes.Add(new ThemeInfo());
+            }
+
 
             serializedObject.ApplyModifiedProperties();
 
             if(updateTheme)
             {
                 themeManager.OnThemeUpdate.Invoke();
+
+                PrefabUtility.ApplyPrefabInstance(themeManager.gameObject, InteractionMode.AutomatedAction);
             }
 
 
