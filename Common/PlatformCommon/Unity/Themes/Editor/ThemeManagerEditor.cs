@@ -166,7 +166,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
             {
                 themeManager.OnThemeUpdate.Invoke();
 
-                PrefabUtility.ApplyPrefabInstance(themeManager.gameObject, InteractionMode.AutomatedAction);
+                if(!Application.isPlaying)
+                    PrefabUtility.ApplyPrefabInstance(themeManager.gameObject, InteractionMode.AutomatedAction);
             }
 
 

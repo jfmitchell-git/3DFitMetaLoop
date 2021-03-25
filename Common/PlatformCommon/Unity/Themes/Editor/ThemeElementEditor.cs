@@ -30,6 +30,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
             //llte fix in case
             themeManager = ThemeManager.Instance;
 
+            if (themeManager == null) return;
+
             // base.OnInspectorGUI();
             serializedObject.Update();
 
@@ -104,6 +106,9 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
             if (refresh)
             {
                 themeElement.UpdateColor();
+
+                //stupidity to update prefabs?
+
             }
            
 

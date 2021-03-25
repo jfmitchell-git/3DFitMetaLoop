@@ -60,11 +60,13 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
 
         //doing my OWN fixedDPI code lol
         private int fixedDPIHigh = 300;
-        private int fixedDPIMedium = 244;
-        private int fixedDPILow = 175;
+        private int fixedDPIMedium = 250;
+        private int fixedDPILow = 200;
 
         [HideInInspector]
         public float CurrentScreenRatio = 1f;
+
+        public bool ShowFps;
 
         void Awake()
         {
@@ -77,6 +79,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
 
                 Instance = this;
 
+                MobileType = GetDeviceType();
 
                 if (SystemInfo.systemMemorySize < 3500)
                 {
@@ -98,7 +101,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
                 //0 = low
 
                 //fps counter always invisible if in production
-                FpsCounter.enabled = true;
+                FpsCounter.enabled = ShowFps;
 
 #if !UNITY_EDITOR
                 FpsCounter.enabled = false;
@@ -258,7 +261,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
             }
 
 
-           // return;
+          
 
          
 
@@ -314,6 +317,9 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
                 if (CurrentScreenRatio < .5f) CurrentScreenRatio = .5f;
 
                 Screen.SetResolution(Mathf.RoundToInt(nativeResolution.x * CurrentScreenRatio), Mathf.RoundToInt(nativeResolution.y * CurrentScreenRatio), true, Screen.currentResolution.refreshRate);
+                Debug.Log("screen resized to " + Mathf.RoundToInt(nativeResolution.y * CurrentScreenRatio));
+
+
             }
 
            
@@ -384,22 +390,55 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
 
         }
 
-        private void RefreshScreenSetting()
+
+
+
+
+        private static float DeviceDiagonalSizeInInches()
+        {
+            float screenWidth = Screen.width / Screen.dpi;
+            float screenHeight = Screen.height / Screen.dpi;
+            float diagonalInches = Mathf.Sqrt(Mathf.Pow(screenWidth, 2) + Mathf.Pow(screenHeight, 2));
+
+            return diagonalInches;
+        }
+
+        public static MobileType GetDeviceType()
+        {
+#if UNITY_IOS
+    bool deviceIsIpad = UnityEngine.iOS.Device.generation.ToString().Contains("iPad");
+            if (deviceIsIpad)
+            {
+                return ENUM_Device_Type.Tablet;
+            }
+            bool deviceIsIphone = UnityEngine.iOS.Device.generation.ToString().Contains("iPhone");
+            if (deviceIsIphone)
+            {
+                return ENUM_Device_Type.Phone;
+            }
+#elif UNITY_ANDROID
+
+            float aspectRatio = Mathf.Max(Screen.width, Screen.height) / Mathf.Min(Screen.width, Screen.height);
+            bool isTablet = (DeviceDiagonalSizeInInches() > 6.5f && aspectRatio < 2f);
+
+            if (isTablet)
+            {
+                return MobileType.Tablet;
+            }
+            else
+            {
+                return MobileType.Phone;
+            }
+#endif
+        }
+    
+
+
+    private void RefreshScreenSetting()
         {
 
             currentScreenSize = new Vector2(Screen.width, Screen.height);
             ScreenHeightInInch = Screen.height / Screen.dpi;
-
-            if (ScreenHeightInInch < 3.1)
-            {
-                // it's a phone
-                MobileType = MobileType.Phone;
-            }
-            else
-            {
-                // it's tablet
-                MobileType = MobileType.Tablet;
-            }
 
 
             float aspectRatio = ((float)Screen.width) / ((float)Screen.height);

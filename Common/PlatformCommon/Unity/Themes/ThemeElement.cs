@@ -32,6 +32,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
         public float ColorBrightness1 = 0;
         public float ColorBrightness2 = 0;
 
+        private bool isDetected;
+
         void Awake()
         {
 
@@ -54,8 +56,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
         // Update is called once per frame
         void Update()
         {
-
-            DetectElement();
+            if(!isDetected)
+                DetectElement();
 
 
             //not sure about this (its werid.. why i need this?)
@@ -162,7 +164,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
                 Image = this.GetComponent<Image>();
                 Text = this.GetComponent<TextMeshProUGUI>();
                 SpriteRenderer = this.GetComponent<SpriteRenderer>();
-
+                isDetected = true;
 
             }
         }
