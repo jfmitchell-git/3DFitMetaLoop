@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using DG.Tweening;
 
 namespace MetaLoop.Common.PlatformCommon.Unity.Themes
 {
@@ -15,14 +16,24 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
 
         int _choiceIndex = 0;
 
-         
+        bool saveTheme;
 
         // private List<ThemeInfo> tempThemes;
 
         private void OnEnable()
         {
             themeManager = (ThemeManager)target;
+
+            EditorApplication.update += OnEditorUpdate;
         }
+
+        protected virtual void OnDisable()
+        {
+            #if UNITY_EDITOR
+               EditorApplication.update -= OnEditorUpdate;
+            #endif
+        }
+
 
         public override void OnInspectorGUI()
         {
@@ -65,6 +76,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
             // if (tempThemes == null)
             //  tempThemes = new List<ThemeInfo>();
             //tempThemes.Clear();
+            bool deleteTheme = false;
+            int deleteThemeIndex = 0;
 
             bool addNewTheme = false;
             if (GUILayout.Button("Add New Theme"))
@@ -110,25 +123,36 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
                     tmpTheme.AllColors[j].Color = EditorGUILayout.ColorField(themeManager.AllColors[j], myTheme.AllColors[j].Color);
                 }
 
-
-               // tmpTheme.LightColor = EditorGUILayout.ColorField("Light Color", myTheme.LightColor);
-               // tmpTheme.DarkColor = EditorGUILayout.ColorField("Dark Color", myTheme.DarkColor);
-
-                //EditorGUILayout.PropertyField(serializedObject.FindProperty("PuzzlePrefabs"));
-
                 themeManager.AllThemes[i] = tmpTheme;
 
                // tempThemes.Add(tmpTheme);
 
                 if (GUILayout.Button("Delete"))
                 {
-                    themeManager.AllThemes.RemoveAt(i);
-                    i--;
+                    deleteTheme = true;
+                    deleteThemeIndex = i;
+                   
                 }
 
 
 
-                    EditorGUILayout.Space();
+                GUILayout.BeginHorizontal();
+                if (GUILayout.Button("Copy Theme Color"))
+                {
+                    themeManager.CopyTheme = myTheme;
+                }
+                if (GUILayout.Button("Paste Theme Color"))
+                {
+                    myTheme.AllColors = themeManager.CopyTheme.AllColors;
+
+                    themeManager.AllThemes[i] = myTheme;
+
+                }
+                GUILayout.EndHorizontal();
+
+
+
+                EditorGUILayout.Space();
                 EditorGUILayout.Space();
             }
 
@@ -140,12 +164,11 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
             // _choiceIndex = EditorGUILayout.Popup(_choiceIndex, themeManager.ThemeType.ToArray());
 
             //no need for save
-            /*  EditorGUILayout.Space();
+            EditorGUILayout.Space();
             if (GUILayout.Button("Save"))
              {
-
-                 //EdiorMethods.WriteToEnum(filePath, fileName, myScrip.days);
-             }*/
+                PrefabUtility.ApplyPrefabInstance(themeManager.gameObject, InteractionMode.UserAction);
+            }
 
             bool updateTheme = false;
             if (EditorGUI.EndChangeCheck())
@@ -157,6 +180,13 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
             if(addNewTheme)
             {
                 themeManager.AllThemes.Add(new ThemeInfo());
+                PrefabUtility.ApplyPrefabInstance(themeManager.gameObject, InteractionMode.UserAction);
+            }
+
+            if(deleteTheme)
+            {
+                themeManager.AllThemes.RemoveAt(deleteThemeIndex);
+                PrefabUtility.ApplyPrefabInstance(themeManager.gameObject, InteractionMode.UserAction);
             }
 
 
@@ -166,11 +196,48 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
             {
                 themeManager.OnThemeUpdate.Invoke();
 
-                if(!Application.isPlaying)
-                    PrefabUtility.ApplyPrefabInstance(themeManager.gameObject, InteractionMode.AutomatedAction);
+
+                //if(!Application.isPlaying)
+                //  PrefabUtility.ApplyPrefabInstance(themeManager.gameObject, InteractionMode.UserAction);
+
+                editorTimer = 0;
+                saveTheme = true;
+               
+              
+
             }
 
 
+        }
+
+
+ 
+             
+
+
+
+
+        int editorTimer;
+
+        protected virtual void OnEditorUpdate()
+        {
+            editorTimer++;
+
+            if (editorTimer > 60 && saveTheme)
+            {
+              
+                Save();
+            }
+
+            // In here you can check the current realtime, see if a certain
+            // amount of time has elapsed, and perform some task.
+        }
+
+        public void Save()
+        {
+            Debug.Log("SAVE THEME");
+            PrefabUtility.ApplyPrefabInstance(themeManager.gameObject, InteractionMode.UserAction);
+            saveTheme = false;
         }
     }
 }

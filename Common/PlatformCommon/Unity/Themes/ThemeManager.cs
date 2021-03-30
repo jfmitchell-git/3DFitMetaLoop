@@ -39,6 +39,9 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
 
         public static ThemeManager Instance;
 
+        [HideInInspector]
+        public ThemeInfo CopyTheme;
+
         public UnityEvent OnThemeUpdate;
 
         public void Awake()
@@ -46,8 +49,13 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
            
             Instance = this;
         }
+        
+        public ThemeInfo GetTheme(string themeName)
+        {
+            return AllThemes.Where(p => p.Name == themeName).Single();
+        }
 
-        public void SetTheme(string themeName)
+        public ThemeInfo SetTheme(string themeName)
         {
             Debug.Log("SET THEME = " + themeName);
 
@@ -55,7 +63,11 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
             CurrentThemeIndex = AllThemes.IndexOf(CurrentTheme, 0);
 
             Debug.Log("current Theme = " + CurrentTheme.Name);
+
+            
             OnThemeUpdate.Invoke();
+
+            return CurrentTheme;
         }
 
         public void Update()

@@ -13,10 +13,19 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
 
     public enum ScreenRatio
     {
-        Ratio43,
-        Ratio1610,
-        Ratio169
+        Ratio_9_20,
+        Ratio_9_18,
+        Ratio_9_16,
+        Ratio_10_16,
+        Ratio_3_4,
+
+        Ratio_4_3,
+        Ratio_16_10,
+        Ratio_16_9,
+        Ratio_18_9,
+        Ratio_20_9
     }
+
 
     public enum MobileType
     {
@@ -27,6 +36,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
     }
 
 
+    [ExecuteInEditMode]
     public class PerformanceManager : MonoBehaviour
     {
 
@@ -36,6 +46,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
         public float ScreenHeightInInch = -1f;
         [HideInInspector]
         public ScreenRatio ScreenRatio;
+        [HideInInspector]
+        public float ScreenRatioPercent;
         [HideInInspector]
         public MobileType MobileType;
         [HideInInspector]
@@ -64,7 +76,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
         private int fixedDPILow = 200;
 
         [HideInInspector]
-        public float CurrentScreenRatio = 1f;
+        public float CurrentScreenRatioPercent = 1f;
 
         public bool ShowFps;
 
@@ -80,6 +92,11 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
                 Instance = this;
 
                 MobileType = GetDeviceType();
+
+
+                if (!Application.isPlaying) return;
+
+               
 
                 if (SystemInfo.systemMemorySize < 3500)
                 {
@@ -134,6 +151,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
 
 
         }
+
+      
 
         public void EvaluateQuality()
         {
@@ -295,29 +314,29 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
                 {
                     case 0:
 
-                        CurrentScreenRatio = fixedDPILow / Screen.dpi;
+                        CurrentScreenRatioPercent = fixedDPILow / Screen.dpi;
 
                         break;
 
                     case 1:
 
-                        CurrentScreenRatio = fixedDPIMedium / Screen.dpi;
+                        CurrentScreenRatioPercent = fixedDPIMedium / Screen.dpi;
 
                         break;
 
                     case 2:
 
-                        CurrentScreenRatio = fixedDPIHigh / Screen.dpi;
+                        CurrentScreenRatioPercent = fixedDPIHigh / Screen.dpi;
 
                         break;
                 }
 
                 //min max value
-                if (CurrentScreenRatio > 1f) CurrentScreenRatio = 1f;
-                if (CurrentScreenRatio < .5f) CurrentScreenRatio = .5f;
+                if (CurrentScreenRatioPercent > 1f) CurrentScreenRatioPercent = 1f;
+                if (CurrentScreenRatioPercent < .5f) CurrentScreenRatioPercent = .5f;
 
-                Screen.SetResolution(Mathf.RoundToInt(nativeResolution.x * CurrentScreenRatio), Mathf.RoundToInt(nativeResolution.y * CurrentScreenRatio), true, Screen.currentResolution.refreshRate);
-                Debug.Log("screen resized to " + Mathf.RoundToInt(nativeResolution.y * CurrentScreenRatio));
+                Screen.SetResolution(Mathf.RoundToInt(nativeResolution.x * CurrentScreenRatioPercent), Mathf.RoundToInt(nativeResolution.y * CurrentScreenRatioPercent), true, Screen.currentResolution.refreshRate);
+                Debug.Log("screen resized to " + Mathf.RoundToInt(nativeResolution.y * CurrentScreenRatioPercent));
 
 
             }
@@ -385,7 +404,10 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
             }
 
           
-
+            if(!Application.isPlaying)
+            {
+                Instance = this;
+            }
 
 
         }
@@ -443,23 +465,36 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
 
             float aspectRatio = ((float)Screen.width) / ((float)Screen.height);
 
-            if (aspectRatio > (16f / 10f + .1f))
+
+            ScreenRatio closestRatio = ScreenRatio.Ratio_9_20;
+            float closestDiff = 100f;
+
+
+            string[] allScreenRatio = System.Enum.GetNames(typeof(ScreenRatio));
+            for (int i = 0; i < allScreenRatio.Length; i++)
             {
-                ScreenRatio = ScreenRatio.Ratio169;
+                string[] getRatio = allScreenRatio[i].Split('_');
+
+                float ratioX = float.Parse(getRatio[1]);
+                float ratioY = float.Parse(getRatio[2]);
+
+                float currentDiff = aspectRatio - (ratioX/ratioY);
+
+
+                if (currentDiff < -0.01f) continue;
+
+                if(currentDiff < closestDiff)
+                {
+                    closestDiff = currentDiff;
+                    closestRatio = (ScreenRatio)Enum.Parse(typeof(ScreenRatio), allScreenRatio[i]);
+                    ScreenRatioPercent = (ratioX / ratioY);
+                }
             }
 
 
-            if (aspectRatio <= 1.61f)
-            {
-                ScreenRatio = ScreenRatio.Ratio1610;
-            }
+            ScreenRatio = closestRatio;
 
-
-            if (aspectRatio < 1.41f)
-            {
-                ScreenRatio = ScreenRatio.Ratio43;
-            }
-
+            Debug.Log("ScreenRatio = " + ScreenRatio);
 
             ScreenSizeChanged.Invoke();
 
