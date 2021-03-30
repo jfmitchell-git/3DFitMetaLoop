@@ -123,7 +123,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
                     tmpTheme.AllColors[j].Color = EditorGUILayout.ColorField(themeManager.AllColors[j], myTheme.AllColors[j].Color);
                 }
 
-                themeManager.AllThemes[i] = tmpTheme;
+               
 
                // tempThemes.Add(tmpTheme);
 
@@ -143,14 +143,31 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
                 }
                 if (GUILayout.Button("Paste Theme Color"))
                 {
-                    myTheme.AllColors = themeManager.CopyTheme.AllColors;
 
-                    themeManager.AllThemes[i] = myTheme;
 
+                   // myTheme.AllColors = themeManager.CopyTheme.AllColors;
+
+
+                    //themeManager.AllThemes[i] = new ThemeInfo();
+                    //themeManager.AllThemes[i].AllColors = new List<ThemeColorInfo>();
+
+                    tmpTheme.AllColors = new List<ThemeColorInfo>();
+
+                    //copy color
+                    foreach (var myColor in themeManager.CopyTheme.AllColors)
+                    {
+                        ThemeColorInfo addNewColor = new ThemeColorInfo();
+                        addNewColor.Color = myColor.Color;
+                        addNewColor.Name = myColor.Name;
+
+                        tmpTheme.AllColors.Add(addNewColor);
+                        
+
+                    }
                 }
                 GUILayout.EndHorizontal();
 
-
+                themeManager.AllThemes[i] = tmpTheme;
 
                 EditorGUILayout.Space();
                 EditorGUILayout.Space();
