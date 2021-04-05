@@ -35,7 +35,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Billing
 
             BuildPurchasables();
 
-#if !BACKOFFICE
+#if !BACKOFFICE && !UNITY_STANDALONE
             List<PurchaserSku> allIapSkus = new List<PurchaserSku>();
             allPurchasableItems.Select(y => y.GetStoreId()).Distinct().ToList().ForEach(y => allIapSkus.Add(new PurchaserSku() { StoreSkuId = y, ProductType = UnityEngine.Purchasing.ProductType.Consumable }));
             Purchaser.Instance.InitializePurchasing(allIapSkus, OnPurchaserReady);
@@ -58,7 +58,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Billing
             }
         }
 
-#if !BACKOFFICE
+#if !BACKOFFICE && !UNITY_STANDALONE
 
 
         public static void Kill()
@@ -84,7 +84,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Billing
 
 
 
-#if !BACKOFFICE
+#if !BACKOFFICE && !UNITY_STANDALONE
         private static void OnPurchaserReady(ProductCollection allProducts)
         {
             if (PurchaseReady) return;

@@ -1,4 +1,4 @@
-﻿#if !BACKOFFICE
+﻿#if !BACKOFFICE && !UNITY_STANDALONE
 using System;
 using System.Collections.Generic;
 using System.Linq;
