@@ -29,9 +29,9 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
 
         protected virtual void OnDisable()
         {
-            #if UNITY_EDITOR
+           
                EditorApplication.update -= OnEditorUpdate;
-            #endif
+           
         }
 
 
