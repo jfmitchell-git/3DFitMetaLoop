@@ -5,6 +5,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using MetaLoop.Common.PlatformCommon.Unity.Utils;
+using DG.Tweening;
 
 namespace MetaLoop.Common.PlatformCommon.Unity.Themes
 {
@@ -70,18 +71,23 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
 
         public void ThemeUpdate()
         {
-            UpdateColor(true);
+            if(ThemeManager.Instance.ThemeTransitionDelay != 0f)
+            {
+                DOVirtual.DelayedCall(ThemeManager.Instance.ThemeTransitionDelay, () => UpdateColor(false));
+            } else
+            {
+                UpdateColor(false);
+            }
+           
           
         }
 
-        public void UpdateColor(bool force = false)
+        public void UpdateColor(bool immediate = false)
         {
 
           //  Debug.Log("UPDATE COLOR THEME ELEMENT " + this.name + " " + CurrentThemeColorInfoIndex1 + " " + ThemeManager.Instance.CurrentTheme.Name);
 
             if (CurrentThemeColorInfoIndex1 == -1) return;
-
-           
 
             ThemeColorInfo CurrentThemeColorInfo = ThemeManager.Instance.CurrentTheme.AllColors[CurrentThemeColorInfoIndex1];
             var useColor1 = ColorUtils.ChangeColorBrightness(CurrentThemeColorInfo.Color, ColorBrightness1);
@@ -92,8 +98,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
             ThemeColorInfo CurrentThemeColorInfo2 = ThemeManager.Instance.CurrentTheme.AllColors[CurrentThemeColorInfoIndex2];
             var useColor2 = ColorUtils.ChangeColorBrightness(CurrentThemeColorInfo2.Color, ColorBrightness2);
 
-            if (!Application.isPlaying || force)
-            {
+          //  if (!Application.isPlaying || force)
+           // {
 
                 if (CurrentThemeColorInfo == null) return;
 
@@ -101,9 +107,17 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
                 if(Gradient != null)
                 {
 
+                    if (Application.isPlaying && !immediate)
+                    {
+                        DOTween.To(() => Gradient.Vertex1, x => Gradient.Vertex1 = x, useColor1, ThemeManager.Instance.ThemeTransitionSpeed);
+                        DOTween.To(() => Gradient.Vertex2, x => Gradient.Vertex2 = x, useColor2, ThemeManager.Instance.ThemeTransitionSpeed);
+                    } else
+                    {
+                        Gradient.Vertex1 = useColor1;
+                        Gradient.Vertex2 = useColor2;
+                    }
 
-                    Gradient.Vertex1 = useColor1;
-                    Gradient.Vertex2 = useColor2;
+                   
 
                     if (Image.enabled)
                     {
@@ -115,7 +129,14 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
                 {
                     if (Image != null)
                     {
-                        Image.color = useColor1;
+                        if (Application.isPlaying && !immediate)
+                        {
+                            Image.DOColor(useColor1, ThemeManager.Instance.ThemeTransitionSpeed);
+                        } else
+                        {
+                            Image.color = useColor1;
+                        }
+
 
                         if (Image.enabled)
                         {
@@ -127,7 +148,14 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
 
                 if (Text != null)
                 {
-                    Text.color = useColor1;
+                    if (Application.isPlaying && !immediate)
+                    {
+                        Text.DOColor(useColor1, ThemeManager.Instance.ThemeTransitionSpeed);
+                    }
+                    else
+                    {
+                        Text.color = useColor1;
+                    }
 
                     if (Text.enabled)
                     {
@@ -139,7 +167,14 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
 
                 if(SpriteRenderer != null)
                 {
-                    SpriteRenderer.color = useColor1;
+                    if (Application.isPlaying && !immediate)
+                    {
+                        SpriteRenderer.DOColor(useColor1, ThemeManager.Instance.ThemeTransitionSpeed);
+                    } else
+                    {
+                        SpriteRenderer.color = useColor1;
+                    }
+                       
 
                     if (SpriteRenderer.enabled)
                     {
@@ -150,7 +185,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
 
 
 
-            }
+          //  }
 
 
         }

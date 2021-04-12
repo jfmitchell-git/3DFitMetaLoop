@@ -8,32 +8,20 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
 {
 
 
-    [System.Serializable]
-    public class CanvasResizerInfo
-    {
-        public ScreenRatio ScreenRatio;
-        public float Resize;
-        public bool EverythingBelow;
-        public bool EverythingOver;
-    }
 
     [ExecuteInEditMode]
     public class CanvasResizer : MonoBehaviour
     {
 
         public Vector2 ReferenceSize;
-
         [HideInInspector]
         public CanvasScaler CanvasScaler;
         [HideInInspector]
         public Canvas Canvas;
-
         public List<CanvasResizerInfo> CanvasResizerInfo;
 
         void Awake()
         {
-
-
             UpdateListener();
         }
 
@@ -85,12 +73,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
                     }
 
                 }
-
-
-
             }
-
-
 
            if(useInfo != null)
            {
@@ -98,10 +81,6 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
 
                 Canvas.ForceUpdateCanvases();
             }
-
-
-
-
         }
 
         void UpdateListener()

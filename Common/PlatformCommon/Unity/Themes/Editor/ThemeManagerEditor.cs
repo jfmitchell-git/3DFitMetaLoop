@@ -43,6 +43,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
 
             EditorGUI.BeginChangeCheck();
 
+            EditorGUILayout.PropertyField(serializedObject.FindProperty("Background"));
+
             List<string> allThemesString = new List<string>();
             themeManager.AllThemes.ForEach(p => allThemesString.Add(p.Name));
             int currentThemeIndex = themeManager.AllThemes.IndexOf(themeManager.CurrentTheme, 0);
@@ -212,10 +214,6 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
             if(updateTheme)
             {
                 themeManager.OnThemeUpdate.Invoke();
-
-
-                //if(!Application.isPlaying)
-                //  PrefabUtility.ApplyPrefabInstance(themeManager.gameObject, InteractionMode.UserAction);
 
                 editorTimer = 0;
                 saveTheme = true;
