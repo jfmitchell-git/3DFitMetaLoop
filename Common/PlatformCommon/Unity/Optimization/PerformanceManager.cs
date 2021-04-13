@@ -80,6 +80,11 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
 
         public bool ShowFps;
 
+        void Start()
+        {
+            MobileType = GetDeviceType();
+        }
+
         void Awake()
         {
 
@@ -91,7 +96,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
 
                 Instance = this;
 
-                MobileType = GetDeviceType();
+                
 
 
                 if (!Application.isPlaying) return;
@@ -439,6 +444,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
                 return ENUM_Device_Type.Phone;
             }
 #elif UNITY_ANDROID
+
+            if (Screen.width == 0f || Screen.height == 0f) return MobileType.Phone;
 
             float aspectRatio = Mathf.Max(Screen.width, Screen.height) / Mathf.Min(Screen.width, Screen.height);
             bool isTablet = (DeviceDiagonalSizeInInches() > 6.5f && aspectRatio < 2f);

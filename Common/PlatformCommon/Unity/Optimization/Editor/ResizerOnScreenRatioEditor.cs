@@ -16,20 +16,17 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
     {
 
         ResizerOnScreenRatio ResizerOnScreenRatio;
-        PerformanceManager themeManager;
+        
 
         private void OnEnable()
         {
             ResizerOnScreenRatio = (ResizerOnScreenRatio)target;
-            themeManager = PerformanceManager.Instance;
+            
         }
         public override void OnInspectorGUI()
         {
 
-            //little fix in case
-            themeManager = PerformanceManager.Instance;
-
-            if (themeManager == null) return;
+           
 
             // base.OnInspectorGUI();
             serializedObject.Update();
