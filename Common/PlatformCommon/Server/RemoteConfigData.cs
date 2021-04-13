@@ -21,21 +21,21 @@ namespace MetaLoop.Common.PlatformCommon.Server
                 return instance;
             }
         }
-        public string this[string settingId]
+        public string this[string settingId, string defaultValue = ""]
         {
             get
             {
                 if (Values.ContainsKey(settingId)) return Values[settingId];
-                return String.Empty;
+                return defaultValue;
             }
         }
 
-        public int GetValueAsInt32(string settingId)
+        public int GetValueAsInt32(string settingId, int defaultValue = 0)
         {
 
             if (string.IsNullOrEmpty(this[settingId]))
             {
-                return 0;
+                return defaultValue;
             }
             else
             {
