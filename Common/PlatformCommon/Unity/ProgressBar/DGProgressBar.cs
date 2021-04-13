@@ -82,6 +82,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.ProgressBar
         public float RoundNumberBy = 1f;
         public float TextMaxValue = 100f;
         public bool ReverseNumber = false;
+
+        [Header("Write OnOff or {0}%")]
         public string TextString = "{0}%";
 
         [HideInInspector]
@@ -96,6 +98,16 @@ namespace MetaLoop.Common.PlatformCommon.Unity.ProgressBar
 
         private Color newColor;
         private Gradient useGradient;
+
+        public Slider AffiliatedSlider;
+        
+
+        public void OnValueChangeFromSlider()
+        {
+            SetValue(AffiliatedSlider.value/ AffiliatedSlider.maxValue* 100f,0f);
+
+            //Debug.Log(AffiliatedSlider.value);
+        }
 
         public Color CurrentColor(string elementName)
         {
@@ -119,6 +131,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.ProgressBar
                 ProgressCanvasGroup = this.GetComponent<CanvasGroup>();
             }
 
+            if (AffiliatedSlider != null)
+                CurrentValue = AffiliatedSlider.value;
 
             CreateProgressBar();
 
@@ -197,10 +211,24 @@ namespace MetaLoop.Common.PlatformCommon.Unity.ProgressBar
 
                 if (speed == 0f)
                 {
-                    PercentText.text = TextString.Replace("{0}", numToUse.ToString("F" + (RoundNumberBy.ToString().Length-1).ToString())).ToString();
+                    if(TextString == "OnOff")
+                    {
+                        PercentText.text = numToUse == 0f ? ResourceManager.GetValue("Off") : ResourceManager.GetValue("On");
+                    } else
+                    {
+                        PercentText.text = TextString.Replace("{0}", numToUse.ToString("F" + (RoundNumberBy.ToString().Length - 1).ToString())).ToString();
+                    }
+                   
                 } else
                 {
-                    Utils.Utils.AnimateNumberInText(PercentText, startValue, numToUse, speed, Convert.ToInt32(RoundNumberBy.ToString().Length - 1), TextString);
+                    if (TextString == "OnOff")
+                    {
+                        PercentText.text = numToUse == 0f ? ResourceManager.GetValue("Off") : ResourceManager.GetValue("On");
+                    }
+                    else
+                    {
+                        Utils.Utils.AnimateNumberInText(PercentText, startValue, numToUse, speed, Convert.ToInt32(RoundNumberBy.ToString().Length - 1), TextString);
+                    }
                 }
 
             }
@@ -209,6 +237,9 @@ namespace MetaLoop.Common.PlatformCommon.Unity.ProgressBar
 
             float maxProgressBarSize = numberOfStep * sizeOfEachStep.x;
             float currentSize = ((useValue / 100* MaxValue) / 100) * maxProgressBarSize;
+
+            //current size is BAD!
+
 
             Vector2 startPos = new Vector2(PaddingWidth, -PaddingHeight);
 
