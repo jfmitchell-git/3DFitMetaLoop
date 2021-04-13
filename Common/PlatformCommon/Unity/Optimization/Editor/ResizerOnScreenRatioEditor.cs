@@ -34,16 +34,6 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
             // base.OnInspectorGUI();
             serializedObject.Update();
 
-            /*
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("ReferenceSize"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("ReferenceSize"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("ReferenceSize"));
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("ReferenceSize"));
-
-            CanvasScaler;
-            Canvas;
-            CanvasResizerInfo;*/
-
             if (ResizerOnScreenRatio.Canvas != null) {
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("ReferenceSize"));
                 EditorGUILayout.PropertyField(serializedObject.FindProperty("CanvasResizerInfo"));

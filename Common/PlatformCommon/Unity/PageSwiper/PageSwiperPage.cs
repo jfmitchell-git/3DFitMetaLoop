@@ -9,7 +9,6 @@ namespace MetaLoop.Common.PlatformCommon.Unity.PageSwiper
        
         public RectTransform RectTransform;
 
-
         private void Awake()
         {
           

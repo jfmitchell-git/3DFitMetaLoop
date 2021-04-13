@@ -142,7 +142,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
         private void DetectElement()
         {
 
-            if ((CanvasScaler == null && Canvas == null) || !isDetected)
+            if ((CanvasScaler == null && Canvas == null && Transform == null) || !isDetected)
             {
                 CanvasScaler = this.GetComponent<CanvasScaler>();
                 Canvas = this.GetComponent<Canvas>();
@@ -171,8 +171,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
         // Update is called once per frame
         void Update()
         {
-            if (!isDetected)
-                DetectElement();
+          
+            DetectElement();
 
             if (!Application.isPlaying)
                 UpdateListener();
