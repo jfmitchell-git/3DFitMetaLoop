@@ -189,13 +189,13 @@ namespace MetaLoop.Common.PlatformCommon
 
 
 
-        public List<object> GetTable(Type type)
+        public List<System.Object> GetTable(Type type)
         {
             KeyValuePair<Type, object> result = CachedObjects.Where(y => y.Key == type).SingleOrDefault();
             if (!result.Equals(new KeyValuePair<Type, object>()))
             {
 
-                return ((IEnumerable<object>)result.Value).ToList();
+                return ((IEnumerable<System.Object>)result.Value).ToList();
             }
             else
             {
