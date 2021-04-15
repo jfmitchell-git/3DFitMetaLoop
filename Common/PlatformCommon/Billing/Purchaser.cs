@@ -63,6 +63,9 @@ namespace MetaLoop.Common.PlatformCommon.Data.Billing
                 return;
             }
 
+            Debug.Log("Purchaser.InitializePurchasing...");
+
+
             this.onPurchaserReady = onPurchaserReady;
             // Create a builder, first passing in a suite of Unity provided stores.
             var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
@@ -173,7 +176,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Billing
         public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
         {
             // Purchasing has succeeded initializing. Collect our Purchasing references.
-            Debug.Log("OnInitialized: PASS");
+            Debug.Log("Purchaser.OnInitialized: PASS");
 
             // Overall Purchasing system, configured with products for this application.
             m_StoreController = controller;
@@ -183,6 +186,9 @@ namespace MetaLoop.Common.PlatformCommon.Data.Billing
             m_StoreExtensionProvider = extensions;
 
             this.onPurchaserReady.Invoke(controller.products);
+
+
+
         }
 
 
@@ -209,6 +215,8 @@ namespace MetaLoop.Common.PlatformCommon.Data.Billing
         public void ConfirmPurchase(PurchaseEventArgs args)
         {
             m_StoreController.ConfirmPendingPurchase(args.purchasedProduct);
+
+        
         }
 
         public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
