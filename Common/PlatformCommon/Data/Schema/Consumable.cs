@@ -5,6 +5,7 @@ using SQLite4Unity3d;
 using System;
 using System.Linq;
 
+
 namespace MetaLoop.Common.PlatformCommon.Data.Schema
 {
     [Serializable]
@@ -20,8 +21,7 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         }
         public static Consumable GetById(int id)
         {
-
-            var okFuck = DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(Consumable)]);
+            //var okFuck = DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(Consumable)]);
             return DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(Consumable)]).Cast<Consumable>().Where(y => y.Id == id).SingleOrDefault();
         }
         public static T GetById<T>(int id) where T : new()
