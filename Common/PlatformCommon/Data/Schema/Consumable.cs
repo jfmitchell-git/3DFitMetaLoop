@@ -19,9 +19,10 @@ namespace MetaLoop.Common.PlatformCommon.Data.Schema
         {
             return DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(Consumable)]).Cast<Consumable>().Where(y => y.Name == name).SingleOrDefault();
         }
+
+        //THIS DOES NOT WORK WITH PROPER INITIAL CACHING!!!
         public static Consumable GetById(int id)
         {
-            //var okFuck = DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(Consumable)]);
             return DataLayer.Instance.GetTable(MetaStateSettings.PolymorhTypes[typeof(Consumable)]).Cast<Consumable>().Where(y => y.Id == id).SingleOrDefault();
         }
         public static T GetById<T>(int id) where T : new()

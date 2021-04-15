@@ -90,6 +90,9 @@ namespace MetaLoop.Common.PlatformCommon.Data.Billing
             if (PurchaseReady) return;
             AllProductsFromStore = allProducts;
 
+            UnityEngine.Debug.Log("OnPurchaserReady");
+            UnityEngine.Debug.Log(allProducts);
+
             foreach (var item in AllProductsFromStore.all)
             {
                 var allPurchasableItemWithSku = allPurchasableItems.Where(y => y.GetStoreId().ToLower() == item.definition.id.ToLower()).ToList();
