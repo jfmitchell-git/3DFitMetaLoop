@@ -82,12 +82,14 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
 
         void Start()
         {
+           
             MobileType = GetDeviceType();
         }
 
         void Awake()
         {
 
+            MobileType = GetDeviceType();
 
 
 
@@ -449,6 +451,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
 
             float aspectRatio = Mathf.Max(Screen.width, Screen.height) / Mathf.Min(Screen.width, Screen.height);
             bool isTablet = (DeviceDiagonalSizeInInches() > 6.5f && aspectRatio < 2f);
+
+            Debug.Log("AspectRatio = " + aspectRatio + " Diagonal =" + DeviceDiagonalSizeInInches() + " isTablet=" + isTablet);
 
             if (isTablet)
             {
