@@ -43,6 +43,11 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Buttons
 
         private void ButtonClicked()
         {
+
+
+            Button.enabled = false;
+
+
             if (SoundClickName != null)
                 SoundManager.Instance.PlaySoundByName(SoundClickName);
 
@@ -50,11 +55,13 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Buttons
             {
                 Animator.Play("Pressed");
 
-                DOVirtual.DelayedCall(AnimationOnClickDelay, ()=> OnClick.Invoke());
+               
+                DOVirtual.DelayedCall(AnimationOnClickDelay, ()=> { OnClick.Invoke(); Button.enabled = true; });
 
             } else
             {
                 OnClick.Invoke();
+                DOVirtual.DelayedCall(AnimationOnClickDelay, () => { Button.enabled = true; });
             }
 
         }
