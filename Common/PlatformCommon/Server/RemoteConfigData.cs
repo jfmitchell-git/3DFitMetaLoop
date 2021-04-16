@@ -16,7 +16,8 @@ namespace MetaLoop.Common.PlatformCommon.Server
             {
                 if (instance == null)
                 {
-                    throw new Exception("Cannot access RemoteConfigData before calling the Load method.");
+                    instance = new RemoteConfigData();
+                    //throw new Exception("Cannot access RemoteConfigData before calling the Load method.");
                 }
                 return instance;
             }
