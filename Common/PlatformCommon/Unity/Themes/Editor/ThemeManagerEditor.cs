@@ -251,7 +251,10 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
         public void Save()
         {
             Debug.Log("SAVE THEME");
-            PrefabUtility.ApplyPrefabInstance(themeManager.gameObject, InteractionMode.UserAction);
+            if (!Application.isPlaying)
+            {
+                PrefabUtility.ApplyPrefabInstance(themeManager.gameObject, InteractionMode.UserAction);
+            }
             saveTheme = false;
         }
     }
