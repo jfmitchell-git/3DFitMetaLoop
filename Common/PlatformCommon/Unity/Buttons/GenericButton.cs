@@ -48,7 +48,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Buttons
             Button.enabled = false;
 
 
-            if (SoundClickName != null)
+            if (SoundClickName != null && SoundManager.Instance != null)
                 SoundManager.Instance.PlaySoundByName(SoundClickName);
 
             if (Animator != null)
