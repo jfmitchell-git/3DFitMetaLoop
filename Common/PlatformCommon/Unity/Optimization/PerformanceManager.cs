@@ -463,6 +463,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
                 return MobileType.Phone;
             }
 #endif
+
+            return MobileType.Phone;
         }
     
 
