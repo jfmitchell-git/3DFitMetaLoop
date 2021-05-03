@@ -57,13 +57,16 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
         // Update is called once per frame
         void Update()
         {
-            if(!isDetected)
-                DetectElement();
+
+          
 
 
             //not sure about this (its werid.. why i need this?)
             if (!Application.isPlaying)
             {
+                if (!isDetected)
+                    DetectElement();
+
                 UpdateThemeListener();
             }
 
