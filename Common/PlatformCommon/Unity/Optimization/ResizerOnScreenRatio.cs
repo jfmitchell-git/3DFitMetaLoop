@@ -68,14 +68,14 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
             CanvasResizerInfo useInfo = CanvasResizerInfo.Where(p => p.ScreenRatio == PerformanceManager.Instance.ScreenRatio).SingleOrDefault();
             if (useInfo != null)
             {
-                Debug.Log("FOUND INFO");
+                //Debug.Log("FOUND INFO");
             }
             else if (CanvasResizerInfo.Count > 0)
             {
 
 
 
-                Debug.Log("DIDNT FOUND INFO");
+                //Debug.Log("DIDNT FOUND INFO");
 
                 string[] allScreenRatio = System.Enum.GetNames(typeof(ScreenRatio));
 
