@@ -47,12 +47,15 @@ namespace MetaLoop.Common.PlatformCommon.Unity.PageSwiper
 
         public void SetCurrentPage(int currentPage,float speed = 0.25f)
         {
+            
+
             CurrentPage = currentPage;
             PageSwiperBar.SetCurrentPage(CurrentPage);
 
             Vector3 newLocation = panelLocation;
 
             newLocation.x = -((CurrentPage - 1) * pageWidth);
+
 
             if(speed == 0f)
             {
