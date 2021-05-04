@@ -73,7 +73,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
         //doing my OWN fixedDPI code lol
         private int fixedDPIHigh = 300;
         private int fixedDPIMedium = 250;
-        private int fixedDPILow = 200;
+        private int fixedDPILow = 144;
 
         [HideInInspector]
         public float CurrentScreenRatioPercent = 1f;
@@ -343,7 +343,7 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
                 if (CurrentScreenRatioPercent < .5f) CurrentScreenRatioPercent = .5f;
 
                 Screen.SetResolution(Mathf.RoundToInt(nativeResolution.x * CurrentScreenRatioPercent), Mathf.RoundToInt(nativeResolution.y * CurrentScreenRatioPercent), true, Screen.currentResolution.refreshRate);
-                Debug.Log("screen resized to " + Mathf.RoundToInt(nativeResolution.y * CurrentScreenRatioPercent));
+                Debug.Log("screen resized to " + Mathf.RoundToInt(nativeResolution.y * CurrentScreenRatioPercent) + " " + CurrentScreenRatioPercent);
 
 
             }
@@ -463,6 +463,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Optimization
                 return MobileType.Phone;
             }
 #endif
+
+            return MobileType.Phone;
         }
     
 
