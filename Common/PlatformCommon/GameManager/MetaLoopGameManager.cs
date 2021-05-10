@@ -301,7 +301,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
 
         protected virtual void OnGameDataAndBackOfficeReady()
         {
-            Debug.Log("MetaLoopGameManager Instancing DataLayer...");
+            Debug.Log("MetaLoopGameManager OnGameDataAndBackOfficeReady Instancing DataLayer...");
 
 #if UNITY_EDITOR
             DataLayer.Instance.Init(Application.streamingAssetsPath + @"/" + MetaStateSettings._DatabaseName);

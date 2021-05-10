@@ -24,6 +24,8 @@ namespace MetaLoop.Common.PlatformCommon.Utils
 
             //we always overwrite now (stupid way of doing it)
 
+            Debug.Log("GetStreamingAssetsPersistantPath called");
+
 #if UNITY_EDITOR || UNITY_STANDALONE
 
             outputPath = Application.streamingAssetsPath + "/" + filename;
@@ -34,8 +36,11 @@ namespace MetaLoop.Common.PlatformCommon.Utils
             outputPath = filepath;
 
 #else
+        Debug.Log("Database not in Persistent path");
         // check if file exists in Application.persistentDataPath
         var filepath = string.Format("{0}/{1}", Application.persistentDataPath, filename);
+
+         Debug.Log("filepath = " + filepath);
 
         //if (!File.Exists(filepath))
           if(filepath != null)

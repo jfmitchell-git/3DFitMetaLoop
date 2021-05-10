@@ -291,7 +291,7 @@ namespace MetaLoop.Common.PlatformCommon.GameManager
         {
 
 
-            Debug.Log("MetaLoopGameManager Instancing DataLayer...");
+            Debug.Log("MetaLoopGameManager OnGameDataAndBackOfficeReady Lite Instancing DataLayer...");
 
             DataLayer.Instance.InitFromStreamingAssets(MetaStateSettings._DatabaseName);
 

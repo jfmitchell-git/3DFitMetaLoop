@@ -49,13 +49,19 @@ namespace MetaLoop.Common.PlatformCommon
             // check if file exists in Application.persistentDataPath
             var filepath = string.Format("{0}/{1}", Application.persistentDataPath, DatabaseName);
              dbPath = filepath;
-            if (!File.Exists(filepath))
+            if (filepath != null)
             {
                 Debug.Log("Database not in Persistent path");
                 // if it doesn't ->
                 // open StreamingAssets directory and load the db ->
 
 #if UNITY_ANDROID
+
+  if (File.Exists(filepath))
+                {
+                    File.Delete(filepath);
+                }
+
                 Debug.Log("SQLite begin copy for assets.");
             var loadDb = new WWW("jar:file://" + Application.dataPath + "!/assets/" + DatabaseName);  // this is the path to your StreamingAssets in android
             while (!loadDb.isDone) { }  // CAREFUL here, for safety reasons you shouldn't let this while loop unattended, place a timer and error check
@@ -134,6 +140,7 @@ namespace MetaLoop.Common.PlatformCommon
             }
             else
             {
+                database = MetaLoop.Common.PlatformCommon.Utils.Path.GetStreamingAssetsPersistantPath(database);
                 Connection = new SQLiteConnection(database, SQLiteOpenFlags.ReadOnly, true);
             }
 
