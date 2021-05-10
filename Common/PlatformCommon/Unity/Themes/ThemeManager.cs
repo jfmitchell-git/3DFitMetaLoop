@@ -83,6 +83,10 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Themes
 
         public ThemeInfo SetTheme(string themeName,float speed = 0.5f)
         {
+
+#if UNITY_STANDALONE
+            themeName = "Green";
+#endif
             Debug.Log("SET THEME = " + themeName);
 
             ThemeTransitionSpeed = speed;

@@ -1,5 +1,8 @@
 ﻿#if !BACKOFFICE
+#if !UNITY_STANDALONE
 using UnityEngine.Purchasing;
+#endif
+
 using MetaLoop.Common.PlatformCommon.Data.Billing;
 #else
 using MetaLoop.Common.PlatformCommon.Billing;
