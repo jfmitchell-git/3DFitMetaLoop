@@ -45,6 +45,11 @@ namespace MetaLoop.Common.PlatformCommon.Utils
             // open StreamingAssets directory and load the db ->
 
 #if UNITY_ANDROID
+
+                if (File.Exists(filepath))
+                {
+                    File.Delete(filepath);
+                }
            
                 var loadFile = new WWW("jar:file://" + Application.dataPath + "!/assets/" + filename);  // this is the path to your StreamingAssets in android
                 while (!loadFile.isDone) { }  // CAREFUL here, for safety reasons you shouldn't let this while loop unattended, place a timer and error check
