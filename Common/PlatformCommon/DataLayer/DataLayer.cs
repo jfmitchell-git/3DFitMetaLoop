@@ -140,7 +140,7 @@ namespace MetaLoop.Common.PlatformCommon
             }
             else
             {
-                database = MetaLoop.Common.PlatformCommon.Utils.Path.GetStreamingAssetsPersistantPath(database);
+              
                 Connection = new SQLiteConnection(database, SQLiteOpenFlags.ReadOnly, true);
             }
 
