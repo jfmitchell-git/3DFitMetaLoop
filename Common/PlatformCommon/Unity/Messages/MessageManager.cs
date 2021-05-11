@@ -1166,6 +1166,8 @@ namespace MetaLoop.Common.PlatformCommon.Unity.Messages
         void Update()
         {
 
+            if (waitingMessages.Count == 0) return;
+
             //check for message that are MANDATORY (settings, stuff like that)
             Message immediateMessage = waitingMessages.Where(p => p.ImmediateDispatch).FirstOrDefault();
             if(immediateMessage != null)
